@@ -23,7 +23,15 @@ const WORK_TYPES = new Set(['assignment', 'exam', 'quiz', 'lab', 'task', 'topic'
 
 // node: the skill/topic row · links: its attachment rows · neighbors: nodes
 // connected by any edge (either direction), used as indirect evidence.
+// Neighbors are deduplicated by id (reciprocal edges must not double-count)
+// and the node itself is excluded (self-loops are not evidence).
 export function scoreConfidence(node, links, neighbors) {
+  const seen = new Set();
+  neighbors = neighbors.filter(n => {
+    if (!n || n.id === node.id || seen.has(n.id)) return false;
+    seen.add(n.id);
+    return true;
+  });
   const signals = [];
 
   let linkPts = 0;
@@ -39,7 +47,8 @@ export function scoreConfidence(node, links, neighbors) {
   if (DONE_STATUSES.includes(node.status)) {
     signals.push({ label: 'Marked complete', points: 20 });
   } else if (node.progress > 0) {
-    signals.push({ label: `Self-reported progress (${node.progress}%)`, points: Math.round(node.progress * 0.15) });
+    const pts = Math.round(node.progress * 0.15);
+    if (pts > 0) signals.push({ label: `Self-reported progress (${node.progress}%)`, points: pts });
   }
 
   const doneWork = neighbors.filter(n => WORK_TYPES.has(n.type) && DONE_STATUSES.includes(n.status));

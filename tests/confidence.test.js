@@ -52,6 +52,7 @@ describe('scoreConfidence — individual signals', () => {
   it('scores notes by length: <40 nothing, ≥40 +6, ≥250 +12 (not both)', () => {
     expect(scoreConfidence(node({ notes: 'x'.repeat(39) }), [], []).score).toBe(0);
     expect(scoreConfidence(node({ notes: 'x'.repeat(40) }), [], []).score).toBe(6);
+    expect(scoreConfidence(node({ notes: 'x'.repeat(249) }), [], []).score).toBe(6); // just under the detailed tier
     const detailed = scoreConfidence(node({ notes: 'x'.repeat(250) }), [], []);
     expect(detailed.score).toBe(12);
     expect(detailed.signals).toHaveLength(1);
@@ -76,12 +77,35 @@ describe('scoreConfidence — individual signals', () => {
     expect(scoreConfidence(node({ progress: 0 }), [], []).signals).toEqual([]);
   });
 
+  it('emits no zero-point signal for tiny progress (1-3%) and 1 point at 7%', () => {
+    expect(scoreConfidence(node({ progress: 3 }), [], []).signals).toEqual([]); // round(0.45) = 0
+    const r = scoreConfidence(node({ progress: 7 }), [], []);
+    expect(r.score).toBe(1);
+    expect(points(r, 'Self-reported progress')).toBe(1);
+  });
+
+  it('deduplicates neighbors by id and ignores the node itself', () => {
+    const work = { id: 'w', type: 'assignment', status: 'Completed', progress: 100 };
+    const self = node({ status: 'Completed', progress: 100 }); // same id as the scored node
+    // w appears twice (reciprocal edges produce this shape) + a self-reference:
+    const r = scoreConfidence(node(), [], [work, { ...work }, self]);
+    expect(points(r, 'Completed connected work')).toBe(10); // counted once, self excluded
+    expect(r.score).toBe(10);
+  });
+
   it('counts completed connected work at 10 each, capped at 30', () => {
     const done = (type, i) => ({ id: `w${i}`, type, status: 'Completed', progress: 100 });
     const two = scoreConfidence(node(), [], [done('assignment', 1), done('lab', 2)]);
     expect(points(two, 'Completed connected work')).toBe(20);
     const five = scoreConfidence(node(), [], ['assignment', 'exam', 'quiz', 'task', 'topic'].map(done));
     expect(points(five, 'Completed connected work')).toBe(30);
+  });
+
+  it('recognizes every WORK type individually (below the cap)', () => {
+    for (const type of ['assignment', 'exam', 'quiz', 'lab', 'task', 'topic', 'section']) {
+      const r = scoreConfidence(node(), [], [{ id: 'w', type, status: 'Completed', progress: 100 }]);
+      expect(r.score, `type ${type} should count as work`).toBe(10);
+    }
   });
 
   it('ignores incomplete work and completed non-work neighbors', () => {
@@ -151,6 +175,39 @@ describe('bulkConfidence', () => {
     ];
     const out = bulkConfidence(nodes, []);
     expect([...out.keys()].sort()).toEqual(['s', 't']);
+  });
+
+  it('attributes links to their own node only', () => {
+    const s1 = { id: 's1', type: 'skill', status: 'Not Started', progress: 0, notes: '' };
+    const s2 = { id: 's2', type: 'skill', status: 'Not Started', progress: 0, notes: '' };
+    const course = { id: 'c', type: 'course', status: 'Not Started', progress: 0, notes: '' };
+    for (const n of [s1, s2, course]) insertNode(n);
+    db.prepare(`INSERT INTO links (id, node_id, kind, target) VALUES ('l1', 's1', 'repo', 'r')`).run();  // 15
+    db.prepare(`INSERT INTO links (id, node_id, kind, target) VALUES ('l2', 's2', 'url', 'u')`).run();   // 4
+    db.prepare(`INSERT INTO links (id, node_id, kind, target) VALUES ('l3', 'c', 'folder', 'f')`).run(); // not scored
+
+    const out = bulkConfidence([s1, s2, course], []);
+    expect(out.get('s1').score).toBe(15);
+    expect(out.get('s2').score).toBe(4);
+  });
+
+  it('does not double-count a neighbor connected by reciprocal edges', () => {
+    const skill = { id: 's', type: 'skill', status: 'Not Started', progress: 0, notes: '' };
+    const work = { id: 'w', type: 'assignment', status: 'Completed', progress: 100, notes: '' };
+    for (const n of [skill, work]) insertNode(n);
+    const edges = [
+      { source: 's', target: 'w', kind: 'related' },
+      { source: 'w', target: 's', kind: 'prereq' } // second edge, same pair
+    ];
+    expect(bulkConfidence([skill, work], edges).get('s').score).toBe(10);
+  });
+
+  it('tolerates edges pointing at nodes absent from the input set', () => {
+    const skill = { id: 's', type: 'skill', status: 'Not Started', progress: 0, notes: '' };
+    insertNode(skill);
+    const edges = [{ source: 's', target: 'ghost', kind: 'related' }];
+    expect(() => bulkConfidence([skill], edges)).not.toThrow();
+    expect(bulkConfidence([skill], edges).get('s').score).toBe(0);
   });
 
   it('treats edges in BOTH directions as neighbors and reads links from the DB', () => {

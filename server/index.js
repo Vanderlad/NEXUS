@@ -273,6 +273,9 @@ function containsCycle(source, target) {
 app.post('/api/edges', (req, res) => {
   const { source, target } = req.body ?? {};
   const kind = EDGE_KINDS.includes(req.body?.kind) ? req.body.kind : 'related';
+  if (source === target) {
+    return res.status(400).json({ error: 'a node cannot connect to itself' });
+  }
   if (!getNode(source) || !getNode(target)) {
     return res.status(400).json({ error: 'source and target must be existing nodes' });
   }
