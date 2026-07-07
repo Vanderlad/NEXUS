@@ -28,7 +28,10 @@ personal data.
 - **Storage:** SQLite at `data/nexus.db` (WAL mode, FK cascades). Created automatically, empty.
 - **Dev:** `npm run dev` runs API (:4000) and Vite (:5173, proxies `/api`). Prod: `npm start` → :4000.
 - **Docker:** `docker compose up --build`; named volume `nexus-data` for the DB.
-- No TypeScript, no test framework yet. Plain JS, ESM, 2-space indent.
+- **Tests:** Vitest (`npm test`), server-side only, in `tests/`. `NEXUS_DB_PATH=:memory:`
+  (set in vitest.config.js) gives each worker an isolated in-memory SQLite DB — the same
+  env var relocates the DB anywhere (e.g. Docker volumes).
+- No TypeScript. Plain JS, ESM, 2-space indent.
 
 ## Folder structure
 
@@ -190,7 +193,7 @@ gamification, search, deep links (`?view=`, `?node=`), Docker, production static
 
 ## Known issues / limitations
 
-- No automated tests yet.
+- Tests cover `confidence.js` and the roadmap importer only — no API-route or UI tests yet.
 - XP is not reverted if you un-complete a node (intentional; revisit).
 - Local file/folder links copy the path to clipboard (browsers can't open `file://`);
   a Tauri/Electron wrapper would enable "reveal in file manager".
@@ -202,9 +205,10 @@ gamification, search, deep links (`?view=`, `?node=`), Docker, production static
 
 ## Next recommended steps
 
-1. **Tests** — Vitest for `confidence.js`, `gamification.js` (level/streak math) and the
-   roadmap importer (schema + prereq edges) first; they're pure and easy to cover.
-2. **LMS/Brightspace import** — an importer producing nodes/edges like `roadmaps.js` does;
+1. **More tests** — `gamification.js` (level curve, streak day math) and API routes
+   (supertest against the express app) are the next cheapest wins; `tests/` shows the
+   in-memory-DB pattern to follow.
+2. **LMS import** — an importer producing nodes/edges like `roadmaps.js` does;
    iCal feed → assignment nodes under a course is the cheapest win.
 3. Tauri wrapper for a real desktop app + opening local files natively.
 4. Spaced-repetition review queue on topic nodes.

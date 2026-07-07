@@ -70,6 +70,7 @@ docker compose up --build   # http://localhost:4000, data persisted in a named v
 | `npm run server` | API only (serves `dist/` if present) |
 | `npm run demo` | Load the sample workspace (only into an empty DB) |
 | `npm run demo:reset` | **Wipe everything** and load the sample workspace |
+| `npm test` | Run the Vitest suite (confidence scoring + roadmap importer) |
 
 ## Keyboard & mouse
 

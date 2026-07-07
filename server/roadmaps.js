@@ -162,7 +162,8 @@ export function importRoadmap(data, origin = null) {
           prerequisites: prereqIds.map(p => titleByLocalId.get(p)),
           criteria: topic.criteria ?? []
         };
-        const hasGuide = guide.why || guide.learn.length || guide.resources.length || guide.criteria.length;
+        const hasGuide = guide.why || guide.learn.length || guide.resources.length
+          || guide.prerequisites.length || guide.criteria.length;
 
         insertNode.run({
           id: topicId, title: topic.title, type: 'topic',
