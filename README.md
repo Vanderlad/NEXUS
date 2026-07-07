@@ -98,11 +98,10 @@ data/       nexus.db (SQLite) — your entire second brain, git-ignored
 
 ## Screenshots
 
-> *Add your own screenshots here — `docs/` holds the hero shot used above.*
 
 ## License
 
-MIT — see [LICENSE](LICENSE). Replace the copyright holder placeholder with your name.
+MIT — see [LICENSE](LICENSE).
 
 ---
 
