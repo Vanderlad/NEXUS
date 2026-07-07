@@ -1,0 +1,724 @@
+{
+  "slug": "operating-systems",
+  "title": "Operating Systems",
+  "source": "custom",
+  "description": "Master how operating systems really work — processes, scheduling, memory, concurrency, filesystems, and I/O — from theory to Linux practice.",
+  "sections": [
+    {
+      "title": "OS Foundations",
+      "description": "Build the mental model of what an operating system is, how the kernel protects the machine, and how programs ask it for services.",
+      "topics": [
+        {
+          "id": "what-is-an-os",
+          "title": "What an Operating System Does",
+          "description": "The OS is the layer that virtualizes hardware: it turns one CPU, one memory, and a few disks into the illusion of many private machines for many programs.",
+          "why": "Every performance mystery, crash, and security boundary you will ever debug traces back to the three jobs of an OS: virtualization, concurrency, and persistence. Naming these jobs gives you a map for everything that follows.",
+          "learn": [
+            "Read the OSTEP introduction and write down the three pillars: virtualizing the CPU, virtualizing memory, and persistence",
+            "List the resources an OS manages (CPU time, memory, storage, network, devices) and one example of contention for each",
+            "Run 'ps aux' and 'free -h' on a Linux machine and identify which OS abstraction each column reflects",
+            "Sketch the layers from hardware to application: hardware, kernel, system libraries, user programs"
+          ],
+          "resources": [
+            { "label": "OSTEP — Introduction to Operating Systems (Ch. 2)", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/intro.pdf" },
+            { "label": "roadmap.sh — Linux roadmap", "url": "https://roadmap.sh/linux" },
+            { "label": "roadmap.sh — Computer Science roadmap", "url": "https://roadmap.sh/computer-science" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can explain the three pillars of an OS (virtualization, concurrency, persistence) with one concrete example each",
+            "You can name the abstraction the OS provides for the CPU, for memory, and for the disk",
+            "You drew a layered diagram from hardware to applications and can defend where the kernel boundary sits"
+          ]
+        },
+        {
+          "id": "kernel-and-user-mode",
+          "title": "Kernel Mode, User Mode, and Traps",
+          "description": "CPUs run code at different privilege levels; the kernel runs privileged while user programs are restricted, and traps, interrupts, and exceptions are the controlled doorways between the two.",
+          "why": "This boundary is the foundation of all OS security and stability — it is why a buggy program crashes itself and not the machine. Understanding limited direct execution also explains what a context switch actually costs.",
+          "learn": [
+            "Read the OSTEP 'Limited Direct Execution' chapter and summarize how the OS regains control of the CPU",
+            "Define trap, interrupt, and exception, and give a real trigger for each (syscall, timer tick, page fault)",
+            "Trace what happens on a timer interrupt: save state, enter kernel, run scheduler, restore state",
+            "Explain why user code cannot simply jump into kernel code and what the trap table is for"
+          ],
+          "resources": [
+            { "label": "OSTEP — Mechanism: Limited Direct Execution", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-mechanisms.pdf" },
+            { "label": "Wizard Zines — Julia Evans' systems zines", "url": "https://wizardzines.com/" }
+          ],
+          "prerequisites": ["what-is-an-os"],
+          "criteria": [
+            "You can explain the difference between kernel mode and user mode and why hardware support is required",
+            "You can walk through a timer interrupt and a system call trap step by step",
+            "You can explain what state is saved during a context switch and why switches are not free"
+          ]
+        },
+        {
+          "id": "system-calls",
+          "title": "System Calls",
+          "description": "System calls are the API of the kernel: the small, well-defined set of requests (open, read, fork, mmap...) through which every program does anything interesting.",
+          "why": "Every language runtime, database, and web server bottoms out in syscalls, so tracing them shows you what a program is really doing regardless of language. Fluency with strace turns opaque bugs into readable transcripts.",
+          "learn": [
+            "Read syscalls(2) and pick ten syscalls you can already guess the purpose of",
+            "Run 'strace ls' and 'strace cat /etc/hostname' and annotate every line of output",
+            "Write a tiny C program that calls write(2) directly and compare it to using printf",
+            "Explain the journey from a libc function call to the kernel and back, including the errno convention"
+          ],
+          "resources": [
+            { "label": "man7.org — syscalls(2) overview of Linux system calls", "url": "https://man7.org/linux/man-pages/man2/syscalls.2.html" },
+            { "label": "man7.org — strace(1)", "url": "https://man7.org/linux/man-pages/man1/strace.1.html" },
+            { "label": "man7.org — The Linux Programming Interface (book site)", "url": "https://man7.org/tlpi/" }
+          ],
+          "prerequisites": ["kernel-and-user-mode"],
+          "criteria": [
+            "You can read an strace transcript of a simple command and explain every syscall in it",
+            "You wrote a program that makes a raw syscall and checked its result and errno",
+            "You can explain why syscalls are slower than function calls"
+          ]
+        },
+        {
+          "id": "proc-and-inspection-tools",
+          "title": "Inspecting a Live System: /proc and Friends",
+          "description": "Linux exposes kernel state as readable files under /proc and /sys, and tools like ps, top, and lsof are largely front-ends over them.",
+          "why": "The rest of this roadmap becomes hands-on the moment you can observe real processes, memory maps, and open files instead of trusting diagrams. These tools are also your first responders during production incidents.",
+          "learn": [
+            "Read proc(5) and explore /proc/self: status, cmdline, fd/, maps, limits",
+            "Use ps, top, and 'cat /proc/<pid>/status' to inspect the same process three ways",
+            "Find every file a running process has open using ls -l /proc/<pid>/fd and lsof",
+            "Work through the Missing Semester shell lectures if the command line still feels slow"
+          ],
+          "resources": [
+            { "label": "man7.org — proc(5)", "url": "https://man7.org/linux/man-pages/man5/proc.5.html" },
+            { "label": "MIT — The Missing Semester of Your CS Education", "url": "https://missing.csail.mit.edu/" },
+            { "label": "man7.org — top(1)", "url": "https://man7.org/linux/man-pages/man1/top.1.html" }
+          ],
+          "prerequisites": ["system-calls"],
+          "criteria": [
+            "You can locate a process's open files, memory maps, and resource limits using only /proc",
+            "You can explain what /proc is (a virtual filesystem) and why reads from it are always fresh",
+            "You used ps/top/lsof to answer a concrete question about a running program"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Processes & Threads",
+      "description": "Understand the running-program abstraction: how processes are created, how they die, how threads share an address space, and how they talk to each other.",
+      "topics": [
+        {
+          "id": "process-abstraction",
+          "title": "The Process Abstraction",
+          "description": "A process is a running program: an address space, registers, open files, and kernel bookkeeping (the PCB), moving between ready, running, and blocked states.",
+          "why": "The process is the unit of isolation, accounting, and failure in every OS — containers, browsers, and shells are all process choreography. Knowing the state machine explains why a process shows as R, S, D, or Z in top.",
+          "learn": [
+            "Read the OSTEP process chapter and draw the ready/running/blocked state diagram from memory",
+            "List what lives in a process: address space regions, registers, file descriptors, credentials, PID",
+            "Map the STAT column codes in 'ps aux' (R, S, D, Z, T) onto the state diagram",
+            "Explain the difference between a program on disk and a process in memory"
+          ],
+          "resources": [
+            { "label": "OSTEP — The Abstraction: The Process", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-intro.pdf" },
+            { "label": "man7.org — proc(5)", "url": "https://man7.org/linux/man-pages/man5/proc.5.html" }
+          ],
+          "prerequisites": ["kernel-and-user-mode", "proc-and-inspection-tools"],
+          "criteria": [
+            "You can draw the process state diagram and give a real event for each transition",
+            "You can list the major components of a process and where the kernel tracks them",
+            "You can explain what a D (uninterruptible sleep) state means and why it worries operators"
+          ]
+        },
+        {
+          "id": "process-lifecycle",
+          "title": "fork, exec, wait: The Process Lifecycle",
+          "description": "Unix creates processes with fork (clone yourself), transforms them with exec (replace your program), and reaps them with wait — a strange but powerful trio.",
+          "why": "This API is how every shell, server, and container runtime launches work, and it explains zombies, orphans, and why redirection is set up between fork and exec. Writing your own mini-shell makes process management permanently intuitive.",
+          "learn": [
+            "Read the OSTEP process API chapter, then the fork(2), execve(2), and wait(2) man pages",
+            "Write a C program that forks, has the child exec 'ls', and waits for it, printing the exit status",
+            "Create a zombie on purpose (child exits, parent never waits) and observe it in ps",
+            "Build a mini-shell: read a command, fork, exec, wait, loop — then add output redirection with dup2",
+            "Explain what an orphan is and how init/systemd adopts it"
+          ],
+          "resources": [
+            { "label": "OSTEP — Interlude: Process API", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-api.pdf" },
+            { "label": "man7.org — fork(2)", "url": "https://man7.org/linux/man-pages/man2/fork.2.html" },
+            { "label": "man7.org — execve(2)", "url": "https://man7.org/linux/man-pages/man2/execve.2.html" },
+            { "label": "man7.org — wait(2)", "url": "https://man7.org/linux/man-pages/man2/wait.2.html" }
+          ],
+          "prerequisites": ["process-abstraction", "system-calls"],
+          "criteria": [
+            "You built a working mini-shell that forks, execs, and waits",
+            "You can explain why fork and exec are separate calls and what runs between them in a shell",
+            "You created and then explained a zombie process and know how it gets reaped"
+          ]
+        },
+        {
+          "id": "threads-basics",
+          "title": "Threads vs Processes",
+          "description": "Threads are multiple execution streams inside one process: shared address space and heap, but private stacks and registers, created on Linux via pthreads.",
+          "why": "Threads are how programs use multiple cores without the cost of process isolation — and shared memory is exactly why they are dangerous. Every concurrency bug you will chase later starts with this sharing model.",
+          "learn": [
+            "Read the OSTEP thread API chapter and pthreads(7); note what threads share and what they do not",
+            "Write a program that spawns two pthreads incrementing a shared counter and observe the lost updates",
+            "Compare the cost and isolation of a thread vs a forked process in a table",
+            "Inspect a multithreaded process with 'ps -L' or /proc/<pid>/task to see its threads"
+          ],
+          "resources": [
+            { "label": "OSTEP — Interlude: Thread API", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/threads-api.pdf" },
+            { "label": "man7.org — pthreads(7)", "url": "https://man7.org/linux/man-pages/man7/pthreads.7.html" },
+            { "label": "man7.org — pthread_create(3)", "url": "https://man7.org/linux/man-pages/man3/pthread_create.3.html" }
+          ],
+          "prerequisites": ["process-abstraction"],
+          "criteria": [
+            "You can state precisely what threads share (heap, globals, fds) and what they do not (stack, registers)",
+            "You wrote a two-thread program and demonstrated a lost-update on a shared counter",
+            "You can argue when to choose threads vs processes for a given workload"
+          ]
+        },
+        {
+          "id": "ipc-and-signals",
+          "title": "IPC: Pipes, Signals, and Shared Memory",
+          "description": "Processes communicate through kernel-mediated channels: pipes and FIFOs stream bytes, signals deliver asynchronous pokes, and shared memory maps the same pages into two address spaces.",
+          "why": "Shell pipelines, Ctrl+C, graceful server shutdown, and high-throughput local messaging all rest on these primitives. Knowing which IPC tool fits which job is a real systems-design skill, not trivia.",
+          "learn": [
+            "Read pipe(7) and signal(7); build a pipeline in C connecting two children with pipe() and dup2()",
+            "Write a program that installs a SIGINT handler and cleans up before exiting; test it with Ctrl+C",
+            "Explain the delivery rules that make signal handlers tricky (async-signal-safety, reentrancy)",
+            "Skim Beej's Guide to Unix IPC and try one shared-memory or message-queue example",
+            "Compare pipes, signals, shared memory, and Unix domain sockets on bandwidth, direction, and coupling"
+          ],
+          "resources": [
+            { "label": "Beej's Guide to Unix IPC", "url": "https://beej.us/guide/bgipc/" },
+            { "label": "man7.org — pipe(7)", "url": "https://man7.org/linux/man-pages/man7/pipe.7.html" },
+            { "label": "man7.org — signal(7)", "url": "https://man7.org/linux/man-pages/man7/signal.7.html" }
+          ],
+          "prerequisites": ["process-lifecycle"],
+          "criteria": [
+            "You built a two-process pipeline in C using pipe, fork, and dup2",
+            "You wrote a signal handler for graceful shutdown and can explain async-signal-safety",
+            "You can recommend an IPC mechanism for three different scenarios and justify each choice"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "CPU Scheduling",
+      "description": "Learn how the OS decides who runs next: classic policies and their trade-offs, MLFQ, the Linux scheduler, and scheduling across multiple cores.",
+      "topics": [
+        {
+          "id": "scheduling-fundamentals",
+          "title": "Scheduling Policies and Metrics",
+          "description": "Schedulers pick the next process to run, judged by metrics like turnaround time, response time, and fairness; FIFO, Shortest-Job-First, and Round-Robin are the classic baselines.",
+          "why": "Scheduling is trade-off thinking in its purest form: optimizing turnaround hurts responsiveness and vice versa. These baselines are the vocabulary for every scheduling discussion, from kernels to job queues to load balancers.",
+          "learn": [
+            "Read the OSTEP scheduling introduction and define turnaround time and response time precisely",
+            "Hand-simulate FIFO, SJF, and Round-Robin on the same three-job workload and compute both metrics",
+            "Explain the convoy effect and which policy suffers from it",
+            "Describe why preemption (via the timer interrupt) is required for responsiveness"
+          ],
+          "resources": [
+            { "label": "OSTEP — Scheduling: Introduction", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched.pdf" },
+            { "label": "OSTEP — Operating Systems: Three Easy Pieces (free book)", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" }
+          ],
+          "prerequisites": ["process-abstraction"],
+          "criteria": [
+            "You can compute turnaround and response time for a small workload under FIFO, SJF, and RR",
+            "You can explain the convoy effect and the trade-off between time-slice length and switch overhead",
+            "You can explain why the scheduler needs the timer interrupt covered earlier"
+          ]
+        },
+        {
+          "id": "mlfq-and-priorities",
+          "title": "Priorities and Multi-Level Feedback Queues",
+          "description": "MLFQ schedules without knowing job lengths: it learns from behavior, demoting CPU hogs and keeping interactive jobs at high priority, with periodic boosts to prevent starvation.",
+          "why": "MLFQ-style ideas power real desktop and server schedulers, and its failure modes — starvation and gaming the scheduler — appear in any priority system you will ever design, including message queues and ticket triage.",
+          "learn": [
+            "Read the OSTEP MLFQ chapter and write down its rules from memory",
+            "Trace an interactive job and a batch job through the queues over several time slices",
+            "Explain how a malicious job could game naive MLFQ and how the accounting rule fixes it",
+            "Read sched(7) to see how Linux exposes priorities: nice values and real-time policies"
+          ],
+          "resources": [
+            { "label": "OSTEP — Scheduling: The Multi-Level Feedback Queue", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-mlfq.pdf" },
+            { "label": "man7.org — sched(7) overview of Linux scheduling", "url": "https://man7.org/linux/man-pages/man7/sched.7.html" }
+          ],
+          "prerequisites": ["scheduling-fundamentals"],
+          "criteria": [
+            "You can state the MLFQ rules and trace two contrasting jobs through the queues",
+            "You can explain starvation and two mechanisms that prevent it",
+            "You can describe what a nice value does on Linux"
+          ]
+        },
+        {
+          "id": "linux-scheduler-in-practice",
+          "title": "The Linux Scheduler in Practice",
+          "description": "Linux schedules normal tasks with a fair, weighted approach (CFS lineage, now EEVDF) and offers real-time policies (SCHED_FIFO, SCHED_RR) plus nice values to tilt the scales.",
+          "why": "This is where theory meets your production boxes: latency spikes, noisy neighbors, and 'why is my service throttled' all route through the scheduler. Being able to observe and adjust scheduling is an operational superpower.",
+          "learn": [
+            "Read sched(7) end to end, noting each scheduling policy and when it applies",
+            "Run a CPU-bound loop at nice 0 and nice 19 simultaneously and compare their CPU share in top",
+            "Use chrt to inspect and set a process's scheduling policy, and note the risks of SCHED_FIFO",
+            "Find voluntary vs involuntary context switches for a process in /proc/<pid>/status"
+          ],
+          "resources": [
+            { "label": "man7.org — sched(7)", "url": "https://man7.org/linux/man-pages/man7/sched.7.html" },
+            { "label": "man7.org — nice(2)", "url": "https://man7.org/linux/man-pages/man2/nice.2.html" },
+            { "label": "man7.org — chrt(1)", "url": "https://man7.org/linux/man-pages/man1/chrt.1.html" }
+          ],
+          "prerequisites": ["mlfq-and-priorities", "proc-and-inspection-tools"],
+          "criteria": [
+            "You demonstrated nice values changing CPU share between two competing processes",
+            "You can name Linux's scheduling policies and when each is appropriate",
+            "You can read context-switch counts from /proc and interpret voluntary vs involuntary switches"
+          ]
+        },
+        {
+          "id": "multiprocessor-scheduling",
+          "title": "Multiprocessor Scheduling and Affinity",
+          "description": "With many cores, scheduling adds cache affinity, per-CPU run queues, and load balancing: moving a task between cores has a real cost because its cache state stays behind.",
+          "why": "Modern performance work is multicore work: pinning latency-critical threads, understanding NUMA effects, and reading per-core load are everyday tasks in performance-sensitive services and game engines alike.",
+          "learn": [
+            "Read the OSTEP multiprocessor scheduling chapter, focusing on cache affinity and load balancing",
+            "Use taskset to pin a busy process to one core and watch per-core load in 'top' (press 1)",
+            "Explain single-queue vs per-CPU-queue scheduling and the trade-offs of work stealing",
+            "Read sched_setaffinity(2) and set affinity programmatically for one thread"
+          ],
+          "resources": [
+            { "label": "OSTEP — Multiprocessor Scheduling", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-multi.pdf" },
+            { "label": "man7.org — taskset(1)", "url": "https://man7.org/linux/man-pages/man1/taskset.1.html" },
+            { "label": "man7.org — sched_setaffinity(2)", "url": "https://man7.org/linux/man-pages/man2/sched_setaffinity.2.html" }
+          ],
+          "prerequisites": ["linux-scheduler-in-practice"],
+          "criteria": [
+            "You pinned a process to a specific core and verified it with per-core CPU stats",
+            "You can explain why cache affinity makes migration expensive",
+            "You can compare single-queue and multi-queue scheduling designs"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Concurrency & Synchronization",
+      "description": "Confront shared-state concurrency head-on: races, locks, condition variables, semaphores, and the classic bugs — deadlock included — that follow them everywhere.",
+      "topics": [
+        {
+          "id": "race-conditions",
+          "title": "Race Conditions and Critical Sections",
+          "description": "When two threads touch shared data and at least one writes, the interleaving of instructions decides the result — a race condition; the code that must not interleave is a critical section.",
+          "why": "Races are the defining bug class of multicore software: rare, timing-dependent, and catastrophic. Learning to spot non-atomic read-modify-write sequences trains the instinct that separates reliable concurrent code from lucky code.",
+          "learn": [
+            "Read the OSTEP concurrency introduction and study why 'counter++' compiles to three instructions",
+            "Reproduce a race: two threads incrementing a shared counter one million times each, run it ten times",
+            "Define critical section, mutual exclusion, and atomicity in your own words",
+            "Explain why races are heisenbugs: why adding printf can make them vanish"
+          ],
+          "resources": [
+            { "label": "OSTEP — Concurrency: An Introduction", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf" },
+            { "label": "man7.org — pthreads(7)", "url": "https://man7.org/linux/man-pages/man7/pthreads.7.html" }
+          ],
+          "prerequisites": ["threads-basics"],
+          "criteria": [
+            "You reproduced a data race and can explain the exact interleaving that loses an update",
+            "You can identify the critical sections in a given piece of concurrent code",
+            "You can explain why race bugs are timing-dependent and hard to reproduce"
+          ]
+        },
+        {
+          "id": "locks-and-mutexes",
+          "title": "Locks: Mutexes and Spinlocks",
+          "description": "Locks make critical sections atomic: spinlocks burn CPU waiting, mutexes put waiters to sleep, and both rest on hardware atomic instructions like compare-and-swap.",
+          "why": "Locks are the workhorse of correct concurrent code in every language, and their costs — contention, convoying, cache-line bouncing — dominate scalability discussions. Knowing when to spin vs sleep is a genuine design decision in kernels and databases.",
+          "learn": [
+            "Read the OSTEP locks chapter, including test-and-set and compare-and-swap",
+            "Fix your racing counter with a pthread mutex and verify the result is now deterministic",
+            "Explain when a spinlock beats a mutex and why spinning on a uniprocessor is wasteful",
+            "Measure the throughput cost of your fix and explain lock contention",
+            "Describe what makes a lock implementation fair or unfair"
+          ],
+          "resources": [
+            { "label": "OSTEP — Locks", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks.pdf" },
+            { "label": "man7.org — pthread_mutex_lock(3)", "url": "https://man7.org/linux/man-pages/man3/pthread_mutex_lock.3.html" },
+            { "label": "man7.org — futex(2)", "url": "https://man7.org/linux/man-pages/man2/futex.2.html" }
+          ],
+          "prerequisites": ["race-conditions"],
+          "criteria": [
+            "You fixed a real race with a mutex and verified determinism across many runs",
+            "You can explain how compare-and-swap enables lock construction",
+            "You can articulate spinlock vs mutex trade-offs and define lock contention"
+          ]
+        },
+        {
+          "id": "condition-variables-and-semaphores",
+          "title": "Condition Variables and Semaphores",
+          "description": "Condition variables let threads sleep until a condition becomes true; semaphores generalize both locking and signaling with a counter — together they solve producer/consumer and friends.",
+          "why": "Waiting for state changes is the other half of concurrency after mutual exclusion: thread pools, bounded queues, and rate limiters are all producer/consumer at heart. The while-loop-recheck idiom you learn here prevents an entire family of subtle bugs.",
+          "learn": [
+            "Read the OSTEP condition variables and semaphores chapters",
+            "Implement a bounded buffer with one producer and one consumer using a mutex and two condition variables",
+            "Explain why you must recheck the condition in a while loop (spurious wakeups, Mesa semantics)",
+            "Re-implement the bounded buffer with semaphores and compare the two solutions",
+            "Work one classic problem from The Little Book of Semaphores (e.g., readers-writers)"
+          ],
+          "resources": [
+            { "label": "OSTEP — Condition Variables", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/threads-cv.pdf" },
+            { "label": "OSTEP — Semaphores", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/threads-sema.pdf" },
+            { "label": "Green Tea Press — The Little Book of Semaphores", "url": "https://greenteapress.com/wp/semaphores/" }
+          ],
+          "prerequisites": ["locks-and-mutexes"],
+          "criteria": [
+            "You built a working bounded buffer with condition variables and stress-tested it",
+            "You can explain why condition checks belong in while loops, not if statements",
+            "You can express both a lock and a signal using only semaphores"
+          ]
+        },
+        {
+          "id": "deadlock-and-concurrency-bugs",
+          "title": "Deadlock and Classic Concurrency Bugs",
+          "description": "Deadlock happens when threads hold locks while waiting for each other in a cycle; alongside atomicity and ordering violations, it rounds out the taxonomy of concurrency bugs.",
+          "why": "Deadlocks freeze production systems silently — no crash, no log, just stuck threads — and the prevention techniques (lock ordering, trylock with backoff) are directly usable in any codebase. Databases, kernels, and your own services all need this discipline.",
+          "learn": [
+            "Read the OSTEP concurrency bugs chapter and memorize the four deadlock conditions",
+            "Write a two-thread, two-lock program that deadlocks, then fix it with a global lock ordering",
+            "Diagnose your deadlocked program from outside using gdb or /proc/<pid>/stack to see where threads wait",
+            "Classify atomicity violations vs ordering violations with one example of each",
+            "Summarize deadlock prevention, avoidance, and detection strategies in a short table"
+          ],
+          "resources": [
+            { "label": "OSTEP — Common Concurrency Problems", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/threads-bugs.pdf" },
+            { "label": "man7.org — pthread_mutex_lock(3)", "url": "https://man7.org/linux/man-pages/man3/pthread_mutex_lock.3.html" }
+          ],
+          "prerequisites": ["locks-and-mutexes", "condition-variables-and-semaphores"],
+          "criteria": [
+            "You can list the four necessary conditions for deadlock and which one lock ordering breaks",
+            "You created a deadlock on purpose, diagnosed it with real tools, and fixed it",
+            "You can distinguish deadlock, livelock, and starvation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Memory Management & Virtual Memory",
+      "description": "Discover how the OS gives every process the illusion of a huge private memory: address translation, paging, TLBs, swapping, and the allocators on top.",
+      "topics": [
+        {
+          "id": "virtual-address-spaces",
+          "title": "Virtual Address Spaces",
+          "description": "Each process sees its own private address space — code, heap growing up, stack growing down — while the OS and hardware translate every virtual address to physical memory.",
+          "why": "Virtual memory is why processes cannot corrupt each other, why pointers in two programs can 'collide' harmlessly, and what a segfault actually is. Reading a process's memory map is a daily debugging move.",
+          "learn": [
+            "Read the OSTEP address spaces chapter and draw the canonical layout: code, heap, shared libs, stack",
+            "Print addresses of a global, a local, a malloc'd block, and a function in C and place them on your diagram",
+            "Read /proc/self/maps for a running program and identify each region and its permissions",
+            "Explain what a segmentation fault is in terms of address translation and permissions"
+          ],
+          "resources": [
+            { "label": "OSTEP — The Abstraction: Address Spaces", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-intro.pdf" },
+            { "label": "man7.org — proc(5) (see /proc/[pid]/maps)", "url": "https://man7.org/linux/man-pages/man5/proc.5.html" }
+          ],
+          "prerequisites": ["process-abstraction"],
+          "criteria": [
+            "You can sketch a process address space and place real addresses from a program onto it",
+            "You can read /proc/<pid>/maps and explain each region and its rwxp flags",
+            "You can define a segfault precisely in terms of the MMU and permissions"
+          ]
+        },
+        {
+          "id": "paging-and-tlbs",
+          "title": "Paging, Page Tables, and TLBs",
+          "description": "Memory is managed in fixed-size pages; page tables map virtual pages to physical frames, and the TLB caches those translations so every memory access is not two memory accesses.",
+          "why": "Paging explains huge swaths of performance behavior: TLB misses, why sequential access beats random, why huge pages exist, and what the kernel is doing during a page fault. It is the machinery behind every pointer dereference you have ever made.",
+          "learn": [
+            "Read the OSTEP paging chapter and translate a virtual address to physical by hand (VPN, offset, PFN)",
+            "Read the TLB chapter and explain what happens on a TLB hit vs miss",
+            "Explain why page tables are multi-level in practice instead of one flat array",
+            "List the bits in a page table entry (valid, protection, dirty, accessed) and what each enables",
+            "Find your system's page size with 'getconf PAGE_SIZE' and read about huge pages"
+          ],
+          "resources": [
+            { "label": "OSTEP — Paging: Introduction", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf" },
+            { "label": "OSTEP — Paging: Faster Translations (TLBs)", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf" }
+          ],
+          "prerequisites": ["virtual-address-spaces"],
+          "criteria": [
+            "You can translate a virtual address through a page table by hand",
+            "You can explain the TLB's role and why context switches can hurt TLB performance",
+            "You can justify multi-level page tables from the size of a flat table"
+          ]
+        },
+        {
+          "id": "swapping-and-page-replacement",
+          "title": "Page Faults, Swapping, and Replacement",
+          "description": "When memory runs short, the OS evicts pages to disk and brings them back on demand via page faults; replacement policies like LRU approximations decide which pages go.",
+          "why": "This is the mechanism behind demand loading, memory overcommit, thrashing, and the dreaded OOM killer — all things that page you at 3am. It is also the conceptual twin of every cache eviction policy you will design.",
+          "learn": [
+            "Read the OSTEP swapping chapter and trace the full path of a page fault from trap to resumed instruction",
+            "Compare FIFO, LRU, and clock replacement on a small reference string by hand",
+            "Define thrashing and describe how you would detect it (major faults, swap activity in vmstat)",
+            "Check major/minor page faults for a process via /proc/<pid>/stat or 'ps -o maj_flt,min_flt'",
+            "Explain what the Linux OOM killer is and when it strikes"
+          ],
+          "resources": [
+            { "label": "OSTEP — Beyond Physical Memory: Mechanisms", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-beyondphys.pdf" },
+            { "label": "OSTEP — Operating Systems: Three Easy Pieces (free book)", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+            { "label": "man7.org — getrusage(2) (fault counters)", "url": "https://man7.org/linux/man-pages/man2/getrusage.2.html" }
+          ],
+          "prerequisites": ["paging-and-tlbs"],
+          "criteria": [
+            "You can narrate a page fault end to end, distinguishing minor from major faults",
+            "You can run three replacement policies on a reference string and compare miss counts",
+            "You can define thrashing and name the signals you would check for it on a live host"
+          ]
+        },
+        {
+          "id": "heap-allocators-and-mmap",
+          "title": "malloc, mmap, and Memory Allocators",
+          "description": "User-space allocators like malloc carve up memory obtained from the kernel via brk and mmap, fighting fragmentation with free lists, size classes, and arenas.",
+          "why": "Allocator behavior drives real-world memory footprints, fragmentation blowups, and 'RSS keeps growing' mysteries in long-running services. mmap itself is a versatile tool: file mapping, shared memory, and allocation all in one syscall.",
+          "learn": [
+            "Read malloc(3) and mmap(2); explain when glibc malloc uses brk vs mmap",
+            "Map a file with mmap and read it as memory; compare with read(2)",
+            "Explain internal vs external fragmentation with diagrams",
+            "Run a leaky program under Valgrind and read the leak report",
+            "Compare RSS vs virtual size for a process and explain why they differ"
+          ],
+          "resources": [
+            { "label": "man7.org — malloc(3)", "url": "https://man7.org/linux/man-pages/man3/malloc.3.html" },
+            { "label": "man7.org — mmap(2)", "url": "https://man7.org/linux/man-pages/man2/mmap.2.html" },
+            { "label": "Valgrind — official site and docs", "url": "https://valgrind.org/" }
+          ],
+          "prerequisites": ["virtual-address-spaces", "paging-and-tlbs"],
+          "criteria": [
+            "You used mmap to map a file and to create an anonymous mapping",
+            "You found a real memory leak with Valgrind and fixed it",
+            "You can explain fragmentation and why RSS and virtual size diverge"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Filesystems",
+      "description": "Follow a byte from open() to the platter: the file API, on-disk structures like inodes, surviving crashes with journaling, and the tooling around mounts and disks.",
+      "topics": [
+        {
+          "id": "files-and-directories",
+          "title": "Files, Directories, and File Descriptors",
+          "description": "Unix models storage as files named by paths, described by inodes, and accessed through small integers called file descriptors; directories are just files mapping names to inodes.",
+          "why": "The fd table explains redirection, 'everything is a file', leaked descriptors, and why deleting an open file frees no space. This API is the substrate for all persistence and much of Unix networking.",
+          "learn": [
+            "Read open(2) and inodes(7); write a program using open, read, write, lseek, and close",
+            "Use 'ls -li' and stat to inspect inode numbers, link counts, and permissions",
+            "Create a hard link and a symlink to the same file and observe how they differ when the original is removed",
+            "Explain the chain: fd -> open file description -> inode, and what dup2 does to it",
+            "Demonstrate that deleting an open file keeps its data alive until the last fd closes"
+          ],
+          "resources": [
+            { "label": "man7.org — open(2)", "url": "https://man7.org/linux/man-pages/man2/open.2.html" },
+            { "label": "man7.org — inode(7)", "url": "https://man7.org/linux/man-pages/man7/inode.7.html" },
+            { "label": "OSTEP — Operating Systems: Three Easy Pieces (persistence chapters)", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" }
+          ],
+          "prerequisites": ["system-calls", "proc-and-inspection-tools"],
+          "criteria": [
+            "You can diagram fd -> open file description -> inode and explain what each level stores",
+            "You demonstrated hard link vs symlink behavior on deletion",
+            "You can explain why 'disk full' can persist after deleting a large open log file"
+          ]
+        },
+        {
+          "id": "filesystem-implementation",
+          "title": "Filesystem Implementation: Inodes on Disk",
+          "description": "A simple filesystem lays out superblock, bitmaps, inode table, and data blocks; reading /a/b.txt becomes a sequence of inode and directory-block reads, with the VFS layer unifying many such designs.",
+          "why": "Knowing the on-disk structures demystifies performance (why many small files are slow), limits (inode exhaustion), and tools like fsck and du. The VFS idea — one interface, many implementations — is a design pattern worth stealing.",
+          "learn": [
+            "Read the OSTEP filesystem implementation chapter and draw the on-disk layout of a simple FS",
+            "Trace every disk read needed to open and read /foo/bar.txt in that design",
+            "Explain multi-level index inodes and compute the max file size for a given design",
+            "Read filesystems(5) and ext4(5) for the real-world counterparts; check inode usage with 'df -i'"
+          ],
+          "resources": [
+            { "label": "OSTEP — Operating Systems: Three Easy Pieces (File System Implementation)", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+            { "label": "man7.org — filesystems(5)", "url": "https://man7.org/linux/man-pages/man5/filesystems.5.html" },
+            { "label": "man7.org — ext4(5)", "url": "https://man7.org/linux/man-pages/man5/ext4.5.html" }
+          ],
+          "prerequisites": ["files-and-directories"],
+          "criteria": [
+            "You can draw a simple filesystem's on-disk layout and trace a path lookup through it",
+            "You can compute maximum file size from an inode's block-pointer design",
+            "You can explain what the VFS layer is and why Linux can mount many filesystem types"
+          ]
+        },
+        {
+          "id": "crash-consistency-and-journaling",
+          "title": "Crash Consistency and Journaling",
+          "description": "A crash mid-update can leave filesystem metadata inconsistent; journaling writes an intent log first so recovery replays or discards whole updates, while fsync controls when data is truly durable.",
+          "why": "Every database, message queue, and editor that promises durability rests on fsync semantics and journaling — and subtle misuse loses customer data. This topic turns 'it should be saved' into an argument you can actually defend.",
+          "learn": [
+            "Read the OSTEP crash consistency chapter and work through the inconsistent-update scenarios",
+            "Explain metadata journaling vs data journaling and their performance trade-offs",
+            "Read fsync(2) and explain what it guarantees, including the directory-fsync subtlety when creating files",
+            "Describe copy-on-write filesystems (btrfs, ZFS) as an alternative to journaling"
+          ],
+          "resources": [
+            { "label": "OSTEP — Operating Systems: Three Easy Pieces (Crash Consistency: FSCK and Journaling)", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+            { "label": "man7.org — fsync(2)", "url": "https://man7.org/linux/man-pages/man2/fsync.2.html" },
+            { "label": "man7.org — sync(2)", "url": "https://man7.org/linux/man-pages/man2/sync.2.html" }
+          ],
+          "prerequisites": ["filesystem-implementation"],
+          "criteria": [
+            "You can show with a concrete scenario how a crash corrupts a non-journaled update",
+            "You can explain how a journal makes multi-block updates atomic across crashes",
+            "You can state what fsync does and does not guarantee, including for newly created files"
+          ]
+        },
+        {
+          "id": "mounts-and-storage-tools",
+          "title": "Mounts, Partitions, and Filesystem Tooling",
+          "description": "Linux assembles one directory tree from many block devices via mounts; partitioning, mkfs, fstab, df/du, and fsck are the operational toolkit around filesystems.",
+          "why": "Full disks and mount mishaps are among the most common real-world outages, and container images and bind mounts build directly on the mount namespace machinery. This is the operational muscle behind the theory.",
+          "learn": [
+            "Read mount(8); run 'findmnt' and identify what device or virtual FS backs /, /proc, and /tmp",
+            "Create a loopback file, mkfs it, mount it, write files, unmount, and fsck it",
+            "Use df -h and du -sh to hunt down disk usage discrepancies and explain why they can disagree",
+            "Read /etc/fstab on a machine and explain each field of one entry"
+          ],
+          "resources": [
+            { "label": "man7.org — mount(8)", "url": "https://man7.org/linux/man-pages/man8/mount.8.html" },
+            { "label": "ArchWiki — File systems", "url": "https://wiki.archlinux.org/title/File_systems" },
+            { "label": "man7.org — fstab(5)", "url": "https://man7.org/linux/man-pages/man5/fstab.5.html" }
+          ],
+          "prerequisites": ["files-and-directories"],
+          "criteria": [
+            "You built, mounted, used, and checked a filesystem on a loopback device end to end",
+            "You can read findmnt output and explain the mount tree of a live system",
+            "You can explain a df vs du discrepancy (deleted open files, other mounts)"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "I/O & Systems Mastery",
+      "description": "Close the loop with devices and data movement: interrupts and DMA, the page cache, scalable event-driven I/O, modern async interfaces, and whole-system observability.",
+      "topics": [
+        {
+          "id": "io-devices-and-drivers",
+          "title": "I/O Devices, Interrupts, and DMA",
+          "description": "Devices talk to the CPU through registers, signal completion with interrupts, and move bulk data via DMA so the CPU is not a courier; drivers wrap each device in a common kernel interface.",
+          "why": "Interrupt-vs-polling and DMA trade-offs resurface constantly — in NIC tuning, in why high-packet-rate servers switch to polling, in understanding what 'softirq time' means in top. Device abstraction is also the canonical example of interface design done right.",
+          "learn": [
+            "Read the OSTEP I/O devices chapter and diagram a device with status, command, and data registers",
+            "Contrast polling and interrupts, and identify when each wins (hint: very fast devices)",
+            "Explain DMA and what problem it solves compared to programmed I/O",
+            "Look at /proc/interrupts on your machine and identify a few interrupt sources",
+            "Describe the role of a device driver and why drivers dominate kernel code volume"
+          ],
+          "resources": [
+            { "label": "OSTEP — Operating Systems: Three Easy Pieces (I/O Devices)", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+            { "label": "man7.org — proc(5) (see /proc/interrupts)", "url": "https://man7.org/linux/man-pages/man5/proc.5.html" }
+          ],
+          "prerequisites": ["kernel-and-user-mode", "files-and-directories"],
+          "criteria": [
+            "You can explain the interrupt-driven I/O path from device to woken process",
+            "You can argue when polling beats interrupts and give a modern example",
+            "You can explain what DMA offloads from the CPU"
+          ]
+        },
+        {
+          "id": "page-cache-and-buffering",
+          "title": "The Page Cache and Buffered I/O",
+          "description": "The kernel caches file data in free RAM (the page cache), so most reads never touch disk and writes complete into memory first — with writeback, readahead, and O_DIRECT as the control knobs.",
+          "why": "The page cache is why re-running a benchmark is suddenly fast, why 'free' memory looks alarmingly low, and why databases manage their own buffers. Reasoning about warm vs cold caches is essential for honest performance numbers.",
+          "learn": [
+            "Explain the buffers/cache columns in 'free -h' and why cached memory is still 'available'",
+            "Time reading a large file twice and explain the speedup; drop caches (on a test box) and time again",
+            "Read about O_DIRECT in open(2) and explain why databases sometimes bypass the page cache",
+            "Read posix_fadvise(2) and describe how applications hint the kernel about access patterns",
+            "Connect the page cache back to mmap: file-backed pages are the same cache"
+          ],
+          "resources": [
+            { "label": "man7.org — open(2) (O_DIRECT, O_SYNC flags)", "url": "https://man7.org/linux/man-pages/man2/open.2.html" },
+            { "label": "man7.org — posix_fadvise(2)", "url": "https://man7.org/linux/man-pages/man2/posix_fadvise.2.html" },
+            { "label": "man7.org — free(1)", "url": "https://man7.org/linux/man-pages/man1/free.1.html" }
+          ],
+          "prerequisites": ["swapping-and-page-replacement", "files-and-directories"],
+          "criteria": [
+            "You demonstrated the cold-vs-warm cache effect with measurements",
+            "You can read 'free -h' correctly and explain why low free memory is usually healthy",
+            "You can explain when O_DIRECT is appropriate and what it costs"
+          ]
+        },
+        {
+          "id": "io-multiplexing",
+          "title": "Blocking, Non-blocking, and epoll",
+          "description": "A single thread can service thousands of connections by asking the kernel which fds are ready: select and poll scan, while epoll registers interest once and gets ready events efficiently.",
+          "why": "This is the engine room of nginx, Redis, and Node.js — the C10K solution that made event-driven servers dominant. Understanding readiness models makes async frameworks stop feeling like magic.",
+          "learn": [
+            "Explain what a blocking read does to a thread and why thread-per-connection stops scaling",
+            "Read select(2), poll(2), and epoll(7); note why epoll avoids rescanning all fds",
+            "Write a small echo server, first blocking single-client, then handling many clients with epoll",
+            "Explain level-triggered vs edge-triggered notification and the extra care edge-triggered needs",
+            "Skim Beej's networking guide sections on select for the classic treatment"
+          ],
+          "resources": [
+            { "label": "man7.org — epoll(7)", "url": "https://man7.org/linux/man-pages/man7/epoll.7.html" },
+            { "label": "man7.org — poll(2)", "url": "https://man7.org/linux/man-pages/man2/poll.2.html" },
+            { "label": "Beej's Guide to Network Programming", "url": "https://beej.us/guide/bgnet/" }
+          ],
+          "prerequisites": ["ipc-and-signals", "io-devices-and-drivers"],
+          "criteria": [
+            "You built an epoll-based server that handles multiple concurrent clients in one thread",
+            "You can compare select, poll, and epoll on API shape and scalability",
+            "You can explain level- vs edge-triggered modes and a bug unique to edge-triggered"
+          ]
+        },
+        {
+          "id": "async-io-and-io-uring",
+          "title": "Asynchronous I/O and io_uring",
+          "description": "True async I/O submits operations and collects completions instead of waiting for readiness; Linux's io_uring uses shared submission/completion rings to cut syscall overhead dramatically.",
+          "why": "io_uring is reshaping high-performance storage and network stacks, and the completion-based model matches how modern hardware actually works. Knowing readiness vs completion models lets you evaluate the next decade of I/O APIs.",
+          "learn": [
+            "Contrast readiness-based (epoll) and completion-based (io_uring) models with a diagram",
+            "Read io_uring(7) and identify the roles of the submission queue and completion queue",
+            "Explain why batching syscalls and sharing rings with the kernel improves throughput",
+            "Read sendfile(2) and explain zero-copy: what copies disappear and why that matters",
+            "Write or study a small liburing example that reads a file asynchronously"
+          ],
+          "resources": [
+            { "label": "man7.org — io_uring(7)", "url": "https://man7.org/linux/man-pages/man7/io_uring.7.html" },
+            { "label": "man7.org — aio(7)", "url": "https://man7.org/linux/man-pages/man7/aio.7.html" },
+            { "label": "man7.org — sendfile(2)", "url": "https://man7.org/linux/man-pages/man2/sendfile.2.html" }
+          ],
+          "prerequisites": ["io-multiplexing"],
+          "criteria": [
+            "You can diagram io_uring's submission and completion rings and the lifecycle of one request",
+            "You can articulate readiness vs completion models and when each fits",
+            "You can explain zero-copy I/O and name a syscall that enables it"
+          ]
+        },
+        {
+          "id": "os-observability",
+          "title": "Capstone: Observing and Debugging the OS",
+          "description": "Pull everything together with the observability toolkit: strace for syscalls, lsof for files, vmstat/iostat for memory and disks, and perf for CPU — applied methodically to a live system.",
+          "why": "This is the payoff: the ability to look at a slow or broken system and locate the bottleneck — CPU, memory, disk, or locks — with evidence instead of guesses. It converts everything in this roadmap into an everyday professional edge.",
+          "learn": [
+            "Work through the Missing Semester debugging and profiling lecture",
+            "Build a personal checklist in the spirit of the USE method (utilization, saturation, errors) per resource",
+            "Diagnose three staged problems on a test box: a CPU spinner, a memory hog, and an fsync-heavy writer — using top, vmstat, iostat, and strace",
+            "Use strace -c and lsof on a real service and summarize what it does at the OS level",
+            "Read Brendan Gregg's Linux performance page and pick two tools you have not used yet to try"
+          ],
+          "resources": [
+            { "label": "Missing Semester — Debugging and Profiling", "url": "https://missing.csail.mit.edu/2020/debugging-profiling/" },
+            { "label": "Brendan Gregg — Linux Performance", "url": "https://www.brendangregg.com/linuxperf.html" },
+            { "label": "man7.org — lsof(8)", "url": "https://man7.org/linux/man-pages/man8/lsof.8.html" },
+            { "label": "Wizard Zines — systems debugging zines", "url": "https://wizardzines.com/" }
+          ],
+          "prerequisites": ["linux-scheduler-in-practice", "swapping-and-page-replacement", "crash-consistency-and-journaling", "io-multiplexing"],
+          "criteria": [
+            "You diagnosed staged CPU, memory, and I/O problems and identified each bottleneck with evidence",
+            "You can pick the right first tool for a reported symptom and explain why",
+            "You produced a one-page OS-level profile of a real service using strace, lsof, and /proc"
+          ]
+        }
+      ]
+    }
+  ]
+}

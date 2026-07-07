@@ -1,0 +1,711 @@
+{
+  "slug": "frontend-developer",
+  "title": "Frontend Developer",
+  "source": "roadmap.sh",
+  "url": "https://roadmap.sh/frontend",
+  "description": "A guided path from HTML, CSS, and JavaScript fundamentals to React, build tooling, accessibility, testing, and performance.",
+  "sections": [
+    {
+      "title": "Web & HTML Foundations",
+      "description": "Understand how the web actually works and learn to structure content with meaningful, valid HTML.",
+      "topics": [
+        {
+          "id": "how-the-web-works",
+          "title": "How the Web Works",
+          "description": "The core plumbing of the web: browsers, servers, HTTP requests and responses, DNS, and what happens when you type a URL.",
+          "why": "Every frontend bug, performance issue, and security concern eventually traces back to this mental model. Knowing how requests travel from browser to server lets you debug with confidence instead of guessing, and it is the foundation for topics like caching, CORS, and deployment.",
+          "learn": [
+            "Trace what happens when you enter a URL: DNS lookup, TCP/TLS connection, HTTP request, response, render",
+            "Learn the anatomy of an HTTP request and response: methods, status codes, and headers",
+            "Understand what DNS does and how domain names map to servers",
+            "Open the Network tab in your browser and inspect real requests on a site you use daily"
+          ],
+          "resources": [
+            { "label": "MDN — An overview of HTTP", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview" },
+            { "label": "Cloudflare Learning — What is DNS?", "url": "https://www.cloudflare.com/learning/dns/what-is-dns/" },
+            { "label": "roadmap.sh — Frontend Developer Roadmap", "url": "https://roadmap.sh/frontend" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can explain the request/response cycle from typing a URL to pixels on screen",
+            "You can identify common HTTP status codes (200, 301, 404, 500) and what they mean",
+            "You inspected a real page load in the Network tab and read its headers"
+          ]
+        },
+        {
+          "id": "html-basics",
+          "title": "HTML Basics",
+          "description": "The markup language of the web: elements, attributes, document structure, links, images, and lists.",
+          "why": "HTML is the skeleton every website hangs on — CSS and JavaScript both operate on it. Writing clean, valid HTML from day one prevents an entire class of styling, scripting, and accessibility problems later.",
+          "learn": [
+            "Write a valid HTML document by hand: doctype, head, body, headings, and paragraphs",
+            "Use links, images, lists, and tables with correct attributes",
+            "Learn how the browser parses HTML into a document tree",
+            "Validate your markup and fix every error it reports"
+          ],
+          "resources": [
+            { "label": "MDN — HTML reference and guides", "url": "https://developer.mozilla.org/en-US/docs/Web/HTML" },
+            { "label": "web.dev — Learn HTML", "url": "https://web.dev/learn/html" },
+            { "label": "freeCodeCamp — Interactive curriculum", "url": "https://www.freecodecamp.org/learn" }
+          ],
+          "prerequisites": ["how-the-web-works"],
+          "criteria": [
+            "You built a multi-page site with only HTML, hand-written in a text editor",
+            "You can explain the difference between block-level and inline elements",
+            "Your pages pass an HTML validator with no errors"
+          ]
+        },
+        {
+          "id": "semantic-html",
+          "title": "Semantic HTML",
+          "description": "Choosing elements for their meaning — header, nav, main, article, section, footer — rather than styling convenience.",
+          "why": "Semantic markup is what screen readers, search engines, and browser reader modes rely on to understand your page. It is the cheapest accessibility and SEO win available, and it makes your HTML dramatically easier to style and maintain.",
+          "learn": [
+            "Learn the landmark elements (header, nav, main, aside, footer) and when to use each",
+            "Use the correct heading hierarchy (h1-h6) to outline a document",
+            "Replace div-soup in one of your pages with semantic elements",
+            "Understand when a div or span is actually the right choice"
+          ],
+          "resources": [
+            { "label": "MDN — Semantics glossary", "url": "https://developer.mozilla.org/en-US/docs/Glossary/Semantics" },
+            { "label": "web.dev — Learn HTML", "url": "https://web.dev/learn/html" }
+          ],
+          "prerequisites": ["html-basics"],
+          "criteria": [
+            "You can justify the element choice for every tag in one of your pages",
+            "You refactored a div-only layout into landmarks and a logical heading outline",
+            "You can explain how semantic markup helps screen reader users navigate"
+          ]
+        },
+        {
+          "id": "forms-and-validation",
+          "title": "Forms & Validation",
+          "description": "Collecting user input with form elements, labels, input types, and built-in browser validation.",
+          "why": "Forms are how the web does business — logins, checkouts, searches, signups. Native input types and constraint validation give you huge functionality for free, and forms done wrong are the single most common accessibility failure in real products.",
+          "learn": [
+            "Build a form using labels correctly associated with inputs",
+            "Use specialized input types (email, number, date, url) and see how mobile keyboards adapt",
+            "Apply built-in validation with required, pattern, and min/max, and style :invalid states",
+            "Understand how form submission works with GET vs POST"
+          ],
+          "resources": [
+            { "label": "MDN — The form element", "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form" },
+            { "label": "web.dev — Learn Forms", "url": "https://web.dev/learn/forms" }
+          ],
+          "prerequisites": ["semantic-html"],
+          "criteria": [
+            "You built a signup form with labels, fieldsets, and native validation",
+            "You can explain when a form should use GET versus POST",
+            "Your form is fully operable with only the keyboard"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "CSS & Layout",
+      "description": "Style and lay out pages with modern CSS: the cascade, Flexbox, Grid, responsive design, and scalable architecture.",
+      "topics": [
+        {
+          "id": "css-fundamentals",
+          "title": "CSS Fundamentals",
+          "description": "Selectors, the cascade, specificity, inheritance, the box model, colors, and units.",
+          "why": "The cascade and the box model explain 90% of 'why does my CSS not work' moments. Once specificity and box sizing click, CSS stops feeling random and starts feeling like a system you control.",
+          "learn": [
+            "Master selectors: type, class, attribute, pseudo-classes, and combinators",
+            "Learn how the cascade resolves conflicts: origin, specificity, and source order",
+            "Internalize the box model: content, padding, border, margin, and box-sizing",
+            "Practice with relative units (rem, em, %, vw/vh) and know when to avoid px"
+          ],
+          "resources": [
+            { "label": "MDN — CSS reference and guides", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+            { "label": "web.dev — Learn CSS", "url": "https://web.dev/learn/css" }
+          ],
+          "prerequisites": ["html-basics"],
+          "criteria": [
+            "You can predict which rule wins in a specificity conflict without testing",
+            "You can diagram the box model of any element using DevTools",
+            "You styled a full page from scratch without a framework"
+          ]
+        },
+        {
+          "id": "flexbox-and-grid",
+          "title": "Flexbox & Grid",
+          "description": "The two modern layout systems: Flexbox for one-dimensional flow and Grid for two-dimensional page structure.",
+          "why": "Flexbox and Grid replaced a decade of float hacks with layout tools that actually match how designers think. Nearly every real-world component — navbars, cards, sidebars, galleries — is a few lines of Flexbox or Grid once you know them.",
+          "learn": [
+            "Build a navbar and a card row with Flexbox: direction, justify, align, gap, and wrap",
+            "Build a page shell with Grid: template columns/rows, areas, and gap",
+            "Learn when to reach for Flexbox versus Grid",
+            "Complete Flexbox Froggy and Grid Garden to drill the properties"
+          ],
+          "resources": [
+            { "label": "CSS-Tricks — A Complete Guide to Flexbox", "url": "https://css-tricks.com/snippets/css/a-guide-to-flexbox/" },
+            { "label": "CSS-Tricks — A Complete Guide to Grid", "url": "https://css-tricks.com/snippets/css/complete-guide-grid/" },
+            { "label": "Flexbox Froggy — Interactive game", "url": "https://flexboxfroggy.com" },
+            { "label": "Grid Garden — Interactive game", "url": "https://cssgridgarden.com" }
+          ],
+          "prerequisites": ["css-fundamentals"],
+          "criteria": [
+            "You built a holy-grail page layout (header, sidebar, content, footer) with Grid",
+            "You can center anything, horizontally and vertically, without googling",
+            "You can articulate when Flexbox is the better tool than Grid and vice versa"
+          ]
+        },
+        {
+          "id": "responsive-design",
+          "title": "Responsive Design",
+          "description": "Making layouts adapt to any screen with fluid sizing, media queries, and mobile-first thinking.",
+          "why": "More than half of web traffic is mobile, and your users will open your site on everything from a watch to an ultrawide monitor. Responsive design is not a feature — it is the baseline expectation for professional frontend work.",
+          "learn": [
+            "Adopt a mobile-first workflow: style small screens, then enhance with min-width media queries",
+            "Use fluid techniques (max-width, minmax, clamp, flexible images) so layouts bend before they break",
+            "Set the viewport meta tag and understand why it matters",
+            "Test a page across breakpoints with DevTools device emulation"
+          ],
+          "resources": [
+            { "label": "web.dev — Learn Responsive Design", "url": "https://web.dev/learn/design" },
+            { "label": "MDN — @media rule", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@media" }
+          ],
+          "prerequisites": ["flexbox-and-grid"],
+          "criteria": [
+            "You built a page that works from 320px to 1920px without horizontal scrolling",
+            "You can explain mobile-first versus desktop-first and defend your choice",
+            "You used clamp() or minmax() to reduce the number of media queries needed"
+          ]
+        },
+        {
+          "id": "scalable-css",
+          "title": "Scalable CSS Architecture",
+          "description": "Keeping styles maintainable as projects grow: naming conventions like BEM, CSS custom properties, and preprocessors.",
+          "why": "CSS is easy to write and brutal to maintain — unscoped styles rot fast in team codebases. Conventions, design tokens via custom properties, and tooling like Sass keep a growing stylesheet predictable instead of terrifying to touch.",
+          "learn": [
+            "Adopt a naming convention such as BEM and apply it to a component set",
+            "Define design tokens (colors, spacing, type scale) with CSS custom properties",
+            "Try a preprocessor like Sass for nesting and partials, and know what native CSS now covers",
+            "Learn how utility-first frameworks like Tailwind approach the same problem"
+          ],
+          "resources": [
+            { "label": "MDN — Using CSS custom properties", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties" },
+            { "label": "BEM — Methodology", "url": "https://getbem.com" },
+            { "label": "Sass — Official guide", "url": "https://sass-lang.com/guide" }
+          ],
+          "prerequisites": ["css-fundamentals"],
+          "criteria": [
+            "You built a small component library styled with a consistent naming convention",
+            "You themed a page (light/dark) by swapping custom property values only",
+            "You can explain the trade-offs between BEM, utility-first, and CSS-in-JS approaches"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "JavaScript & the DOM",
+      "description": "Learn the language of the browser and use it to read, modify, and react to the page.",
+      "topics": [
+        {
+          "id": "javascript-fundamentals",
+          "title": "JavaScript Fundamentals",
+          "description": "Core language features: variables, types, functions, objects, arrays, control flow, and scope.",
+          "why": "JavaScript is the only language browsers execute natively, and every framework you will ever use is just JavaScript underneath. Deep fundamentals are what separate developers who debug frameworks from developers who are debugged by them.",
+          "learn": [
+            "Learn variables (let/const), primitive types, and type coercion pitfalls",
+            "Write and compose functions; understand parameters, return values, and arrow syntax",
+            "Work fluently with objects and arrays, including map, filter, and reduce",
+            "Understand scope, closures, and the this keyword",
+            "Solve small problems daily until the syntax disappears"
+          ],
+          "resources": [
+            { "label": "MDN — JavaScript Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" },
+            { "label": "javascript.info — The Modern JavaScript Tutorial", "url": "https://javascript.info" },
+            { "label": "Eloquent JavaScript — Free book", "url": "https://eloquentjavascript.net" }
+          ],
+          "prerequisites": ["html-basics"],
+          "criteria": [
+            "You can explain closures with an example you wrote yourself",
+            "You can transform data with map/filter/reduce without writing loops",
+            "You solved 20+ small JavaScript exercises without reference material"
+          ]
+        },
+        {
+          "id": "dom-and-events",
+          "title": "DOM Manipulation & Events",
+          "description": "The Document Object Model: selecting, creating, and updating elements, and responding to user events.",
+          "why": "The DOM is the live, scriptable representation of your page — it is what makes the web interactive. Understanding it directly, before frameworks abstract it away, demystifies what React and friends are actually doing for you.",
+          "learn": [
+            "Select elements with querySelector/querySelectorAll and read or change their content and attributes",
+            "Create, insert, and remove elements; update classes and styles from JavaScript",
+            "Handle events with addEventListener and read the event object",
+            "Learn event bubbling and implement event delegation on a list",
+            "Build a small interactive widget (tabs, modal, or todo list) with no libraries"
+          ],
+          "resources": [
+            { "label": "MDN — Document Object Model", "url": "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model" },
+            { "label": "javascript.info — Document (DOM tutorial)", "url": "https://javascript.info/document" },
+            { "label": "MDN — addEventListener", "url": "https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener" }
+          ],
+          "prerequisites": ["javascript-fundamentals", "semantic-html"],
+          "criteria": [
+            "You built a working todo app in vanilla JavaScript with add, complete, and delete",
+            "You can explain event bubbling and when to use event delegation",
+            "You can update the page from user input without a single page reload"
+          ]
+        },
+        {
+          "id": "async-javascript",
+          "title": "Async JavaScript & Fetch",
+          "description": "Handling operations that take time: the event loop, promises, async/await, and fetching data from APIs.",
+          "why": "Real apps live on data from servers, and JavaScript handles that without freezing the page through its async model. Promises and async/await are non-negotiable for any frontend job, and misunderstanding the event loop is behind some of the gnarliest bugs you will meet.",
+          "learn": [
+            "Understand the event loop: call stack, task queue, and why JavaScript never blocks on I/O",
+            "Work with promises: then/catch, chaining, and Promise.all",
+            "Rewrite promise chains with async/await and handle errors with try/catch",
+            "Fetch JSON from a public API and render it into the DOM, including loading and error states"
+          ],
+          "resources": [
+            { "label": "MDN — Using promises", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises" },
+            { "label": "MDN — Fetch API", "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API" },
+            { "label": "javascript.info — Promises, async/await", "url": "https://javascript.info/async" }
+          ],
+          "prerequisites": ["javascript-fundamentals"],
+          "criteria": [
+            "You built a page that fetches API data and shows loading, success, and error states",
+            "You can explain what the event loop does using a concrete example",
+            "You can convert between promise chains and async/await fluently"
+          ]
+        },
+        {
+          "id": "modern-javascript-and-modules",
+          "title": "Modern JavaScript & Modules",
+          "description": "ES6+ features you will see everywhere — destructuring, spread, template literals, classes — and organizing code with ES modules.",
+          "why": "All modern codebases and every React tutorial assume fluency in ES6+ syntax. Modules are how real projects split code across files, and they are the concept bundlers, imports, and code-splitting are all built on.",
+          "learn": [
+            "Practice destructuring, spread/rest, template literals, and optional chaining until they are second nature",
+            "Split a project into ES modules with import and export",
+            "Understand default versus named exports and module scope",
+            "Learn what transpilation is and why tools like Babel and modern bundlers exist"
+          ],
+          "resources": [
+            { "label": "MDN — JavaScript modules", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules" },
+            { "label": "javascript.info — The Modern JavaScript Tutorial", "url": "https://javascript.info" }
+          ],
+          "prerequisites": ["javascript-fundamentals"],
+          "criteria": [
+            "You refactored a single-file script into clean ES modules",
+            "You can read modern framework code without tripping on syntax",
+            "You can explain the difference between default and named exports"
+          ]
+        },
+        {
+          "id": "browser-devtools",
+          "title": "Browser DevTools",
+          "description": "Your in-browser debugger and inspector: the Elements, Console, Sources, Network, and Performance panels.",
+          "why": "DevTools is the single highest-leverage skill multiplier in frontend work — it turns every 'it doesn't work' into an inspectable, steppable, measurable situation. Developers who master it fix in minutes what others chase for hours.",
+          "learn": [
+            "Inspect and live-edit HTML and CSS in the Elements panel, including computed styles",
+            "Set breakpoints and step through code in the Sources panel instead of console.log-ing everything",
+            "Analyze requests, payloads, and timing in the Network panel",
+            "Record a Performance profile and read the flame chart at a basic level"
+          ],
+          "resources": [
+            { "label": "Chrome for Developers — DevTools docs", "url": "https://developer.chrome.com/docs/devtools" },
+            { "label": "MDN — Web technology for developers", "url": "https://developer.mozilla.org/en-US/docs/Web" }
+          ],
+          "prerequisites": ["dom-and-events"],
+          "criteria": [
+            "You debugged a real bug using breakpoints rather than console.log",
+            "You can find why an element has a given style using the Computed panel",
+            "You diagnosed a slow or failing request from the Network panel"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Tooling & Workflow",
+      "description": "Adopt the professional toolchain: version control, package management, bundlers, and automated code quality.",
+      "topics": [
+        {
+          "id": "git-and-github",
+          "title": "Git & GitHub",
+          "description": "Version control for tracking changes, branching safely, and collaborating through commits and pull requests.",
+          "why": "Every professional team runs on Git — it is as fundamental as the text editor. It gives you fearless experimentation (everything is undoable) and is the backbone of code review, CI, and deployment workflows.",
+          "learn": [
+            "Learn the core loop: init, status, add, commit, log, and diff",
+            "Create branches, merge them, and resolve a merge conflict on purpose",
+            "Push to GitHub, open a pull request, and review a diff",
+            "Practice recovering: amend, revert, and restore"
+          ],
+          "resources": [
+            { "label": "Pro Git — Free official book", "url": "https://git-scm.com/book" },
+            { "label": "Learn Git Branching — Interactive tutorial", "url": "https://learngitbranching.js.org" },
+            { "label": "GitHub Docs", "url": "https://docs.github.com" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You use feature branches and merge via pull requests on your own projects",
+            "You resolved a merge conflict without panic or data loss",
+            "You can read git log/diff output to reconstruct what changed and when"
+          ]
+        },
+        {
+          "id": "npm-and-packages",
+          "title": "npm & Package Management",
+          "description": "Node.js-based tooling: installing dependencies, package.json, semantic versioning, lockfiles, and npm scripts.",
+          "why": "The entire frontend ecosystem — React, Vite, ESLint, everything — ships as npm packages. Understanding package.json, versioning, and lockfiles is the difference between a reproducible project and 'works on my machine'.",
+          "learn": [
+            "Install Node.js and initialize a project with package.json",
+            "Add, update, and remove dependencies; understand dependencies vs devDependencies",
+            "Read semantic versioning (^, ~, exact) and explain what the lockfile guarantees",
+            "Write npm scripts to run your common tasks"
+          ],
+          "resources": [
+            { "label": "npm Docs", "url": "https://docs.npmjs.com" },
+            { "label": "Node.js — Learn", "url": "https://nodejs.org/en/learn" }
+          ],
+          "prerequisites": ["javascript-fundamentals"],
+          "criteria": [
+            "You set up a project from scratch with package.json and npm scripts",
+            "You can explain what ^1.2.3 permits and why lockfiles matter",
+            "You diagnosed and fixed a dependency issue using npm ls or a clean install"
+          ]
+        },
+        {
+          "id": "build-tools-and-bundlers",
+          "title": "Build Tools & Bundlers",
+          "description": "Tools like Vite and webpack that bundle modules, run dev servers with hot reload, and produce optimized production builds.",
+          "why": "Modern apps are hundreds of modules that must become a few optimized files for the browser. Knowing what your bundler does — transforming, bundling, minifying, code-splitting — lets you fix broken builds and shrink slow ones instead of treating tooling as magic.",
+          "learn": [
+            "Scaffold a project with Vite and explore the dev server, hot module replacement, and build output",
+            "Understand what bundling, transpiling, and minification each do and why they exist",
+            "Configure environment variables and static assets in a build",
+            "Compare the dev build with the production build and inspect what changed"
+          ],
+          "resources": [
+            { "label": "Vite — Guide", "url": "https://vitejs.dev/guide/" },
+            { "label": "webpack — Concepts", "url": "https://webpack.js.org/concepts/" },
+            { "label": "esbuild — Docs", "url": "https://esbuild.github.io" }
+          ],
+          "prerequisites": ["npm-and-packages", "modern-javascript-and-modules"],
+          "criteria": [
+            "You built and served a production bundle and can describe what the tool did",
+            "You can explain why raw ES modules alone are not enough for large production apps",
+            "You fixed a build error by reading the tool's output rather than re-scaffolding"
+          ]
+        },
+        {
+          "id": "linting-and-formatting",
+          "title": "Linting & Formatting",
+          "description": "Automated code quality with ESLint and consistent style with Prettier, wired into your editor and scripts.",
+          "why": "Linters catch real bugs — unused variables, unsafe equality, broken hook rules — before code ever runs. Formatters end style debates permanently, and teams expect both to be running on every save and every commit.",
+          "learn": [
+            "Add ESLint to a project, run it, and fix every warning it raises",
+            "Add Prettier and configure your editor to format on save",
+            "Understand the division of labor: linters for correctness, formatters for style",
+            "Wire lint and format checks into npm scripts"
+          ],
+          "resources": [
+            { "label": "ESLint — Documentation", "url": "https://eslint.org/docs/latest/" },
+            { "label": "Prettier — Documentation", "url": "https://prettier.io" }
+          ],
+          "prerequisites": ["npm-and-packages"],
+          "criteria": [
+            "Your projects lint clean and format automatically on save",
+            "You can explain two real bug classes ESLint catches",
+            "You added a lint script that fails on warnings, suitable for CI"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "React",
+      "description": "Build component-based user interfaces with React: components, state, hooks, routing, data, and TypeScript.",
+      "topics": [
+        {
+          "id": "react-fundamentals",
+          "title": "React Fundamentals",
+          "description": "Components, JSX, props, and rendering: describing UI as a function of data.",
+          "why": "React is the most widely used frontend framework, and its mental model — declarative UI built from composable components — transfers to nearly every modern framework. It is also the single most requested skill in frontend job listings.",
+          "learn": [
+            "Scaffold a React app with Vite and understand every file it generates",
+            "Write function components with JSX and compose them into a UI tree",
+            "Pass data with props and render lists with keys",
+            "Render conditionally and follow the 'Thinking in React' process to break a design into components"
+          ],
+          "resources": [
+            { "label": "react.dev — Learn React", "url": "https://react.dev/learn" },
+            { "label": "react.dev — Thinking in React", "url": "https://react.dev/learn/thinking-in-react" }
+          ],
+          "prerequisites": ["modern-javascript-and-modules", "dom-and-events", "build-tools-and-bundlers"],
+          "criteria": [
+            "You built a multi-component React app that renders dynamic lists from data",
+            "You can explain what JSX compiles to and why keys matter in lists",
+            "You can decompose a mockup into a sensible component hierarchy"
+          ]
+        },
+        {
+          "id": "react-state-and-hooks",
+          "title": "State & Hooks",
+          "description": "Making components interactive with useState, synchronizing with external systems via useEffect, and the rules of hooks.",
+          "why": "State is what turns static markup into an application, and hooks are how all modern React code manages it. Understanding rendering — when and why components re-run — is what keeps your apps correct and fast instead of glitchy and slow.",
+          "learn": [
+            "Manage component state with useState and update it immutably",
+            "Handle user events and build controlled form inputs",
+            "Use useEffect for data fetching and subscriptions, with correct dependency arrays and cleanup",
+            "Lift state up to share it between components",
+            "Learn the rules of hooks and why they exist"
+          ],
+          "resources": [
+            { "label": "react.dev — Managing State", "url": "https://react.dev/learn/managing-state" },
+            { "label": "react.dev — API reference (Hooks)", "url": "https://react.dev/reference/react" }
+          ],
+          "prerequisites": ["react-fundamentals", "async-javascript"],
+          "criteria": [
+            "You built an interactive app (e.g., searchable list or quiz) with useState and controlled inputs",
+            "You can explain what triggers a re-render and trace one through your app",
+            "You fetch data in useEffect with proper loading, error, and cleanup handling"
+          ]
+        },
+        {
+          "id": "react-routing-and-data",
+          "title": "Routing & Data Fetching",
+          "description": "Building multi-page single-page apps with client-side routing and managing server data with a fetching library.",
+          "why": "Real apps have URLs, navigation, and remote data with caching, revalidation, and error handling. A router plus a server-state library like TanStack Query is the standard architecture of production React apps, and it eliminates whole categories of hand-rolled fetching bugs.",
+          "learn": [
+            "Add client-side routing with routes, links, nested layouts, and URL params",
+            "Handle not-found routes and redirects",
+            "Adopt a data-fetching library and learn queries, caching, and invalidation",
+            "Distinguish server state from client state and store each appropriately"
+          ],
+          "resources": [
+            { "label": "React Router — Docs", "url": "https://reactrouter.com" },
+            { "label": "TanStack Query — Docs", "url": "https://tanstack.com/query/latest" }
+          ],
+          "prerequisites": ["react-state-and-hooks"],
+          "criteria": [
+            "You built a multi-route app with a detail page driven by URL params",
+            "You can explain what a query cache does and when data refetches",
+            "Navigation in your app preserves state and works with the browser back button"
+          ]
+        },
+        {
+          "id": "typescript-for-react",
+          "title": "TypeScript for React",
+          "description": "Static types for JavaScript: annotating variables and functions, typing props and state, and catching errors at compile time.",
+          "why": "TypeScript is the default in professional frontend codebases — most React job postings expect it. Types turn runtime surprises into instant editor feedback and make refactoring large component trees safe instead of scary.",
+          "learn": [
+            "Learn basic annotations: primitives, arrays, objects, unions, and type inference",
+            "Define interfaces or type aliases for component props and useState generics",
+            "Type event handlers and API response data",
+            "Convert one of your JavaScript React projects to TypeScript"
+          ],
+          "resources": [
+            { "label": "TypeScript — Documentation", "url": "https://www.typescriptlang.org/docs/" },
+            { "label": "react.dev — Using TypeScript", "url": "https://react.dev/learn/typescript" },
+            { "label": "React TypeScript Cheatsheet", "url": "https://react-typescript-cheatsheet.netlify.app" }
+          ],
+          "prerequisites": ["react-fundamentals"],
+          "criteria": [
+            "You migrated a React app to TypeScript with zero any types in your own code",
+            "You can read a compiler error and fix the underlying type mismatch",
+            "You typed an API response and caught a shape mismatch before runtime"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Accessibility & Testing",
+      "description": "Build interfaces everyone can use and prove they work with automated tests.",
+      "topics": [
+        {
+          "id": "accessibility-fundamentals",
+          "title": "Accessibility Fundamentals",
+          "description": "Making sites usable by people with disabilities: perceivable, operable, understandable, robust — the principles behind WCAG.",
+          "why": "Over a billion people live with disabilities, accessibility is a legal requirement in many markets, and accessible sites are simply better-built sites. Most of it costs nothing when done early: correct elements, labels, contrast, and keyboard support.",
+          "learn": [
+            "Learn the POUR principles and skim the WCAG success criteria structure",
+            "Navigate your own site using only the keyboard and fix every trap or missing focus style",
+            "Check color contrast and text alternatives for images",
+            "Run an automated audit (Lighthouse or axe) and fix what it finds"
+          ],
+          "resources": [
+            { "label": "web.dev — Learn Accessibility", "url": "https://web.dev/learn/accessibility" },
+            { "label": "W3C WAI — Accessibility fundamentals", "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/" },
+            { "label": "MDN — Accessibility", "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility" }
+          ],
+          "prerequisites": ["semantic-html", "css-fundamentals"],
+          "criteria": [
+            "Your site is fully operable via keyboard with visible focus indicators",
+            "You fixed all issues from an automated accessibility audit on one project",
+            "You can explain the four POUR principles with concrete examples"
+          ]
+        },
+        {
+          "id": "aria-and-assistive-tech",
+          "title": "ARIA & Assistive Technology",
+          "description": "Using ARIA roles, states, and properties correctly to make custom widgets understandable to screen readers.",
+          "why": "When you build custom components — menus, dialogs, tabs — semantics no longer come for free, and ARIA is how you restore them. Used well it makes rich UIs accessible; used carelessly it makes them worse, so the rules matter.",
+          "learn": [
+            "Learn the first rule of ARIA: prefer native HTML elements before reaching for roles",
+            "Study accessible widget patterns (dialog, tabs, menu) in the ARIA Authoring Practices Guide",
+            "Add appropriate aria-label, aria-expanded, and live regions to a custom component",
+            "Test one of your pages with an actual screen reader (VoiceOver, NVDA, or Orca)"
+          ],
+          "resources": [
+            { "label": "W3C — ARIA Authoring Practices Guide", "url": "https://www.w3.org/WAI/ARIA/apg/" },
+            { "label": "MDN — ARIA", "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA" },
+            { "label": "WebAIM — Articles and resources", "url": "https://webaim.org" }
+          ],
+          "prerequisites": ["accessibility-fundamentals", "dom-and-events"],
+          "criteria": [
+            "You built an accessible custom widget (e.g., modal or tabs) following the APG pattern",
+            "You used a screen reader to verify your component announces state changes",
+            "You can explain why 'no ARIA is better than bad ARIA'"
+          ]
+        },
+        {
+          "id": "component-testing",
+          "title": "Unit & Component Testing",
+          "description": "Writing automated tests for functions and React components with Vitest/Jest and Testing Library.",
+          "why": "Tests are what let you refactor and ship on a Friday without fear — they catch regressions the moment they appear. Testing Library's user-centric approach also pushes you toward more accessible components as a side effect.",
+          "learn": [
+            "Write unit tests for pure functions: arrange, act, assert",
+            "Test React components with Testing Library: query by role, simulate user events, assert output",
+            "Mock network requests so tests are fast and deterministic",
+            "Run tests in watch mode during development and add a test script for CI"
+          ],
+          "resources": [
+            { "label": "Vitest — Docs", "url": "https://vitest.dev" },
+            { "label": "Testing Library — Docs", "url": "https://testing-library.com/docs/" },
+            { "label": "Jest — Getting started", "url": "https://jestjs.io/docs/getting-started" }
+          ],
+          "prerequisites": ["react-state-and-hooks", "linting-and-formatting"],
+          "criteria": [
+            "You wrote a component test suite covering rendering, interaction, and an async fetch",
+            "You can explain why querying by role beats querying by test id",
+            "A test in your suite caught a real regression you introduced"
+          ]
+        },
+        {
+          "id": "end-to-end-testing",
+          "title": "End-to-End Testing",
+          "description": "Testing whole user flows in a real browser with tools like Playwright or Cypress.",
+          "why": "Unit tests can all pass while the login flow is broken — E2E tests verify the app actually works the way users experience it. A handful of well-chosen E2E tests over critical paths is the highest-confidence safety net a frontend team has.",
+          "learn": [
+            "Set up Playwright or Cypress and write a first test that loads your app",
+            "Script a critical user journey: navigate, fill a form, submit, and assert the result",
+            "Learn locator strategies and why auto-waiting beats manual sleeps",
+            "Run E2E tests headlessly and debug failures from traces or screenshots"
+          ],
+          "resources": [
+            { "label": "Playwright — Docs", "url": "https://playwright.dev" },
+            { "label": "Cypress — Docs", "url": "https://docs.cypress.io" }
+          ],
+          "prerequisites": ["component-testing"],
+          "criteria": [
+            "You automated a full user flow that passes headlessly from the command line",
+            "You debugged a failing E2E test using its trace, video, or screenshot output",
+            "You can articulate the testing pyramid and where E2E tests fit"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Performance & Shipping",
+      "description": "Make it fast, keep it safe, and get it in front of users: performance, security, and deployment.",
+      "topics": [
+        {
+          "id": "web-performance",
+          "title": "Web Performance & Core Web Vitals",
+          "description": "Measuring and understanding page speed: loading, interactivity, and visual stability via LCP, INP, and CLS.",
+          "why": "Slow sites lose users and revenue measurably — performance is a product feature, not a nice-to-have. Core Web Vitals also feed Google's ranking, so speed directly affects how many people ever find your site.",
+          "learn": [
+            "Learn the three Core Web Vitals (LCP, INP, CLS) and what user experience each protects",
+            "Run Lighthouse on one of your projects and read the full report",
+            "Understand the critical rendering path: how HTML, CSS, and JS block or unblock first paint",
+            "Distinguish lab data from field data and why both matter"
+          ],
+          "resources": [
+            { "label": "web.dev — Core Web Vitals", "url": "https://web.dev/vitals/" },
+            { "label": "web.dev — Learn Performance", "url": "https://web.dev/learn/performance" },
+            { "label": "MDN — Web performance", "url": "https://developer.mozilla.org/en-US/docs/Web/Performance" }
+          ],
+          "prerequisites": ["browser-devtools"],
+          "criteria": [
+            "You can name the three Core Web Vitals and their good-score thresholds",
+            "You measured a page with Lighthouse and identified its top bottleneck",
+            "You can explain render-blocking resources and one way to mitigate them"
+          ]
+        },
+        {
+          "id": "asset-and-code-optimization",
+          "title": "Asset & Code Optimization",
+          "description": "Shrinking what you ship: responsive images, modern formats, lazy loading, code splitting, and caching.",
+          "why": "Images and JavaScript are the two heaviest things on the web, and optimizing them yields the biggest performance wins available. These are the concrete techniques that turn a red Lighthouse score green.",
+          "learn": [
+            "Serve responsive images with srcset/sizes and modern formats like WebP or AVIF",
+            "Lazy-load below-the-fold images and set width/height to prevent layout shift",
+            "Split code by route with dynamic import and measure the bundle size difference",
+            "Understand HTTP caching headers and what a CDN adds"
+          ],
+          "resources": [
+            { "label": "web.dev — Learn Images", "url": "https://web.dev/learn/images" },
+            { "label": "MDN — Web performance", "url": "https://developer.mozilla.org/en-US/docs/Web/Performance" },
+            { "label": "Cloudflare Learning — What is a CDN?", "url": "https://www.cloudflare.com/learning/cdn/what-is-a-cdn/" }
+          ],
+          "prerequisites": ["web-performance", "build-tools-and-bundlers"],
+          "criteria": [
+            "You cut a page's transfer size significantly and documented before/after numbers",
+            "You implemented route-based code splitting in a React app",
+            "You can read response headers and explain how an asset is cached"
+          ]
+        },
+        {
+          "id": "web-security-essentials",
+          "title": "Web Security Essentials",
+          "description": "Frontend-relevant security: HTTPS, XSS, CSRF, CORS, Content Security Policy, and safe handling of user input.",
+          "why": "The frontend is the attack surface users touch — one XSS hole can leak every user's session. Employers expect frontend developers to know the OWASP basics, and understanding CORS alone will save you days of confused debugging.",
+          "learn": [
+            "Understand what HTTPS/TLS protects and why every site needs it",
+            "Learn how XSS works and how escaping, frameworks, and CSP defend against it",
+            "Learn CSRF and the role of SameSite cookies and tokens",
+            "Demystify CORS: same-origin policy, preflights, and why the browser blocks that request",
+            "Skim the OWASP Top 10 and map each risk to a frontend implication"
+          ],
+          "resources": [
+            { "label": "OWASP — Top Ten", "url": "https://owasp.org/www-project-top-ten/" },
+            { "label": "MDN — Web security", "url": "https://developer.mozilla.org/en-US/docs/Web/Security" },
+            { "label": "PortSwigger — Web Security Academy", "url": "https://portswigger.net/web-security" }
+          ],
+          "prerequisites": ["how-the-web-works", "async-javascript"],
+          "criteria": [
+            "You can explain XSS and CSRF with an example attack and its defense",
+            "You diagnosed and correctly fixed a CORS error without disabling security",
+            "You completed at least one hands-on lab on XSS or CSRF"
+          ]
+        },
+        {
+          "id": "deploy-and-ship",
+          "title": "Deployment & CI",
+          "description": "Getting your app onto the internet: static hosting, environment configuration, and automated build-and-deploy pipelines.",
+          "why": "A project on localhost helps no one — shipping is the skill that turns practice into a portfolio. Modern platforms make production deploys with CI, previews, and HTTPS nearly free, and knowing the pipeline end-to-end makes you the person who can unblock releases.",
+          "learn": [
+            "Deploy a static site or React build to GitHub Pages, Netlify, or Vercel",
+            "Connect deploys to Git so every push builds and ships automatically",
+            "Configure environment variables per environment and understand preview deployments",
+            "Add your lint and test scripts as CI checks that gate the deploy"
+          ],
+          "resources": [
+            { "label": "GitHub Docs — GitHub Pages", "url": "https://docs.github.com/en/pages" },
+            { "label": "Netlify — Docs", "url": "https://docs.netlify.com" },
+            { "label": "Vercel — Docs", "url": "https://vercel.com/docs" }
+          ],
+          "prerequisites": ["git-and-github", "build-tools-and-bundlers", "component-testing"],
+          "criteria": [
+            "You have a project live on a public URL with HTTPS, deployed automatically from Git",
+            "Your pipeline runs tests and lint before deploying, and a failure blocks the release",
+            "You can walk someone through your app's full path from commit to production"
+          ]
+        }
+      ]
+    }
+  ]
+}

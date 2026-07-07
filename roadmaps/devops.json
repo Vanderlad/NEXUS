@@ -1,0 +1,665 @@
+{
+  "slug": "devops",
+  "title": "DevOps",
+  "source": "roadmap.sh",
+  "url": "https://roadmap.sh/devops",
+  "description": "Go from Linux and networking fundamentals to containers, CI/CD, infrastructure as code, cloud, and production monitoring.",
+  "sections": [
+    {
+      "title": "Linux Fundamentals",
+      "description": "Get comfortable operating a Linux system from the terminal — the foundation every other DevOps skill builds on.",
+      "topics": [
+        {
+          "id": "linux-cli-basics",
+          "title": "Terminal & Shell Basics",
+          "description": "Navigating and manipulating a Linux system from the command line: files, pipes, redirection, and finding help.",
+          "why": "Nearly every server, container, and CI runner you will ever touch is Linux without a GUI. Fluency in the shell is the difference between guessing and knowing what a machine is doing, and it compounds into every later topic.",
+          "learn": [
+            "Navigate and inspect the filesystem with cd, ls, pwd, cat, less, and find",
+            "Chain commands with pipes and redirect output with >, >>, and 2>&1",
+            "Search text with grep and transform it with cut, sort, uniq, and wc",
+            "Read documentation with man and --help instead of searching the web first",
+            "Practice daily: do routine tasks (moving files, searching logs) only from the terminal for a week"
+          ],
+          "resources": [
+            { "label": "Linux Journey — Guided Linux lessons", "url": "https://linuxjourney.com/" },
+            { "label": "MIT — The Missing Semester of Your CS Education", "url": "https://missing.csail.mit.edu/" },
+            { "label": "OverTheWire — Bandit wargame", "url": "https://overthewire.org/wargames/bandit/" },
+            { "label": "man7.org — Linux man pages", "url": "https://man7.org/linux/man-pages/" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can find, filter, and count lines in a log file using only grep, sort, and pipes",
+            "You can explain what stdin, stdout, and stderr are and redirect each one",
+            "You completed at least the first 15 levels of OverTheWire Bandit"
+          ]
+        },
+        {
+          "id": "users-groups-permissions",
+          "title": "Users, Groups & Permissions",
+          "description": "How Linux controls who can read, write, and execute what: users, groups, file modes, ownership, and sudo.",
+          "why": "Permission errors are one of the most common failures in deployments, containers, and CI jobs. Understanding the ownership model lets you fix 'Permission denied' correctly instead of reaching for chmod 777, and it underpins container security later.",
+          "learn": [
+            "Decode the output of ls -l: file type, owner, group, and the rwx permission triplets",
+            "Change ownership and modes with chown, chgrp, and chmod (both symbolic and octal forms)",
+            "Create and manage users and groups with useradd, usermod, and groupadd",
+            "Use sudo deliberately and read the structure of /etc/sudoers at a high level",
+            "Explain what setuid, setgid, and the sticky bit do and when they appear"
+          ],
+          "resources": [
+            { "label": "Linux Journey — Permissions and users", "url": "https://linuxjourney.com/" },
+            { "label": "man7.org — chmod(1)", "url": "https://man7.org/linux/man-pages/man1/chmod.1.html" },
+            { "label": "man7.org — Linux man pages", "url": "https://man7.org/linux/man-pages/" }
+          ],
+          "prerequisites": ["linux-cli-basics"],
+          "criteria": [
+            "You can translate between octal (754) and symbolic (rwxr-xr--) permissions instantly",
+            "You diagnosed and fixed a real 'Permission denied' error by changing ownership, not by chmod 777",
+            "You can explain why running services as root is dangerous"
+          ]
+        },
+        {
+          "id": "processes-and-systemd",
+          "title": "Processes & systemd Services",
+          "description": "How Linux runs programs: processes, signals, resource usage, and managing long-running services with systemd.",
+          "why": "Every app you deploy becomes a process that can hang, leak memory, or die. Knowing how to inspect, signal, and supervise processes lets you debug production issues and run anything reliably as a service.",
+          "learn": [
+            "Inspect running processes with ps and top/htop, reading CPU, memory, and state columns",
+            "Send signals with kill and explain the difference between SIGTERM and SIGKILL",
+            "Manage services with systemctl: start, stop, enable, status, and reading unit failures",
+            "Read service logs with journalctl, filtering by unit and time",
+            "Write a minimal systemd unit file that runs a script on boot and restarts on failure"
+          ],
+          "resources": [
+            { "label": "man7.org — systemctl(1)", "url": "https://man7.org/linux/man-pages/man1/systemctl.1.html" },
+            { "label": "man7.org — systemd.service(5)", "url": "https://man7.org/linux/man-pages/man5/systemd.service.5.html" },
+            { "label": "Linux Journey — Processes", "url": "https://linuxjourney.com/" }
+          ],
+          "prerequisites": ["linux-cli-basics"],
+          "criteria": [
+            "You wrote a systemd unit that keeps a script running and survives reboot",
+            "You can find which process is using a given port or eating CPU",
+            "You can explain the process lifecycle from fork/exec to exit and reaping"
+          ]
+        },
+        {
+          "id": "shell-scripting",
+          "title": "Shell Scripting",
+          "description": "Automating repetitive work with Bash: variables, conditionals, loops, functions, and safe scripting practices.",
+          "why": "Shell scripts are the glue of DevOps — CI steps, container entrypoints, cron jobs, and deploy hooks are all shell. Writing robust scripts (and reading other people's) is a daily-use skill that multiplies everything else you automate.",
+          "learn": [
+            "Write scripts with variables, command substitution, if/case conditionals, and for/while loops",
+            "Handle arguments with $1, $@, and getopts, and exit with meaningful status codes",
+            "Adopt safety defaults: set -euo pipefail, quoting variables, and validating inputs",
+            "Lint every script with ShellCheck and fix what it flags",
+            "Automate one real chore end-to-end (backup, log rotation, or bulk rename)"
+          ],
+          "resources": [
+            { "label": "GNU — Bash Reference Manual", "url": "https://www.gnu.org/software/bash/manual/" },
+            { "label": "ShellCheck — Shell script linter", "url": "https://www.shellcheck.net/" },
+            { "label": "MIT Missing Semester — Shell tools and scripting", "url": "https://missing.csail.mit.edu/2020/shell-tools/" }
+          ],
+          "prerequisites": ["linux-cli-basics"],
+          "criteria": [
+            "You wrote a script with arguments, error handling, and a clean ShellCheck pass",
+            "You can explain why unquoted variables and missing set -e cause real bugs",
+            "You automated a task you previously did by hand"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Networking Basics",
+      "description": "Understand how machines find and talk to each other, so you can debug connectivity anywhere in the stack.",
+      "topics": [
+        {
+          "id": "tcp-ip-fundamentals",
+          "title": "TCP/IP & the Network Stack",
+          "description": "The layered model of networking: IP addresses, subnets, ports, TCP vs UDP, and how packets move between hosts.",
+          "why": "Timeouts, connection refused, and unreachable hosts are the bread and butter of infrastructure debugging. A mental model of the stack tells you which layer is broken and which tool to reach for, instead of restarting things at random.",
+          "learn": [
+            "Explain the roles of IP, TCP, and UDP and what a port number identifies",
+            "Read IP addresses and CIDR notation (what does /24 mean?) and identify private ranges",
+            "Trace connectivity with ping and traceroute, and see what is listening with ss or netstat",
+            "Walk through the TCP three-way handshake and what 'connection refused' vs 'timeout' implies",
+            "Capture and read some real traffic with tcpdump or Wireshark"
+          ],
+          "resources": [
+            { "label": "Beej's Guide to Network Programming", "url": "https://beej.us/guide/bgnet/" },
+            { "label": "Cloudflare Learning — What is TCP/IP?", "url": "https://www.cloudflare.com/learning/ddos/glossary/tcp-ip/" },
+            { "label": "Wizard Zines — Networking comics by Julia Evans", "url": "https://wizardzines.com/" }
+          ],
+          "prerequisites": ["linux-cli-basics"],
+          "criteria": [
+            "You can explain what happens at each layer when you load a website",
+            "You can tell from an error whether the problem is DNS, routing, a closed port, or a dead service",
+            "You subnetted a network on paper: usable hosts in a /26, broadcast address, and ranges"
+          ]
+        },
+        {
+          "id": "dns-fundamentals",
+          "title": "DNS",
+          "description": "How names become IP addresses: resolvers, authoritative servers, record types, TTLs, and caching.",
+          "why": "'It's always DNS' is a joke because it's true — DNS misconfiguration causes an outsized share of outages. You will manage records for every service you ship, and debugging resolution is a weekly task in real operations.",
+          "learn": [
+            "Follow a full resolution: stub resolver, recursive resolver, root, TLD, authoritative server",
+            "Know the core record types — A, AAAA, CNAME, MX, TXT, NS — and when each is used",
+            "Query records directly with dig and interpret the answer, authority, and TTL fields",
+            "Explain caching and TTLs, and why DNS changes 'take time to propagate'",
+            "Point a real domain or subdomain at a server you control"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — What is DNS?", "url": "https://www.cloudflare.com/learning/dns/what-is-dns/" },
+            { "label": "Wizard Zines — How DNS Works", "url": "https://wizardzines.com/zines/dns/" },
+            { "label": "Linux Journey — Network sharing and DNS", "url": "https://linuxjourney.com/" }
+          ],
+          "prerequisites": ["tcp-ip-fundamentals"],
+          "criteria": [
+            "You can resolve a name step by step with dig and explain every section of the output",
+            "You configured DNS records for a real domain and verified them",
+            "You can explain the difference between a CNAME and an A record and when CNAMEs break"
+          ]
+        },
+        {
+          "id": "http-https-tls",
+          "title": "HTTP, HTTPS & TLS",
+          "description": "The protocol of the web: requests and responses, methods, status codes, headers, and how TLS secures the connection.",
+          "why": "Almost everything you deploy speaks HTTP — APIs, health checks, load balancers, webhooks. Reading raw requests and understanding certificates lets you debug 502s, redirect loops, and TLS failures that stump application developers.",
+          "learn": [
+            "Anatomize a request/response: method, path, status code, and key headers",
+            "Memorize what status classes mean (2xx/3xx/4xx/5xx) and the big ones: 200, 301, 403, 404, 500, 502, 503",
+            "Make and inspect requests with curl -v, including headers, redirects, and POST bodies",
+            "Explain the TLS handshake at a high level: certificates, chains of trust, and why they expire",
+            "Set up HTTPS on a server or reverse proxy with a real certificate"
+          ],
+          "resources": [
+            { "label": "MDN — HTTP documentation", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" },
+            { "label": "Cloudflare Learning — What is SSL/TLS?", "url": "https://www.cloudflare.com/learning/ssl/what-is-ssl/" },
+            { "label": "IETF — RFC 9110: HTTP Semantics", "url": "https://datatracker.ietf.org/doc/html/rfc9110" }
+          ],
+          "prerequisites": ["tcp-ip-fundamentals", "dns-fundamentals"],
+          "criteria": [
+            "You can debug an API call with curl -v and explain every header you see",
+            "You served a site over HTTPS with a valid certificate you provisioned yourself",
+            "You can explain what a 502 vs 503 vs 504 from a load balancer tells you"
+          ]
+        },
+        {
+          "id": "ssh-remote-access",
+          "title": "SSH & Remote Access",
+          "description": "Securely administering remote machines: key-based auth, ssh config, jump hosts, tunnels, and scp/rsync.",
+          "why": "SSH is how you reach every server, and its key model reappears in Git, CI deploy keys, and bastion hosts. Mastering keys and tunnels makes remote work fast and safe, and misunderstanding them is a classic source of lockouts and leaks.",
+          "learn": [
+            "Generate a modern keypair with ssh-keygen and install it with ssh-copy-id",
+            "Explain public vs private keys and why the private key never leaves your machine",
+            "Write ~/.ssh/config entries for hosts, users, ports, and jump hosts (ProxyJump)",
+            "Copy files with scp and rsync, and forward a remote port with ssh -L",
+            "Harden a server: disable password auth and root login in sshd_config"
+          ],
+          "resources": [
+            { "label": "man7.org — ssh(1)", "url": "https://man7.org/linux/man-pages/man1/ssh.1.html" },
+            { "label": "man7.org — ssh-keygen(1)", "url": "https://man7.org/linux/man-pages/man1/ssh-keygen.1.html" },
+            { "label": "Cloudflare Learning — What is SSH?", "url": "https://www.cloudflare.com/learning/access-management/what-is-ssh/" }
+          ],
+          "prerequisites": ["linux-cli-basics", "tcp-ip-fundamentals"],
+          "criteria": [
+            "You log into your servers with keys only, via aliases in ~/.ssh/config",
+            "You tunneled a remote database port to your laptop with ssh -L",
+            "You hardened sshd on a real machine and verified password auth is rejected"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Containers",
+      "description": "Package applications with their dependencies and run them anywhere — from a laptop to a Kubernetes cluster.",
+      "topics": [
+        {
+          "id": "docker-fundamentals",
+          "title": "Docker Fundamentals",
+          "description": "What containers are, how they differ from VMs, and the core Docker workflow: pull, run, exec, logs, stop.",
+          "why": "Containers are the standard unit of deployment in modern infrastructure. Understanding images vs containers and the isolation model (namespaces, cgroups) demystifies everything from CI runners to Kubernetes pods.",
+          "learn": [
+            "Explain what a container is and how it differs from a virtual machine",
+            "Run containers with docker run, mapping ports (-p) and setting environment variables (-e)",
+            "Inspect running containers with docker ps, logs, exec, and inspect",
+            "Understand images vs containers, and manage them with pull, images, and rm/rmi",
+            "Persist data with volumes and explain why container filesystems are ephemeral"
+          ],
+          "resources": [
+            { "label": "Docker Docs — Get started", "url": "https://docs.docker.com/get-started/" },
+            { "label": "roadmap.sh — Docker roadmap", "url": "https://roadmap.sh/docker" }
+          ],
+          "prerequisites": ["linux-cli-basics", "processes-and-systemd"],
+          "criteria": [
+            "You can run a third-party service (e.g. Postgres) in a container with a persistent volume",
+            "You can explain the difference between an image, a container, and a volume",
+            "You debugged a failing container using logs and exec"
+          ]
+        },
+        {
+          "id": "dockerfiles-and-images",
+          "title": "Dockerfiles & Image Building",
+          "description": "Writing Dockerfiles to build your own images: layers, caching, multi-stage builds, and keeping images small and secure.",
+          "why": "Every application you ship needs an image, and badly built images mean slow pipelines, bloated registries, and security holes. Layer caching and multi-stage builds can cut build times and image sizes by an order of magnitude.",
+          "learn": [
+            "Write a Dockerfile for a real app using FROM, COPY, RUN, ENV, EXPOSE, and CMD",
+            "Explain image layers and order instructions to maximize build-cache hits",
+            "Use a .dockerignore file and explain what the build context is",
+            "Convert a build to multi-stage so the final image contains only the runtime",
+            "Run the app as a non-root user and pin base image versions"
+          ],
+          "resources": [
+            { "label": "Docker Docs — Dockerfile reference", "url": "https://docs.docker.com/reference/dockerfile/" },
+            { "label": "Docker Docs — Build overview", "url": "https://docs.docker.com/build/" }
+          ],
+          "prerequisites": ["docker-fundamentals"],
+          "criteria": [
+            "You containerized one of your own applications from scratch",
+            "You reduced an image's size significantly using multi-stage builds",
+            "You can explain why changing one source file shouldn't reinstall all dependencies (layer caching)"
+          ]
+        },
+        {
+          "id": "docker-compose",
+          "title": "Docker Compose & Multi-Container Apps",
+          "description": "Defining multi-service applications declaratively: services, networks, volumes, and environment config in one file.",
+          "why": "Real systems are an app plus a database plus a cache plus a proxy. Compose teaches you to describe whole environments as code — the same declarative mindset Kubernetes and IaC use — and gives every teammate an identical dev stack in one command.",
+          "learn": [
+            "Write a compose.yaml with two or more services, e.g. an app and its database",
+            "Wire services together on a network and explain how service names become DNS hostnames",
+            "Manage configuration with environment variables and env files, keeping secrets out of the file",
+            "Use volumes for persistent data and bind mounts for live code reload in development",
+            "Control the stack with up, down, and logs, rebuilding only what changed"
+          ],
+          "resources": [
+            { "label": "Docker Docs — Docker Compose", "url": "https://docs.docker.com/compose/" },
+            { "label": "GitHub — Awesome Compose examples", "url": "https://github.com/docker/awesome-compose" }
+          ],
+          "prerequisites": ["dockerfiles-and-images"],
+          "criteria": [
+            "You run an app + database + one more service with a single command",
+            "You can explain how containers on a compose network find each other",
+            "Your stack survives docker compose down && up without losing data"
+          ]
+        },
+        {
+          "id": "kubernetes-fundamentals",
+          "title": "Kubernetes Fundamentals",
+          "description": "The industry-standard container orchestrator: pods, deployments, services, and the declarative reconciliation model.",
+          "why": "Kubernetes is where most production containers run, and its concepts (desired state, controllers, self-healing) define modern operations. Even a working knowledge of pods, deployments, and services makes you effective on almost any platform team.",
+          "learn": [
+            "Explain the architecture: control plane, nodes, and the reconciliation loop toward desired state",
+            "Run a local cluster (minikube or kind) and deploy a pod, then a Deployment with replicas",
+            "Expose an app with a Service and explain ClusterIP vs NodePort vs LoadBalancer",
+            "Manage configuration with ConfigMaps and Secrets, and set resource requests and limits",
+            "Debug workloads with kubectl get, describe, logs, and exec"
+          ],
+          "resources": [
+            { "label": "Kubernetes Docs — Learn Kubernetes Basics tutorial", "url": "https://kubernetes.io/docs/tutorials/kubernetes-basics/" },
+            { "label": "Kubernetes Docs — Concepts", "url": "https://kubernetes.io/docs/concepts/" },
+            { "label": "roadmap.sh — Kubernetes roadmap", "url": "https://roadmap.sh/kubernetes" }
+          ],
+          "prerequisites": ["dockerfiles-and-images", "tcp-ip-fundamentals"],
+          "criteria": [
+            "You deployed your own image to a local cluster with a Deployment and Service",
+            "You killed a pod and watched Kubernetes recreate it, and can explain why",
+            "You can debug a CrashLoopBackOff using describe and logs"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "CI/CD",
+      "description": "Automate the path from commit to production: version control workflows, pipelines, and safe deployment strategies.",
+      "topics": [
+        {
+          "id": "git-collaboration",
+          "title": "Git & Collaboration Workflows",
+          "description": "Version control beyond commit/push: branching, merging vs rebasing, pull requests, and resolving conflicts.",
+          "why": "CI/CD is triggered by Git events, so pipeline design starts with branch strategy. Confident history manipulation and conflict resolution keep teams unblocked and are assumed knowledge for every DevOps role.",
+          "learn": [
+            "Master the core loop: clone, branch, commit, push, pull, and inspecting history with log and diff",
+            "Practice merging and rebasing, and explain when each is appropriate",
+            "Resolve merge conflicts deliberately rather than by accepting one side blindly",
+            "Work with pull requests: review, request changes, and protect the main branch",
+            "Recover from mistakes with reflog, reset, and revert"
+          ],
+          "resources": [
+            { "label": "Pro Git — The Git book (free)", "url": "https://git-scm.com/book/en/v2" },
+            { "label": "GitHub Docs — Get started", "url": "https://docs.github.com/en/get-started" },
+            { "label": "GitHub Education — Learning resources", "url": "https://education.github.com/" }
+          ],
+          "prerequisites": ["linux-cli-basics"],
+          "criteria": [
+            "You can explain merge vs rebase with a drawing of the commit graph",
+            "You resolved a real merge conflict and verified the result",
+            "You recovered a 'lost' commit using reflog"
+          ]
+        },
+        {
+          "id": "ci-fundamentals",
+          "title": "Continuous Integration Concepts",
+          "description": "The practice of building and testing every change automatically: pipelines, stages, artifacts, and fast feedback.",
+          "why": "CI is the safety net that makes frequent deployment possible — it catches breakage minutes after a commit instead of days later in production. Understanding the principles lets you design good pipelines on any tool, not just copy YAML.",
+          "learn": [
+            "Explain why integrating small changes frequently beats long-lived branches",
+            "Break a pipeline into stages: lint, build, test, package — and decide what blocks a merge",
+            "Understand artifacts and caching: what gets built once and passed along",
+            "Keep pipelines fast: parallel jobs, cached dependencies, failing early",
+            "Treat a red build as the team's top priority and keep main always releasable"
+          ],
+          "resources": [
+            { "label": "Martin Fowler — Continuous Integration", "url": "https://martinfowler.com/articles/continuousIntegration.html" },
+            { "label": "roadmap.sh — DevOps roadmap (CI/CD)", "url": "https://roadmap.sh/devops" }
+          ],
+          "prerequisites": ["git-collaboration"],
+          "criteria": [
+            "You can sketch a sensible pipeline for a given project: stages, triggers, and blocking checks",
+            "You can explain the difference between continuous integration, delivery, and deployment",
+            "You identified and fixed the slowest step in a real pipeline"
+          ]
+        },
+        {
+          "id": "github-actions",
+          "title": "Pipelines with GitHub Actions",
+          "description": "Building real CI/CD workflows: triggers, jobs, runners, secrets, matrix builds, and publishing artifacts or images.",
+          "why": "GitHub Actions is the most widely used CI system, and its concepts (event triggers, jobs, secrets, reusable steps) transfer directly to GitLab CI, Jenkins, and others. Building a pipeline end-to-end turns CI theory into a working deliverable.",
+          "learn": [
+            "Write a workflow triggered on push and pull_request that lints, builds, and tests your project",
+            "Use jobs, steps, and marketplace actions, and understand what runs on which runner",
+            "Store credentials in encrypted secrets and use them safely in workflows",
+            "Build and push a Docker image to a registry from the pipeline",
+            "Add a matrix build (multiple versions or platforms) and cache dependencies for speed"
+          ],
+          "resources": [
+            { "label": "GitHub Docs — GitHub Actions", "url": "https://docs.github.com/en/actions" },
+            { "label": "GitHub Skills — Hands-on courses", "url": "https://skills.github.com/" }
+          ],
+          "prerequisites": ["ci-fundamentals", "dockerfiles-and-images"],
+          "criteria": [
+            "Every push to your project triggers tests automatically and blocks merge on failure",
+            "Your pipeline builds and publishes a container image using secrets correctly",
+            "You can explain what happens from git push to green check, step by step"
+          ]
+        },
+        {
+          "id": "deployment-strategies",
+          "title": "Deployment Strategies",
+          "description": "Shipping changes without downtime or drama: rolling updates, blue-green, canary releases, feature flags, and rollbacks.",
+          "why": "How you deploy determines your blast radius when something goes wrong. Knowing the trade-offs between strategies — and always having a tested rollback — is what separates confident frequent releases from risky big-bang deploys.",
+          "learn": [
+            "Compare rolling, blue-green, and canary deployments and the failure modes of each",
+            "Explain how health checks and readiness probes gate traffic during a rollout",
+            "Use feature flags to decouple deploying code from releasing features",
+            "Design a rollback plan: what triggers it and how fast it completes",
+            "Apply twelve-factor principles: config in the environment, stateless processes, disposability"
+          ],
+          "resources": [
+            { "label": "Martin Fowler — Blue-Green Deployment", "url": "https://martinfowler.com/bliki/BlueGreenDeployment.html" },
+            { "label": "Martin Fowler — Canary Release", "url": "https://martinfowler.com/bliki/CanaryRelease.html" },
+            { "label": "The Twelve-Factor App", "url": "https://12factor.net/" }
+          ],
+          "prerequisites": ["ci-fundamentals", "kubernetes-fundamentals"],
+          "criteria": [
+            "You can recommend a deployment strategy for a given service and justify it",
+            "You performed a zero-downtime deploy and a rollback on a real or demo app",
+            "You can explain how a canary detects problems before all users are affected"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Infrastructure as Code",
+      "description": "Define servers, networks, and configuration in versioned code instead of clicking through consoles.",
+      "topics": [
+        {
+          "id": "iac-principles",
+          "title": "IaC Principles",
+          "description": "Why infrastructure belongs in version control: declarative definitions, idempotency, drift, and immutable infrastructure.",
+          "why": "Hand-built servers are unreproducible snowflakes that fail at the worst moments. IaC makes environments reviewable, repeatable, and recoverable — you can rebuild everything from a Git repo, and changes go through the same review process as application code.",
+          "learn": [
+            "Contrast declarative ('what I want') with imperative ('what to do') infrastructure definitions",
+            "Define idempotency and explain why running the same code twice must be safe",
+            "Explain configuration drift and how IaC detects and corrects it",
+            "Compare mutable servers (patched in place) with immutable infrastructure (replaced, never modified)",
+            "Distinguish provisioning tools (Terraform) from configuration management (Ansible) and where each fits"
+          ],
+          "resources": [
+            { "label": "Martin Fowler — Infrastructure As Code", "url": "https://martinfowler.com/bliki/InfrastructureAsCode.html" },
+            { "label": "HashiCorp — Terraform intro: what and why", "url": "https://developer.hashicorp.com/terraform/intro" },
+            { "label": "roadmap.sh — Terraform roadmap", "url": "https://roadmap.sh/terraform" }
+          ],
+          "prerequisites": ["shell-scripting", "git-collaboration"],
+          "criteria": [
+            "You can explain idempotency and drift with concrete examples",
+            "You can argue when to reach for provisioning vs configuration management",
+            "You can describe how IaC changes get reviewed and applied on a real team"
+          ]
+        },
+        {
+          "id": "terraform-basics",
+          "title": "Terraform",
+          "description": "Provisioning cloud resources declaratively with HCL: providers, resources, state, plan/apply, variables, and modules.",
+          "why": "Terraform is the de facto standard for provisioning across every major cloud, and 'plan before apply' is the workflow serious teams use to change infrastructure safely. Its state model teaches you how declarative tools actually track reality.",
+          "learn": [
+            "Write a configuration with a provider and a few resources, then run init, plan, and apply",
+            "Read a plan output carefully and explain every create, change, and destroy before applying",
+            "Understand state: what terraform.tfstate contains, why it matters, and remote state for teams",
+            "Parameterize with variables and outputs, and reference resources by attribute",
+            "Extract a reusable module and destroy everything cleanly with terraform destroy"
+          ],
+          "resources": [
+            { "label": "HashiCorp — Terraform tutorials", "url": "https://developer.hashicorp.com/terraform/tutorials" },
+            { "label": "HashiCorp — Terraform documentation", "url": "https://developer.hashicorp.com/terraform/docs" }
+          ],
+          "prerequisites": ["iac-principles"],
+          "criteria": [
+            "You provisioned and destroyed real infrastructure entirely through Terraform",
+            "You can explain what would happen if you lost your state file",
+            "You caught an unintended change by reading a plan before applying it"
+          ]
+        },
+        {
+          "id": "ansible-config-management",
+          "title": "Configuration Management with Ansible",
+          "description": "Configuring fleets of machines over SSH with YAML playbooks: inventories, tasks, modules, handlers, and roles.",
+          "why": "Once servers exist, something must install packages, template configs, and manage services on them — repeatably. Ansible's agentless, push-over-SSH model makes it the gentlest entry into configuration management and a widely used tool in real fleets.",
+          "learn": [
+            "Set up an inventory of hosts and verify connectivity with the ping module",
+            "Write a playbook that installs packages, templates a config file, and restarts a service via handlers",
+            "Use variables, facts, and conditionals to handle differences between hosts",
+            "Keep playbooks idempotent: re-running reports zero changes on an already-configured host",
+            "Organize a larger setup into roles and store secrets with ansible-vault"
+          ],
+          "resources": [
+            { "label": "Ansible — Official documentation", "url": "https://docs.ansible.com/" },
+            { "label": "Ansible Docs — Getting started guide", "url": "https://docs.ansible.com/ansible/latest/getting_started/index.html" }
+          ],
+          "prerequisites": ["iac-principles", "ssh-remote-access"],
+          "criteria": [
+            "You configured a fresh server to run a service using only a playbook",
+            "Your playbook is idempotent: a second run makes zero changes",
+            "You can explain how Ansible differs from Terraform and when you'd use both together"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Cloud Platforms",
+      "description": "Learn the building blocks shared by AWS, GCP, and Azure: compute, storage, networking, and identity.",
+      "topics": [
+        {
+          "id": "cloud-fundamentals",
+          "title": "Cloud Concepts & Providers",
+          "description": "What cloud computing actually is: IaaS/PaaS/SaaS, regions and availability zones, elasticity, and the pay-per-use model.",
+          "why": "Nearly all modern infrastructure lives on a handful of cloud providers, and their shared vocabulary (regions, zones, managed services) is the language of every architecture discussion. Understanding the model — including how bills grow — makes everything after it concrete.",
+          "learn": [
+            "Define IaaS, PaaS, and SaaS with an example of each",
+            "Explain regions and availability zones and why multi-AZ matters for uptime",
+            "Understand the shared responsibility model: what the provider secures vs what you secure",
+            "Create a free-tier account, set a billing alarm first, and explore the console",
+            "Map the big three's core services to each other (compute, object storage, managed databases)"
+          ],
+          "resources": [
+            { "label": "AWS — Getting started resources", "url": "https://aws.amazon.com/getting-started/" },
+            { "label": "Google Cloud — Documentation", "url": "https://cloud.google.com/docs" },
+            { "label": "roadmap.sh — AWS roadmap", "url": "https://roadmap.sh/aws" }
+          ],
+          "prerequisites": ["tcp-ip-fundamentals"],
+          "criteria": [
+            "You can explain regions, AZs, and the shared responsibility model without notes",
+            "You created a cloud account with billing alerts configured before anything else",
+            "You can name the equivalent compute, storage, and database services across two providers"
+          ]
+        },
+        {
+          "id": "core-cloud-services",
+          "title": "Compute, Storage & Cloud Networking",
+          "description": "The workhorse services: virtual machines, object storage, managed databases, VPCs, subnets, and load balancers.",
+          "why": "Whatever you build — containers, serverless, or plain VMs — sits on these primitives. Being able to launch a VM in a properly configured network with the right firewall rules is the practical baseline for any cloud work, and it's where most security mistakes happen.",
+          "learn": [
+            "Launch a VM, SSH into it, and serve something from it, then tear it down",
+            "Store and retrieve files in object storage (e.g. S3) and explain buckets, keys, and access policies",
+            "Build a VPC mentally: public vs private subnets, route tables, internet and NAT gateways",
+            "Restrict traffic with security groups and firewall rules following least privilege",
+            "Put a load balancer in front of two instances and verify traffic distribution and health checks"
+          ],
+          "resources": [
+            { "label": "AWS — Documentation", "url": "https://docs.aws.amazon.com/" },
+            { "label": "Cloudflare Learning — What is the cloud?", "url": "https://www.cloudflare.com/learning/cloud/what-is-the-cloud/" }
+          ],
+          "prerequisites": ["cloud-fundamentals", "ssh-remote-access"],
+          "criteria": [
+            "You deployed a small app on a cloud VM behind correct firewall rules",
+            "You can diagram a VPC with public and private subnets and explain the routing",
+            "You can explain why a database belongs in a private subnet"
+          ]
+        },
+        {
+          "id": "cloud-iam-security",
+          "title": "Identity, Access & Cloud Security",
+          "description": "Controlling who and what can do anything in your cloud: IAM users, roles, policies, least privilege, and secret handling.",
+          "why": "Most cloud breaches trace back to over-permissive IAM or leaked credentials, not exotic exploits. Roles and least-privilege policies are also how your CI pipelines and services authenticate, so you cannot automate safely without them.",
+          "learn": [
+            "Distinguish users, groups, roles, and policies, and read a policy document's effect, action, and resource",
+            "Apply least privilege: grant a service exactly the permissions it needs and nothing more",
+            "Use roles for machines and pipelines instead of long-lived access keys",
+            "Keep secrets out of code: environment injection and managed secret stores",
+            "Enable MFA everywhere and audit who can do what in your account"
+          ],
+          "resources": [
+            { "label": "AWS Docs — Identity and Access Management (IAM)", "url": "https://docs.aws.amazon.com/iam/" },
+            { "label": "OWASP — Top Ten security risks", "url": "https://owasp.org/www-project-top-ten/" }
+          ],
+          "prerequisites": ["core-cloud-services"],
+          "criteria": [
+            "You created a least-privilege role for a real workload and verified broader actions are denied",
+            "Your pipelines authenticate without any long-lived secret keys in the repo",
+            "You can explain what a leaked access key allows and how you'd respond"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Monitoring & Observability",
+      "description": "See what production is doing: logs, metrics, dashboards, alerts, and a calm response when things break.",
+      "topics": [
+        {
+          "id": "observability-concepts",
+          "title": "Observability Concepts",
+          "description": "The three pillars — logs, metrics, and traces — and how they answer different questions about a running system.",
+          "why": "You cannot fix what you cannot see. Observability turns 'the site feels slow' into a specific, answerable question, and knowing which pillar to consult first is what makes incident debugging fast instead of frantic.",
+          "learn": [
+            "Define logs, metrics, and traces and the kind of question each answers best",
+            "Distinguish monitoring (known failure modes) from observability (debugging the unknown)",
+            "Learn the four golden signals: latency, traffic, errors, and saturation",
+            "Understand SLIs and SLOs and why 100% availability is the wrong target",
+            "Survey OpenTelemetry as the vendor-neutral standard for emitting telemetry"
+          ],
+          "resources": [
+            { "label": "Google — Site Reliability Engineering book (free)", "url": "https://sre.google/sre-book/table-of-contents/" },
+            { "label": "OpenTelemetry — Documentation", "url": "https://opentelemetry.io/docs/" }
+          ],
+          "prerequisites": ["deployment-strategies"],
+          "criteria": [
+            "You can explain which pillar you'd check first for three different symptoms",
+            "You can define the four golden signals for a service you run",
+            "You can explain an SLO and its error budget in plain language"
+          ]
+        },
+        {
+          "id": "logging-pipelines",
+          "title": "Logging",
+          "description": "Producing and consuming useful logs: structured logging, journald, log levels, aggregation, and searching at scale.",
+          "why": "Logs are usually the first and richest evidence when something breaks. Structured, centralized logs turn hours of SSH-and-grep across machines into a single query — and badly designed logging turns incidents into archaeology.",
+          "learn": [
+            "Read system and service logs fluently with journalctl and docker/kubectl logs",
+            "Emit structured (JSON) logs with consistent fields instead of free-form strings",
+            "Use log levels deliberately and explain what belongs at ERROR vs INFO vs DEBUG",
+            "Treat logs as event streams written to stdout, collected by the platform",
+            "Set up or use a log aggregation stack and search across services by request ID"
+          ],
+          "resources": [
+            { "label": "man7.org — journalctl(1)", "url": "https://man7.org/linux/man-pages/man1/journalctl.1.html" },
+            { "label": "The Twelve-Factor App — Logs", "url": "https://12factor.net/logs" },
+            { "label": "Grafana — Documentation (Loki and more)", "url": "https://grafana.com/docs/" }
+          ],
+          "prerequisites": ["observability-concepts"],
+          "criteria": [
+            "You traced a single request across multiple services using log search",
+            "Your app emits structured logs with levels, timestamps, and correlation IDs",
+            "You can explain why apps should log to stdout rather than files"
+          ]
+        },
+        {
+          "id": "metrics-and-dashboards",
+          "title": "Metrics with Prometheus & Grafana",
+          "description": "Collecting time-series metrics with Prometheus and visualizing them in Grafana: exporters, PromQL, and dashboards.",
+          "why": "Metrics are cheap enough to record continuously, making them the backbone of alerting and capacity planning. The Prometheus pull model and PromQL are the de facto standard, especially in Kubernetes environments, and dashboards are how teams share a view of system health.",
+          "learn": [
+            "Run Prometheus and scrape node_exporter to collect host metrics",
+            "Understand the data model: metric names, labels, and counter vs gauge vs histogram",
+            "Write basic PromQL: rate() over counters, aggregations by label, and percentiles from histograms",
+            "Build a Grafana dashboard showing the golden signals for one service",
+            "Instrument one of your own apps with a metrics endpoint"
+          ],
+          "resources": [
+            { "label": "Prometheus — Overview and docs", "url": "https://prometheus.io/docs/introduction/overview/" },
+            { "label": "Grafana — Documentation", "url": "https://grafana.com/docs/" }
+          ],
+          "prerequisites": ["observability-concepts", "docker-compose"],
+          "criteria": [
+            "You built a dashboard that shows request rate, errors, and latency for a real service",
+            "You can explain why counters need rate() and what a histogram quantile means",
+            "Your own application exposes at least three custom metrics"
+          ]
+        },
+        {
+          "id": "alerting-and-incident-response",
+          "title": "Alerting & Incident Response",
+          "description": "Turning telemetry into action: alert rules that page on symptoms, on-call practice, runbooks, and blameless postmortems.",
+          "why": "An unwatched dashboard helps nobody at 3 a.m. — alerts are what actually summon a human, and noisy ones burn teams out until real pages get ignored. Structured incident response and blameless postmortems are how organizations get more reliable after every failure.",
+          "learn": [
+            "Write alert rules on symptoms users feel (error rate, latency) rather than causes (CPU)",
+            "Tune alerts to be actionable: every page should require a human decision",
+            "Write a runbook for your most likely failure so 3 a.m. you can follow it",
+            "Learn incident roles and communication flow: commander, responders, status updates",
+            "Run a blameless postmortem: timeline, contributing factors, and concrete follow-ups"
+          ],
+          "resources": [
+            { "label": "Google SRE Book — Free online edition", "url": "https://sre.google/sre-book/table-of-contents/" },
+            { "label": "PagerDuty — Incident Response guide", "url": "https://response.pagerduty.com/" },
+            { "label": "Google — The Site Reliability Workbook (free)", "url": "https://sre.google/workbook/table-of-contents/" }
+          ],
+          "prerequisites": ["metrics-and-dashboards"],
+          "criteria": [
+            "You configured an alert that fires on a user-facing symptom and routes to a human",
+            "You wrote a runbook that someone else could follow during an incident",
+            "You conducted or participated in a blameless postmortem with tracked action items"
+          ]
+        }
+      ]
+    }
+  ]
+}

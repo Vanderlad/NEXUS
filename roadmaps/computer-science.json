@@ -1,0 +1,659 @@
+{
+  "slug": "computer-science",
+  "title": "Computer Science",
+  "source": "roadmap.sh",
+  "url": "https://roadmap.sh/computer-science",
+  "description": "A ground-up path through core CS: programming, data structures, algorithms, systems, and the math that powers them.",
+  "sections": [
+    {
+      "title": "Programming Fundamentals",
+      "description": "Learn to write, run, and manage real programs — the toolkit every other stage builds on.",
+      "topics": [
+        {
+          "id": "pick-a-language",
+          "title": "Pick a First Language",
+          "description": "Choose one language (Python or C are classic CS starters) and set up a working environment where you can write and run code daily.",
+          "why": "Every concept in this roadmap is learned by implementing it, so you need one language you know well enough to think in. Depth in one language beats shallow exposure to five, and the skills transfer once fundamentals click.",
+          "learn": [
+            "Install Python (or C with gcc/clang) and a code editor, and run a hello-world program from the terminal",
+            "Work through the official tutorial for your language end to end",
+            "Write ten tiny programs: a calculator, a unit converter, a number-guessing game, and similar",
+            "Learn to read error messages and stack traces instead of guessing"
+          ],
+          "resources": [
+            { "label": "Harvard — CS50x: Introduction to Computer Science", "url": "https://cs50.harvard.edu/x/" },
+            { "label": "Python — The Official Python Tutorial", "url": "https://docs.python.org/3/tutorial/" },
+            { "label": "freeCodeCamp — Interactive Curriculum", "url": "https://www.freecodecamp.org/learn" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can write, run, and debug a small program without copying code",
+            "You completed an official tutorial or CS50's first weeks in your chosen language",
+            "You can explain why you chose your language and what it is good at"
+          ]
+        },
+        {
+          "id": "programming-basics",
+          "title": "Core Programming Constructs",
+          "description": "Variables, types, control flow, loops, functions, and basic I/O — the grammar shared by nearly every programming language.",
+          "why": "These constructs are the atoms of all software; data structures and algorithms are just disciplined arrangements of them. Fluency here means later topics are about ideas, not syntax fights.",
+          "learn": [
+            "Practice conditionals, loops, and functions until you can write them without reference",
+            "Learn how types work in your language: numbers, strings, booleans, collections",
+            "Decompose a problem into small functions with clear inputs and outputs",
+            "Read a program you did not write and trace its execution on paper",
+            "Learn basic file and console I/O to make programs that do useful work"
+          ],
+          "resources": [
+            { "label": "Harvard — CS50x lecture notes and problem sets", "url": "https://cs50.harvard.edu/x/" },
+            { "label": "Khan Academy — Computer Programming", "url": "https://www.khanacademy.org/computing/computer-programming" },
+            { "label": "Beej's Guide to C Programming", "url": "https://beej.us/guide/bgc/" }
+          ],
+          "prerequisites": ["pick-a-language"],
+          "criteria": [
+            "You can implement FizzBuzz-level problems in under five minutes",
+            "You built a small multi-function program (e.g., a to-do CLI or text game)",
+            "You can trace a loop with nested conditions by hand and predict its output"
+          ]
+        },
+        {
+          "id": "command-line-and-unix",
+          "title": "Command Line & Unix Basics",
+          "description": "Navigating a Unix shell: files, pipes, permissions, processes, and the standard toolbox (grep, find, curl, and friends).",
+          "why": "Almost all serious development, servers, and tooling live in the terminal. Shell fluency compounds daily: it makes you faster at everything else and is assumed knowledge in systems courses and real jobs.",
+          "learn": [
+            "Learn filesystem navigation, file manipulation, and permissions (cd, ls, mv, chmod)",
+            "Compose commands with pipes and redirection to filter and transform text",
+            "Use grep, find, and a terminal editor (nano or vim) comfortably",
+            "Play OverTheWire Bandit to level 15+ to cement the skills",
+            "Write a small shell script that automates something you do repeatedly"
+          ],
+          "resources": [
+            { "label": "MIT — The Missing Semester of Your CS Education", "url": "https://missing.csail.mit.edu/" },
+            { "label": "Linux Journey — Interactive Linux lessons", "url": "https://linuxjourney.com/" },
+            { "label": "OverTheWire — Bandit wargame", "url": "https://overthewire.org/wargames/bandit/" },
+            { "label": "Wizard Zines — Julia Evans' programming zines", "url": "https://wizardzines.com/" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can find, filter, and transform text files using pipes without a GUI",
+            "You completed OverTheWire Bandit through at least level 15",
+            "You wrote a shell script with arguments and used it more than once"
+          ]
+        },
+        {
+          "id": "version-control-git",
+          "title": "Version Control with Git",
+          "description": "Tracking code history with Git: commits, branches, merges, remotes, and collaborating through platforms like GitHub.",
+          "why": "Git is the universal safety net and collaboration protocol of software. Every project in this roadmap should live in a repository, and every team you ever join will expect branch-and-merge fluency.",
+          "learn": [
+            "Initialize a repo and build the habit: small commits with meaningful messages",
+            "Learn branching, merging, and resolving conflicts on a toy repository",
+            "Push to a remote, open a pull request, and review a diff",
+            "Practice undoing mistakes: restore, reset, revert, and reading the reflog"
+          ],
+          "resources": [
+            { "label": "Pro Git — The official Git book (free)", "url": "https://git-scm.com/book/en/v2" },
+            { "label": "Git — Official reference documentation", "url": "https://git-scm.com/docs" },
+            { "label": "GitHub Education — Student resources", "url": "https://education.github.com/" }
+          ],
+          "prerequisites": ["command-line-and-unix"],
+          "criteria": [
+            "You can explain the difference between working tree, staging area, and history",
+            "You resolved a merge conflict deliberately created on a practice repo",
+            "All your learning projects live in Git with a readable commit history"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Math for Computer Science",
+      "description": "The discrete math, counting, and linear algebra that make algorithm analysis and advanced CS legible.",
+      "topics": [
+        {
+          "id": "discrete-math",
+          "title": "Discrete Math, Logic & Proofs",
+          "description": "Propositional logic, sets, functions, relations, induction, and the art of reading and writing proofs.",
+          "why": "Discrete math is the native language of computer science: correctness arguments, recursion, database theory, and cryptography all speak it. Induction in particular is the mental model behind every recursive algorithm you will write.",
+          "learn": [
+            "Learn propositional logic: truth tables, implication, and logical equivalence",
+            "Work with sets, functions, and relations, and their standard notation",
+            "Master proof techniques: direct, contrapositive, contradiction, and induction",
+            "Prove small claims about programs, like a loop invariant or a recursion bound"
+          ],
+          "resources": [
+            { "label": "MIT OCW — Mathematics for Computer Science (6.042J)", "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/" },
+            { "label": "Book of Proof — Richard Hammack (free)", "url": "https://www.people.vcu.edu/~rhammack/BookOfProof/" },
+            { "label": "roadmap.sh — Computer Science roadmap", "url": "https://roadmap.sh/computer-science" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can write a correct induction proof unaided",
+            "You can translate an English claim into precise logical notation",
+            "You can explain what makes an argument a proof versus a plausible story"
+          ]
+        },
+        {
+          "id": "combinatorics-and-probability",
+          "title": "Combinatorics & Probability",
+          "description": "Counting principles, permutations and combinations, basic probability, expectation, and common distributions.",
+          "why": "Counting arguments drive complexity analysis, hashing behavior, and randomized algorithms. Probability is also the foundation for reasoning about load balancing, caching, and anything involving uncertainty or data.",
+          "learn": [
+            "Master the sum and product rules, permutations, and combinations",
+            "Compute probabilities with conditional probability and independence",
+            "Understand expected value and use it on classic puzzles (dice, birthday problem)",
+            "Connect the ideas to CS: hash collisions, average-case analysis, randomized quicksort"
+          ],
+          "resources": [
+            { "label": "Khan Academy — Statistics and Probability", "url": "https://www.khanacademy.org/math/statistics-probability" },
+            { "label": "MIT OCW — Mathematics for Computer Science (6.042J)", "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/" },
+            { "label": "Project Euler — Math-flavored programming problems", "url": "https://projecteuler.net/" }
+          ],
+          "prerequisites": ["discrete-math"],
+          "criteria": [
+            "You can solve counting problems mixing permutations and combinations",
+            "You can explain the birthday paradox and its relevance to hash collisions",
+            "You solved ten or more Project Euler problems with code"
+          ]
+        },
+        {
+          "id": "linear-algebra-basics",
+          "title": "Linear Algebra Basics",
+          "description": "Vectors, matrices, matrix multiplication, and linear transformations, with geometric intuition for what they mean.",
+          "why": "Linear algebra underpins graphics, machine learning, scientific computing, and network analysis. Even a working intuition for vectors and matrix operations unlocks huge areas of modern computing.",
+          "learn": [
+            "Learn vector operations: addition, scaling, dot product, and their geometry",
+            "Understand matrices as linear transformations, not just grids of numbers",
+            "Practice matrix multiplication and know why it is not commutative",
+            "Implement dot product and matrix multiply from scratch in your language"
+          ],
+          "resources": [
+            { "label": "Khan Academy — Linear Algebra", "url": "https://www.khanacademy.org/math/linear-algebra" },
+            { "label": "3Blue1Brown — Essence of Linear Algebra", "url": "https://www.3blue1brown.com/topics/linear-algebra" },
+            { "label": "MIT OCW — Linear Algebra (18.06, Gilbert Strang)", "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can multiply matrices by hand and explain what the result represents",
+            "You implemented matrix multiplication in code and tested it",
+            "You can describe a real system (graphics, ML, graphs) that relies on linear algebra"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Structures",
+      "description": "The core ways to organize data in memory, and the cost model of each operation.",
+      "topics": [
+        {
+          "id": "arrays-and-strings",
+          "title": "Arrays & Strings",
+          "description": "Contiguous storage: static and dynamic arrays, string representation, and the classic patterns (two pointers, sliding window).",
+          "why": "Arrays are the default data structure and the baseline every other structure is measured against. The two-pointer and sliding-window patterns built on them solve an enormous share of practical and interview problems.",
+          "learn": [
+            "Understand memory layout: indexing is O(1), insertion in the middle is O(n)",
+            "Learn how dynamic arrays grow and what amortized cost means",
+            "Practice the two-pointer and sliding-window patterns on real problems",
+            "Handle strings deliberately: immutability, encodings, and building vs concatenating"
+          ],
+          "resources": [
+            { "label": "VisuAlgo — Data structure visualizations", "url": "https://visualgo.net/en" },
+            { "label": "NeetCode — Curated practice problems", "url": "https://neetcode.io/" },
+            { "label": "LeetCode — Coding practice problems", "url": "https://leetcode.com/" }
+          ],
+          "prerequisites": ["programming-basics"],
+          "criteria": [
+            "You can explain why appending to a dynamic array is amortized O(1)",
+            "You solved ten or more array/string problems using two pointers or sliding window",
+            "You can pick between array and other structures for a given access pattern"
+          ]
+        },
+        {
+          "id": "linked-lists-stacks-queues",
+          "title": "Linked Lists, Stacks & Queues",
+          "description": "Node-and-pointer structures and the two fundamental access disciplines: LIFO stacks and FIFO queues.",
+          "why": "Pointer manipulation is where many programmers' mental model of memory either forms or fails. Stacks and queues then show up everywhere: call stacks, undo systems, schedulers, BFS/DFS, and parsers.",
+          "learn": [
+            "Implement a singly linked list from scratch: insert, delete, reverse",
+            "Implement a stack and a queue, and know their O(1) operations",
+            "Trace the runtime call stack to understand recursion and stack overflows",
+            "Solve classic problems: balanced parentheses, cycle detection, queue via two stacks"
+          ],
+          "resources": [
+            { "label": "VisuAlgo — Data structure and algorithm visualizations", "url": "https://visualgo.net/en" },
+            { "label": "Khan Academy — Algorithms course", "url": "https://www.khanacademy.org/computing/computer-science/algorithms" },
+            { "label": "NeetCode — Practice roadmap", "url": "https://neetcode.io/roadmap" }
+          ],
+          "prerequisites": ["arrays-and-strings"],
+          "criteria": [
+            "You implemented linked list, stack, and queue from scratch with tests",
+            "You can reverse a linked list on a whiteboard without hesitation",
+            "You can name two real systems each for stacks and queues"
+          ]
+        },
+        {
+          "id": "hash-tables",
+          "title": "Hash Tables",
+          "description": "Key-value storage with average O(1) lookup: hash functions, collision handling, and load factors.",
+          "why": "Hash tables are arguably the single most useful data structure in practice — they power dictionaries, caches, indexes, and deduplication. Knowing how they work explains both their speed and their failure modes.",
+          "learn": [
+            "Understand hash functions and what makes one good for a table",
+            "Learn collision resolution: chaining vs open addressing",
+            "Understand load factor and why tables resize",
+            "Build a toy hash map from scratch, then use your language's built-in everywhere",
+            "Practice the 'use a hash map' pattern: two-sum, frequency counts, grouping"
+          ],
+          "resources": [
+            { "label": "VisuAlgo — Data structure and algorithm visualizations", "url": "https://visualgo.net/en" },
+            { "label": "Harvard — CS50x (data structures weeks)", "url": "https://cs50.harvard.edu/x/" },
+            { "label": "NeetCode — Curated practice problems", "url": "https://neetcode.io/" }
+          ],
+          "prerequisites": ["arrays-and-strings", "combinatorics-and-probability"],
+          "criteria": [
+            "You built a working hash map with collision handling from scratch",
+            "You can explain when hash table operations degrade to O(n)",
+            "You reflexively reach for a hash map in frequency/lookup problems"
+          ]
+        },
+        {
+          "id": "trees-and-bsts",
+          "title": "Trees & Binary Search Trees",
+          "description": "Hierarchical structures: binary trees, BST invariants, traversals, and why balance matters.",
+          "why": "Trees model hierarchy everywhere — file systems, the DOM, parsers, database indexes. BSTs introduce the ordered-structure idea behind B-trees and every 'sorted map' you will use, and tree recursion is a rite of passage.",
+          "learn": [
+            "Implement a binary tree and all traversals: pre-, in-, post-order, and level-order",
+            "Implement BST insert, search, and delete, and verify the BST invariant",
+            "Understand why unbalanced BSTs degrade to O(n) and what balancing achieves",
+            "Solve recursive tree problems: height, lowest common ancestor, validate BST"
+          ],
+          "resources": [
+            { "label": "VisuAlgo — Data structure and algorithm visualizations", "url": "https://visualgo.net/en" },
+            { "label": "Khan Academy — Algorithms course", "url": "https://www.khanacademy.org/computing/computer-science/algorithms" },
+            { "label": "NeetCode — Practice roadmap", "url": "https://neetcode.io/roadmap" }
+          ],
+          "prerequisites": ["linked-lists-stacks-queues"],
+          "criteria": [
+            "You can write all four tree traversals from memory",
+            "You implemented a BST and explained its worst-case behavior",
+            "You solved ten or more tree problems using recursion confidently"
+          ]
+        },
+        {
+          "id": "heaps-and-priority-queues",
+          "title": "Heaps & Priority Queues",
+          "description": "The binary heap: an array-backed tree that serves the min or max element in O(log n), powering priority queues.",
+          "why": "Priority queues run schedulers, Dijkstra's algorithm, event simulations, and top-K queries. Heaps also demonstrate a beautiful trick — encoding a tree in an array — that shows how structure and representation can differ.",
+          "learn": [
+            "Understand the heap property and the array encoding of a complete binary tree",
+            "Implement sift-up and sift-down, then push and pop",
+            "Learn heapify and why building a heap is O(n)",
+            "Solve top-K and 'merge K sorted lists' problems with your language's heap library"
+          ],
+          "resources": [
+            { "label": "VisuAlgo — Data structure and algorithm visualizations", "url": "https://visualgo.net/en" },
+            { "label": "cp-algorithms — Algorithm reference", "url": "https://cp-algorithms.com/" },
+            { "label": "LeetCode — Coding practice problems", "url": "https://leetcode.com/" }
+          ],
+          "prerequisites": ["trees-and-bsts"],
+          "criteria": [
+            "You implemented a binary heap from scratch with push/pop working",
+            "You can explain why heap operations are O(log n)",
+            "You solved a top-K problem using a heap of bounded size"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Algorithms",
+      "description": "How to design, analyze, and implement the classic algorithms — and reason about their cost.",
+      "topics": [
+        {
+          "id": "asymptotic-analysis",
+          "title": "Asymptotic Analysis (Big-O)",
+          "description": "The vocabulary of algorithmic cost: Big-O, Big-Theta, best/worst/average case, and time-space trade-offs.",
+          "why": "Big-O lets you predict whether code will survive real input sizes before you run it, and it is the shared language of every algorithms discussion, code review, and interview. Without it, performance work is guesswork.",
+          "learn": [
+            "Learn the common classes and their growth: O(1), O(log n), O(n), O(n log n), O(n^2), O(2^n)",
+            "Derive the complexity of loops, nested loops, and recursive calls",
+            "Understand worst vs average case, and time vs space trade-offs",
+            "Estimate for real inputs: what does n = 10^6 rule out?"
+          ],
+          "resources": [
+            { "label": "Big-O Cheat Sheet — Complexity reference", "url": "https://www.bigocheatsheet.com/" },
+            { "label": "Khan Academy — Asymptotic notation (Algorithms course)", "url": "https://www.khanacademy.org/computing/computer-science/algorithms" },
+            { "label": "MIT OCW — Introduction to Algorithms (6.006)", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/" }
+          ],
+          "prerequisites": ["discrete-math", "programming-basics"],
+          "criteria": [
+            "You can state the complexity of any code you have written and justify it",
+            "You can rank the growth classes and give a real algorithm for each",
+            "Given n and a time limit, you can predict which complexities are feasible"
+          ]
+        },
+        {
+          "id": "sorting-and-searching",
+          "title": "Sorting & Binary Search",
+          "description": "The classic sorts (insertion, merge, quick, heap) and binary search over sorted data and answer spaces.",
+          "why": "Sorting is the canonical case study in algorithm design and the preprocessing step for countless problems. Binary search is the highest-leverage O(log n) idea in programming — and famously easy to get subtly wrong.",
+          "learn": [
+            "Implement insertion sort, merge sort, and quicksort, and compare their behavior",
+            "Understand stability, in-place sorting, and the O(n log n) comparison bound",
+            "Implement binary search correctly, handling boundaries without off-by-one errors",
+            "Apply binary search on answer spaces, not just arrays",
+            "Know what your language's built-in sort uses and when to trust it"
+          ],
+          "resources": [
+            { "label": "VisuAlgo — Data structure and algorithm visualizations", "url": "https://visualgo.net/en" },
+            { "label": "Khan Academy — Algorithms course", "url": "https://www.khanacademy.org/computing/computer-science/algorithms" },
+            { "label": "LeetCode — Coding practice problems", "url": "https://leetcode.com/" }
+          ],
+          "prerequisites": ["asymptotic-analysis", "arrays-and-strings"],
+          "criteria": [
+            "You implemented merge sort and quicksort and can explain their trade-offs",
+            "Your binary search passes edge cases: empty, single element, target absent",
+            "You solved a problem by binary searching over the answer space"
+          ]
+        },
+        {
+          "id": "recursion-and-divide-conquer",
+          "title": "Recursion, Backtracking & Divide and Conquer",
+          "description": "Solving problems by self-similar decomposition: recursion mechanics, backtracking search, and divide-and-conquer design.",
+          "why": "Recursion is the thinking tool behind trees, parsing, dynamic programming, and most elegant algorithms. Backtracking turns brute-force search into a systematic technique for puzzles, constraint problems, and combinatorial generation.",
+          "learn": [
+            "Internalize the recursion contract: base case, recursive case, trust the call",
+            "Trace recursion with the call stack and relate it to induction proofs",
+            "Implement backtracking classics: permutations, subsets, N-queens",
+            "Analyze divide-and-conquer running times (merge sort as the model case)"
+          ],
+          "resources": [
+            { "label": "Khan Academy — Algorithms course", "url": "https://www.khanacademy.org/computing/computer-science/algorithms" },
+            { "label": "NeetCode — Practice roadmap", "url": "https://neetcode.io/roadmap" },
+            { "label": "MIT OCW — Introduction to Algorithms (6.006)", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/" }
+          ],
+          "prerequisites": ["trees-and-bsts", "asymptotic-analysis"],
+          "criteria": [
+            "You can write a recursive solution and its base case without trial and error",
+            "You solved N-queens or an equivalent backtracking problem from scratch",
+            "You can explain how divide and conquer achieves O(n log n)"
+          ]
+        },
+        {
+          "id": "graph-algorithms",
+          "title": "Graphs: BFS, DFS & Shortest Paths",
+          "description": "Graph representations (adjacency list/matrix) and the core algorithms: BFS, DFS, topological sort, and Dijkstra.",
+          "why": "Graphs model networks, dependencies, maps, and social connections — a huge slice of real-world problems is 'a graph problem in disguise.' BFS and DFS are the two master keys that open almost all of them.",
+          "learn": [
+            "Represent graphs with adjacency lists and know when a matrix wins",
+            "Implement BFS and DFS, and use them for reachability and connected components",
+            "Use BFS for unweighted shortest paths and DFS for cycle detection",
+            "Implement topological sort for dependency ordering",
+            "Implement Dijkstra's algorithm with a priority queue"
+          ],
+          "resources": [
+            { "label": "cp-algorithms — Algorithm reference", "url": "https://cp-algorithms.com/" },
+            { "label": "VisuAlgo — Data structure and algorithm visualizations", "url": "https://visualgo.net/en" },
+            { "label": "NeetCode — Practice roadmap", "url": "https://neetcode.io/roadmap" }
+          ],
+          "prerequisites": ["recursion-and-divide-conquer", "heaps-and-priority-queues"],
+          "criteria": [
+            "You implemented BFS, DFS, topological sort, and Dijkstra from scratch",
+            "You can spot that a word/grid/dependency problem is secretly a graph problem",
+            "You can explain why Dijkstra needs a priority queue and fails on negative edges"
+          ]
+        },
+        {
+          "id": "dynamic-programming",
+          "title": "Dynamic Programming & Greedy",
+          "description": "Solving problems with overlapping subproblems via memoization and tabulation, and knowing when a greedy choice suffices.",
+          "why": "DP turns exponential brute force into polynomial time and appears in scheduling, text diffing, bioinformatics, and resource optimization. It is also the technique that most separates confident algorithmists from beginners.",
+          "learn": [
+            "Start from recursion: identify overlapping subproblems and add memoization",
+            "Convert memoized solutions to bottom-up tables",
+            "Work the classics: Fibonacci, climbing stairs, coin change, longest common subsequence, knapsack",
+            "Learn greedy algorithms and how to argue (or disprove) that greedy is correct",
+            "Practice defining the state and transition before writing any code"
+          ],
+          "resources": [
+            { "label": "cp-algorithms — Algorithm reference", "url": "https://cp-algorithms.com/" },
+            { "label": "NeetCode — Practice roadmap", "url": "https://neetcode.io/roadmap" },
+            { "label": "LeetCode — Coding practice problems", "url": "https://leetcode.com/" }
+          ],
+          "prerequisites": ["recursion-and-divide-conquer"],
+          "criteria": [
+            "You can state the DP state, transition, and base cases before coding",
+            "You solved coin change, LCS, and a knapsack variant independently",
+            "You can give an example where greedy fails and DP is required"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Computer Systems",
+      "description": "What is actually happening under your code: hardware, operating systems, networks, and databases.",
+      "topics": [
+        {
+          "id": "computer-architecture",
+          "title": "How Computers Work",
+          "description": "From transistors to programs: binary representation, logic gates, CPU, memory hierarchy, and how code becomes machine instructions.",
+          "why": "Understanding the machine demystifies performance: caches, branch prediction, and memory layout explain why 'equivalent' code can differ 100x in speed. It also grounds everything above it — OS, compilers, and languages stop being magic.",
+          "learn": [
+            "Learn binary and hexadecimal, two's complement, and how text and floats are encoded",
+            "Understand logic gates and how they compose into an ALU",
+            "Learn the fetch-decode-execute cycle and what an instruction set is",
+            "Understand the memory hierarchy: registers, caches, RAM, disk, and their latency gaps",
+            "Build a computer from NAND gates upward with the Nand2Tetris projects"
+          ],
+          "resources": [
+            { "label": "Nand2Tetris — Build a computer from first principles", "url": "https://www.nand2tetris.org/" },
+            { "label": "Harvard — CS50x (C and memory weeks)", "url": "https://cs50.harvard.edu/x/" },
+            { "label": "roadmap.sh — Computer Science roadmap", "url": "https://roadmap.sh/computer-science" }
+          ],
+          "prerequisites": ["programming-basics"],
+          "criteria": [
+            "You can convert between binary, hex, and decimal and explain two's complement",
+            "You can walk through fetch-decode-execute for a simple instruction",
+            "You can explain why cache-friendly code is faster, with an example"
+          ]
+        },
+        {
+          "id": "operating-systems",
+          "title": "Operating Systems",
+          "description": "What the OS does: processes, virtual memory, scheduling, file systems, and system calls.",
+          "why": "The OS is the layer every program you write runs on; understanding it explains crashes, resource limits, and performance cliffs. It is also the gateway to systems programming, containers, and debugging production issues.",
+          "learn": [
+            "Understand processes vs programs: address spaces, fork/exec, and process states",
+            "Learn virtual memory: paging, page faults, and why each process sees its own memory",
+            "Understand CPU scheduling and context switches",
+            "Learn how file systems organize data and what file descriptors are",
+            "Explore a running Linux system: ps, top, /proc, strace"
+          ],
+          "resources": [
+            { "label": "OSTEP — Operating Systems: Three Easy Pieces (free book)", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+            { "label": "man7.org — Linux man pages", "url": "https://man7.org/linux/man-pages/" },
+            { "label": "Linux Journey — OS and Linux internals lessons", "url": "https://linuxjourney.com/" }
+          ],
+          "prerequisites": ["computer-architecture", "command-line-and-unix"],
+          "criteria": [
+            "You can explain what happens from shell command to running process",
+            "You can describe virtual memory and what a page fault is",
+            "You used strace or /proc to inspect what a real program is doing"
+          ]
+        },
+        {
+          "id": "concurrency-and-parallelism",
+          "title": "Concurrency & Parallelism",
+          "description": "Threads, locks, race conditions, deadlocks, and async I/O — running more than one thing at a time correctly.",
+          "why": "Every modern machine is multi-core and every real service handles many clients at once, so concurrency bugs are among the most common and most expensive in industry. The mental models here (races, atomicity, deadlock) apply from embedded code to distributed systems.",
+          "learn": [
+            "Understand the difference between concurrency and parallelism",
+            "Write a program with threads and produce, then fix, a real race condition",
+            "Learn mutexes, condition variables, and the classic deadlock conditions",
+            "Understand async/event-loop I/O as an alternative to threads",
+            "Study classic problems: producer-consumer and readers-writers"
+          ],
+          "resources": [
+            { "label": "OSTEP — Concurrency chapters (free book)", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+            { "label": "man7.org — pthreads(7) overview", "url": "https://man7.org/linux/man-pages/man7/pthreads.7.html" },
+            { "label": "Python docs — asyncio", "url": "https://docs.python.org/3/library/asyncio.html" }
+          ],
+          "prerequisites": ["operating-systems"],
+          "criteria": [
+            "You wrote code that exhibits a race condition and fixed it with a lock",
+            "You can name the four deadlock conditions and how to break one",
+            "You can explain when async I/O beats threads and vice versa"
+          ]
+        },
+        {
+          "id": "networking",
+          "title": "Networking & the Internet",
+          "description": "How machines talk: IP, TCP/UDP, DNS, HTTP/TLS, and writing programs that communicate over sockets.",
+          "why": "Nearly all software is networked software. Understanding the layers below HTTP lets you debug slow requests, design APIs sensibly, and reason about reliability, latency, and security instead of cargo-culting.",
+          "learn": [
+            "Learn the layered model: link, IP, transport (TCP/UDP), application",
+            "Understand DNS resolution and trace what happens when you load a URL",
+            "Learn TCP's guarantees: handshake, ordering, retransmission — and their costs",
+            "Write a TCP client and server with sockets in any language",
+            "Inspect real traffic with curl, dig, and a packet capture tool"
+          ],
+          "resources": [
+            { "label": "Beej's Guide to Network Programming", "url": "https://beej.us/guide/bgnet/" },
+            { "label": "Cloudflare Learning Center — Networking fundamentals", "url": "https://www.cloudflare.com/learning/" },
+            { "label": "Wizard Zines — Julia Evans' programming zines", "url": "https://wizardzines.com/" }
+          ],
+          "prerequisites": ["operating-systems"],
+          "criteria": [
+            "You can narrate everything that happens when a browser loads a URL",
+            "You built a working TCP client/server pair with raw sockets",
+            "You can explain TCP vs UDP and pick correctly for a given application"
+          ]
+        },
+        {
+          "id": "databases-and-sql",
+          "title": "Databases & SQL",
+          "description": "Storing and querying structured data: relational modeling, SQL, indexes, and transactions with ACID guarantees.",
+          "why": "Almost every application is a thin layer over a database, and SQL has outlived generations of trendier tools. Understanding indexes and transactions is the difference between apps that work in demos and apps that survive production.",
+          "learn": [
+            "Learn SQL thoroughly: SELECT, JOIN, GROUP BY, and subqueries",
+            "Design a small relational schema with keys and sensible normalization",
+            "Understand indexes as B-trees and use EXPLAIN to see them work",
+            "Learn transactions and ACID, and what happens without isolation",
+            "Build a small app on PostgreSQL or SQLite end to end"
+          ],
+          "resources": [
+            { "label": "SQLBolt — Interactive SQL lessons", "url": "https://sqlbolt.com/" },
+            { "label": "PostgreSQL — Official documentation", "url": "https://www.postgresql.org/docs/" },
+            { "label": "freeCodeCamp — Relational database curriculum", "url": "https://www.freecodecamp.org/learn" }
+          ],
+          "prerequisites": ["programming-basics"],
+          "criteria": [
+            "You can write multi-table JOIN and aggregation queries unaided",
+            "You designed a schema for a real domain and justified its keys",
+            "You used EXPLAIN to show an index changing a query plan"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Practice & Application",
+      "description": "Turn knowledge into demonstrable skill: deliberate problem practice, design thinking, and real projects.",
+      "topics": [
+        {
+          "id": "coding-problem-practice",
+          "title": "Deliberate Problem Practice",
+          "description": "A sustained practice habit on curated problem sets, covering every data structure and algorithm pattern you have learned.",
+          "why": "Knowing an algorithm and producing it under constraints are different skills — practice closes that gap. A structured problem habit is also the standard preparation for technical interviews at nearly every company.",
+          "learn": [
+            "Follow a curated list (NeetCode roadmap or similar) rather than random problems",
+            "Practice a pattern until it is automatic before moving to the next",
+            "Time-box attempts: struggle 30-45 minutes, then study the solution and re-solve it",
+            "Re-solve failed problems a week later from a blank editor",
+            "Track your patterns: log every problem with its technique and your mistakes"
+          ],
+          "resources": [
+            { "label": "NeetCode — Structured practice roadmap", "url": "https://neetcode.io/roadmap" },
+            { "label": "LeetCode — Problem archive and contests", "url": "https://leetcode.com/" },
+            { "label": "Project Euler — Math and algorithm challenges", "url": "https://projecteuler.net/" }
+          ],
+          "prerequisites": ["sorting-and-searching", "hash-tables", "graph-algorithms", "dynamic-programming"],
+          "criteria": [
+            "You solved 100+ problems spanning arrays, trees, graphs, and DP",
+            "You can identify the intended pattern of a new problem within minutes",
+            "You maintain a log of solved problems with techniques and takeaways"
+          ]
+        },
+        {
+          "id": "system-design-fundamentals",
+          "title": "System Design Fundamentals",
+          "description": "Designing software beyond one machine: scaling, load balancing, caching, replication, and communicating trade-offs.",
+          "why": "Real systems are shaped by trade-offs between latency, consistency, cost, and complexity — not by single algorithms. Design thinking is what senior engineers are evaluated on, and it ties every systems topic together.",
+          "learn": [
+            "Learn the building blocks: load balancers, caches, CDNs, queues, and replicas",
+            "Understand vertical vs horizontal scaling and when each applies",
+            "Study caching strategies and their invalidation trade-offs",
+            "Learn database replication, sharding, and the intuition behind CAP",
+            "Practice designing on paper: a URL shortener, a chat service, a news feed"
+          ],
+          "resources": [
+            { "label": "roadmap.sh — System Design roadmap", "url": "https://roadmap.sh/system-design" },
+            { "label": "GitHub — The System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "label": "Cloudflare Learning Center — CDN, DNS, and performance", "url": "https://www.cloudflare.com/learning/" }
+          ],
+          "prerequisites": ["networking", "databases-and-sql", "concurrency-and-parallelism"],
+          "criteria": [
+            "You can sketch a URL-shortener design covering storage, caching, and scale",
+            "You can explain a real trade-off (e.g., cache freshness vs load) with numbers",
+            "You completed three paper designs and defended them to another person"
+          ]
+        },
+        {
+          "id": "build-real-projects",
+          "title": "Build Real Projects",
+          "description": "Apply everything by building substantial software from scratch — including 'build your own X' rites of passage like a shell, an interpreter, or a database.",
+          "why": "Projects force the integration that courses never do: design decisions, debugging, trade-offs, and finishing. Rebuilding known tools (a shell, an HTTP server) is the fastest way to convert theory from this roadmap into deep understanding.",
+          "learn": [
+            "Build a 'build your own X' project: a shell, HTTP server, interpreter, or key-value store",
+            "Scope it to ship: define a v1 you can finish in a few weeks",
+            "Use Git properly throughout, with a README explaining design decisions",
+            "Add tests and measure performance where your CS knowledge predicts behavior",
+            "Publish the code and write up what you learned"
+          ],
+          "resources": [
+            { "label": "GitHub — build-your-own-x project guides", "url": "https://github.com/codecrafters-io/build-your-own-x" },
+            { "label": "freeCodeCamp — Certification projects", "url": "https://www.freecodecamp.org/learn" },
+            { "label": "GitHub Education — Student Developer Pack", "url": "https://education.github.com/pack" }
+          ],
+          "prerequisites": ["version-control-git", "operating-systems", "networking"],
+          "criteria": [
+            "You shipped at least one substantial project others can run from the README",
+            "Your project applies at least three roadmap topics (e.g., sockets, hashing, concurrency)",
+            "You can explain every design decision in your codebase"
+          ]
+        },
+        {
+          "id": "open-source-contribution",
+          "title": "Contribute to Open Source",
+          "description": "Reading large unfamiliar codebases and landing accepted contributions to real open-source projects.",
+          "why": "Professional engineering is mostly reading and modifying other people's code, and open source is the only place to practice that publicly before your first job. Merged PRs are also durable, verifiable proof of skill.",
+          "learn": [
+            "Complete a first-contribution walkthrough to learn the fork-and-PR flow",
+            "Pick a project you actually use and read its contributing guide",
+            "Start small: fix a documentation gap or a 'good first issue' bug",
+            "Learn to navigate a large codebase with search, tests, and git history",
+            "Respond to code review gracefully and iterate until merged"
+          ],
+          "resources": [
+            { "label": "Open Source Guides — How to contribute", "url": "https://opensource.guide/" },
+            { "label": "GitHub — First Contributions walkthrough", "url": "https://github.com/firstcontributions/first-contributions" },
+            { "label": "Opensource.com — Open source culture and how-tos", "url": "https://opensource.com/" }
+          ],
+          "prerequisites": ["version-control-git", "build-real-projects"],
+          "criteria": [
+            "You have at least one merged pull request in a project you do not own",
+            "You can find where a feature lives in an unfamiliar codebase within an hour",
+            "You revised a PR based on maintainer feedback and got it merged"
+          ]
+        }
+      ]
+    }
+  ]
+}

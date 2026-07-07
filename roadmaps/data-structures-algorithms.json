@@ -1,0 +1,1108 @@
+{
+  "slug": "data-structures-algorithms",
+  "title": "Data Structures & Algorithms",
+  "source": "roadmap.sh",
+  "url": "https://roadmap.sh/datastructures-and-algorithms",
+  "description": "A deep dive into DSA: complexity analysis, core data structures, graphs, sorting, DP, and the patterns that crack interviews.",
+  "sections": [
+    {
+      "title": "Foundations & Complexity Analysis",
+      "description": "Build the mental toolkit for reasoning about how algorithms behave as inputs grow.",
+      "topics": [
+        {
+          "id": "big-o-notation",
+          "title": "Big-O Notation & Asymptotic Analysis",
+          "description": "The mathematical language for describing how running time and memory scale with input size, ignoring constant factors.",
+          "why": "Big-O is the single most-used concept in algorithm discussions and interviews. It lets you predict whether code will survive a 1000x growth in data and compare approaches before writing a line of code.",
+          "learn": [
+            "Skim the roadmap.sh DSA roadmap to see the full landscape you are about to cover",
+            "Learn the common complexity classes and their ordering: O(1), O(log n), O(n), O(n log n), O(n^2), O(2^n), O(n!)",
+            "Derive the Big-O of simple loops, nested loops, and halving loops by counting operations",
+            "Distinguish best case, worst case, and average case, and understand why worst case usually matters most",
+            "Practice simplification rules: drop constants and lower-order terms",
+            "Analyze 10 short code snippets and state their time complexity"
+          ],
+          "resources": [
+            {
+              "label": "roadmap.sh — Data Structures & Algorithms Roadmap",
+              "url": "https://roadmap.sh/datastructures-and-algorithms"
+            },
+            {
+              "label": "Khan Academy — Asymptotic Notation",
+              "url": "https://www.khanacademy.org/computing/computer-science/algorithms/asymptotic-notation/a/asymptotic-notation"
+            },
+            {
+              "label": "freeCodeCamp — Big O Notation Explained",
+              "url": "https://www.freecodecamp.org/news/big-o-notation-why-it-matters-and-why-it-doesnt-1674cfa8a23c/"
+            },
+            {
+              "label": "MIT OCW — Introduction to Algorithms (6.006)",
+              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/"
+            }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can state the time complexity of a given code snippet and justify it",
+            "You can rank O(1), O(log n), O(n), O(n log n), O(n^2), O(2^n) from fastest to slowest growth",
+            "You can explain why constants and lower-order terms are dropped"
+          ]
+        },
+        {
+          "id": "space-complexity",
+          "title": "Space Complexity & Memory Basics",
+          "description": "Analyzing how much extra memory an algorithm needs, plus how the stack, heap, and contiguous memory actually work.",
+          "why": "Time is not the only budget: recursion depth can blow the stack, and an O(n) auxiliary array may be unacceptable on large data. Understanding memory layout also explains why arrays are cache-friendly and linked lists are not.",
+          "learn": [
+            "Define auxiliary space vs total space and compute space complexity for iterative and recursive functions",
+            "Understand stack frames: why each recursive call consumes memory and what a stack overflow is",
+            "Learn how contiguous memory (arrays) differs from pointer-linked memory (lists, trees) and the cache implications",
+            "Rewrite a recursive function iteratively and compare their space usage"
+          ],
+          "resources": [
+            {
+              "label": "MIT OCW — Introduction to Algorithms (6.006)",
+              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/"
+            },
+            {
+              "label": "freeCodeCamp — Data Structures Articles",
+              "url": "https://www.freecodecamp.org/news/tag/data-structures/"
+            }
+          ],
+          "prerequisites": [
+            "big-o-notation"
+          ],
+          "criteria": [
+            "You can compute the space complexity of a recursive function including its call stack",
+            "You can explain the difference between stack and heap allocation",
+            "You converted a recursive solution to an iterative one and explained the memory trade-off"
+          ]
+        },
+        {
+          "id": "language-setup",
+          "title": "Pick a Language & Practice Environment",
+          "description": "Choosing one language for DSA practice and getting fluent with its built-in collections and idioms.",
+          "why": "Fluency in one language removes friction so you can focus on the algorithm, not syntax. Knowing your language's built-in structures (and their complexities) is itself interview material.",
+          "learn": [
+            "Pick one language (Python, Java, C++, JavaScript, or Go) and commit to it for the whole roadmap",
+            "Learn its core collections and their complexities: dynamic array, hash map, set, deque, heap",
+            "Set up a local practice loop: editor, runner, and a folder of solved problems with notes",
+            "Solve 5 warm-up problems on LeetCode or NeetCode to verify your setup end to end"
+          ],
+          "resources": [
+            {
+              "label": "Python Docs — Data Structures Tutorial",
+              "url": "https://docs.python.org/3/tutorial/datastructures.html"
+            },
+            {
+              "label": "MDN — JavaScript Reference",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+            },
+            {
+              "label": "NeetCode — Practice Platform",
+              "url": "https://neetcode.io/"
+            }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can list the time complexity of insert, lookup, and delete for your language's built-in list, map, and set",
+            "You solved 5 easy problems in your chosen language without syntax lookups",
+            "You have a repeatable local setup for writing and running practice solutions"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Arrays, Strings & Hashing",
+      "description": "Master the linear structures and hash-based lookups that underpin the majority of practical problems.",
+      "topics": [
+        {
+          "id": "arrays-dynamic-arrays",
+          "title": "Arrays & Dynamic Arrays",
+          "description": "Contiguous fixed-size arrays and their resizable cousins (Python lists, Java ArrayList, C++ vector), with amortized analysis of growth.",
+          "why": "Arrays are the default data structure in nearly every program and the substrate for many others (heaps, hash tables, stacks). Understanding amortized O(1) append and O(n) middle insertion explains a huge class of performance behavior.",
+          "learn": [
+            "Implement index access, insertion, and deletion on a raw array and derive the cost of each",
+            "Explain how dynamic arrays resize (doubling) and why append is amortized O(1)",
+            "Practice in-place array manipulation: reverse, rotate, remove duplicates from sorted array",
+            "Solve 8-10 easy array problems focusing on index arithmetic and edge cases (empty, single element)"
+          ],
+          "resources": [
+            {
+              "label": "NeetCode — Arrays & Hashing Problems",
+              "url": "https://neetcode.io/roadmap"
+            },
+            {
+              "label": "Python Docs — Data Structures Tutorial",
+              "url": "https://docs.python.org/3/tutorial/datastructures.html"
+            },
+            {
+              "label": "LeetCode — Array Problem Set",
+              "url": "https://leetcode.com/tag/array/"
+            }
+          ],
+          "prerequisites": [
+            "big-o-notation",
+            "language-setup"
+          ],
+          "criteria": [
+            "You can explain why appending to a dynamic array is amortized O(1)",
+            "You can insert into and delete from an array in place, handling edge cases",
+            "You solved at least 8 array problems and can articulate each solution's complexity"
+          ]
+        },
+        {
+          "id": "strings",
+          "title": "String Manipulation",
+          "description": "Strings as character arrays: immutability, building, searching, and classic problems like palindromes and anagrams.",
+          "why": "String problems are among the most common interview questions and daily programming tasks. Knowing that naive concatenation in a loop can be O(n^2) and how to avoid it is a practical superpower.",
+          "learn": [
+            "Understand string immutability in your language and the cost of concatenation vs a builder/join approach",
+            "Solve classic problems: reverse a string, valid palindrome, valid anagram, longest common prefix",
+            "Learn character-frequency counting with arrays or hash maps as a reusable technique",
+            "Handle encoding basics: ASCII vs Unicode and why 'length' can be subtle"
+          ],
+          "resources": [
+            {
+              "label": "LeetCode — String Problem Set",
+              "url": "https://leetcode.com/tag/string/"
+            },
+            {
+              "label": "MDN — String Reference (JavaScript)",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String"
+            },
+            {
+              "label": "NeetCode — Practice Roadmap",
+              "url": "https://neetcode.io/roadmap"
+            }
+          ],
+          "prerequisites": [
+            "arrays-dynamic-arrays"
+          ],
+          "criteria": [
+            "You can explain the cost of naive string concatenation in a loop and the efficient alternative",
+            "You solved palindrome, anagram, and frequency-count problems without hints",
+            "You can pick between array-based and map-based character counting and justify it"
+          ]
+        },
+        {
+          "id": "hash-tables",
+          "title": "Hash Tables, Maps & Sets",
+          "description": "Hash functions, buckets, and collision handling (chaining, open addressing) that deliver average O(1) lookup.",
+          "why": "Hash maps are the most powerful general-purpose tool in your kit: countless O(n^2) brute-force solutions drop to O(n) by trading space for lookup speed. 'Can a hash map help?' should be a reflex on every problem.",
+          "learn": [
+            "Understand how hashing maps keys to buckets and what makes a good hash function",
+            "Learn collision resolution: separate chaining vs open addressing, and what load factor triggers a resize",
+            "Implement a tiny hash map with chaining to demystify the internals",
+            "Re-solve earlier array/string problems (two sum, anagram, duplicates) using maps and sets and compare complexities",
+            "Know when worst case degrades to O(n) and why order is (or is not) preserved in your language's map"
+          ],
+          "resources": [
+            {
+              "label": "NeetCode — Arrays & Hashing",
+              "url": "https://neetcode.io/roadmap"
+            },
+            {
+              "label": "Python Docs — dict and set",
+              "url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries"
+            },
+            {
+              "label": "MDN — Map Reference",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map"
+            }
+          ],
+          "prerequisites": [
+            "arrays-dynamic-arrays",
+            "strings"
+          ],
+          "criteria": [
+            "You can explain how a hash table achieves average O(1) lookup and when it degrades",
+            "You built a minimal hash map with collision handling",
+            "You converted at least three O(n^2) brute-force solutions into O(n) hash-based ones"
+          ]
+        },
+        {
+          "id": "two-pointers-sliding-window",
+          "title": "Two Pointers & Sliding Window",
+          "description": "Index-based patterns that scan arrays and strings in one pass: converging pointers, fast/slow pointers, and variable-size windows.",
+          "why": "These two patterns alone solve a huge fraction of medium interview problems in O(n). Recognizing 'sorted array + pair condition' or 'contiguous subarray/substring' as pattern triggers is a major leap in problem-solving speed.",
+          "learn": [
+            "Solve converging two-pointer problems: two sum on sorted input, container with most water, valid palindrome",
+            "Learn the sliding window template: expand right, shrink left while a constraint is violated",
+            "Solve fixed-size and variable-size window problems: max subarray of size k, longest substring without repeating characters",
+            "Write down the trigger phrases that suggest each pattern and add them to a personal pattern journal"
+          ],
+          "resources": [
+            {
+              "label": "NeetCode — Two Pointers & Sliding Window",
+              "url": "https://neetcode.io/roadmap"
+            },
+            {
+              "label": "LeetCode — Two Pointers Problems",
+              "url": "https://leetcode.com/tag/two-pointers/"
+            },
+            {
+              "label": "LeetCode — Sliding Window Problems",
+              "url": "https://leetcode.com/tag/sliding-window/"
+            }
+          ],
+          "prerequisites": [
+            "hash-tables"
+          ],
+          "criteria": [
+            "You can recognize from a problem statement whether two pointers or sliding window applies",
+            "You solved at least 6 problems across both patterns, each in O(n)",
+            "You can write the variable-size sliding window template from memory"
+          ]
+        },
+        {
+          "id": "binary-search",
+          "title": "Binary Search & Variants",
+          "description": "Halving a sorted search space each step for O(log n) lookup, extended to boundaries, rotated arrays, and 'search on the answer'.",
+          "why": "Binary search is deceptively hard to write correctly — off-by-one bugs are legendary — and its generalized form (binary search over a monotonic answer space) solves problems that look nothing like searching a sorted array.",
+          "learn": [
+            "Implement classic binary search and get the loop bounds and mid computation right",
+            "Implement lower-bound and upper-bound variants (first/last occurrence of a target)",
+            "Solve search in rotated sorted array",
+            "Learn 'binary search on the answer' with a problem like koko eating bananas or capacity to ship packages",
+            "Write a checklist of the invariants (what lo and hi mean) you maintain in each variant"
+          ],
+          "resources": [
+            {
+              "label": "Khan Academy — Binary Search",
+              "url": "https://www.khanacademy.org/computing/computer-science/algorithms/binary-search/a/binary-search"
+            },
+            {
+              "label": "LeetCode — Binary Search Problems",
+              "url": "https://leetcode.com/tag/binary-search/"
+            },
+            {
+              "label": "NeetCode — Binary Search",
+              "url": "https://neetcode.io/roadmap"
+            }
+          ],
+          "prerequisites": [
+            "arrays-dynamic-arrays",
+            "big-o-notation"
+          ],
+          "criteria": [
+            "You can write bug-free binary search including boundary variants",
+            "You solved a rotated-array search problem",
+            "You can recognize and apply 'binary search on the answer' to a monotonic optimization problem"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Linked Structures, Recursion & Sorting",
+      "description": "Pointer-based structures, the LIFO/FIFO abstractions built on them, and the recursive thinking that powers classic sorting.",
+      "topics": [
+        {
+          "id": "linked-lists",
+          "title": "Linked Lists",
+          "description": "Singly and doubly linked lists: nodes connected by pointers, enabling O(1) insertion and deletion at known positions.",
+          "why": "Linked lists teach pointer manipulation, the skill behind every tree and graph operation. They are also an interview staple: reversal, cycle detection, and merging appear constantly.",
+          "learn": [
+            "Implement a singly linked list from scratch: insert at head/tail, delete, search, and traverse",
+            "Master the classic operations: reverse a list iteratively and recursively, find the middle with fast/slow pointers",
+            "Detect a cycle with Floyd's tortoise-and-hare algorithm and explain why it works",
+            "Solve merge two sorted lists and remove nth node from end, using a dummy head node",
+            "Compare arrays vs linked lists on access, insertion, deletion, and cache behavior"
+          ],
+          "resources": [
+            {
+              "label": "NeetCode — Linked List Problems",
+              "url": "https://neetcode.io/roadmap"
+            },
+            {
+              "label": "LeetCode — Linked List Problems",
+              "url": "https://leetcode.com/tag/linked-list/"
+            },
+            {
+              "label": "freeCodeCamp — Data Structures Articles",
+              "url": "https://www.freecodecamp.org/news/tag/data-structures/"
+            }
+          ],
+          "prerequisites": [
+            "space-complexity",
+            "language-setup"
+          ],
+          "criteria": [
+            "You built a linked list from scratch with insert, delete, and traversal",
+            "You can reverse a linked list and detect a cycle without looking anything up",
+            "You can state when a linked list beats an array and vice versa"
+          ]
+        },
+        {
+          "id": "stacks",
+          "title": "Stacks",
+          "description": "Last-in-first-out collections supporting O(1) push and pop, implemented over arrays or linked lists.",
+          "why": "Stacks model nested and reversible processes: function calls, undo history, expression parsing, and backtracking. The monotonic stack variant unlocks a family of hard-looking problems like next greater element.",
+          "learn": [
+            "Implement a stack with push, pop, and peek over an array, all O(1)",
+            "Solve valid parentheses and evaluate reverse Polish notation",
+            "Learn the monotonic stack pattern with next greater element and daily temperatures",
+            "Connect stacks to the call stack: simulate a recursive traversal with an explicit stack"
+          ],
+          "resources": [
+            {
+              "label": "NeetCode — Stack Problems",
+              "url": "https://neetcode.io/roadmap"
+            },
+            {
+              "label": "LeetCode — Stack Problems",
+              "url": "https://leetcode.com/tag/stack/"
+            }
+          ],
+          "prerequisites": [
+            "linked-lists"
+          ],
+          "criteria": [
+            "You can implement a stack and explain why all core operations are O(1)",
+            "You solved valid parentheses and at least one monotonic stack problem",
+            "You can replace simple recursion with an explicit stack"
+          ]
+        },
+        {
+          "id": "queues-deques",
+          "title": "Queues & Deques",
+          "description": "First-in-first-out queues and double-ended queues, including circular-buffer implementations.",
+          "why": "Queues drive breadth-first search, task schedulers, and buffering everywhere in real systems. Deques enable the sliding-window-maximum trick and power efficient implementations of both stacks and queues.",
+          "learn": [
+            "Implement a queue with O(1) enqueue and dequeue using a linked list or circular buffer",
+            "Learn your language's built-in deque and its complexities",
+            "Solve implement-queue-using-stacks to internalize the amortized analysis",
+            "Preview how BFS uses a queue to explore level by level (you will use this heavily in trees and graphs)"
+          ],
+          "resources": [
+            {
+              "label": "Python Docs — collections.deque",
+              "url": "https://docs.python.org/3/library/collections.html#collections.deque"
+            },
+            {
+              "label": "LeetCode — Queue Problems",
+              "url": "https://leetcode.com/tag/queue/"
+            },
+            {
+              "label": "NeetCode — Practice Roadmap",
+              "url": "https://neetcode.io/roadmap"
+            }
+          ],
+          "prerequisites": [
+            "stacks"
+          ],
+          "criteria": [
+            "You can implement a queue with O(1) operations and explain the circular buffer approach",
+            "You solved queue-using-stacks and can explain its amortized cost",
+            "You can describe where a queue appears in BFS"
+          ]
+        },
+        {
+          "id": "recursion",
+          "title": "Recursion & Divide and Conquer",
+          "description": "Functions that call themselves on smaller subproblems, with base cases, recurrence relations, and the divide-and-conquer strategy.",
+          "why": "Recursion is the gateway to trees, graphs, backtracking, sorting, and dynamic programming — most of the rest of this roadmap. Getting comfortable writing and trusting recursive definitions is the biggest single unlock in DSA study.",
+          "learn": [
+            "Write recursive solutions for factorial, Fibonacci, sum of a list, and string reversal, always stating the base case first",
+            "Draw recursion trees to visualize call order and count total work",
+            "Learn to derive simple recurrences (T(n) = 2T(n/2) + O(n)) and their closed forms",
+            "Solve a divide-and-conquer problem end to end, such as finding max in an array by splitting in half",
+            "Identify and fix a stack-overflow-prone recursion by adding a base case or converting to iteration"
+          ],
+          "resources": [
+            {
+              "label": "Khan Academy — Recursive Algorithms",
+              "url": "https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/recursion"
+            },
+            {
+              "label": "MIT OCW — Introduction to Algorithms (6.006)",
+              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/"
+            },
+            {
+              "label": "freeCodeCamp — Recursion Articles",
+              "url": "https://www.freecodecamp.org/news/tag/recursion/"
+            }
+          ],
+          "prerequisites": [
+            "stacks",
+            "space-complexity"
+          ],
+          "criteria": [
+            "You can write a recursive function with correct base and recursive cases on the first attempt",
+            "You can draw the recursion tree for a divide-and-conquer algorithm and derive its complexity",
+            "You can explain how the call stack executes recursion and what causes stack overflow"
+          ]
+        },
+        {
+          "id": "sorting-algorithms",
+          "title": "Sorting Algorithms: Insertion to Quicksort",
+          "description": "The full sorting toolkit: elementary O(n^2) sorts (bubble, selection, insertion) and the O(n log n) heavyweights, merge sort and quicksort.",
+          "why": "Sorting is the canonical proving ground for algorithmic ideas: loop invariants, stability, divide and conquer, and worst-case analysis all live here. Standard-library sorts (Timsort, introsort) are hybrids of exactly these algorithms, and the partition step reappears in quickselect for kth-element problems.",
+          "learn": [
+            "Implement insertion sort, state its loop invariant, and note when it beats everything else (tiny or nearly-sorted inputs)",
+            "Implement merge sort and derive T(n) = 2T(n/2) + O(n) = O(n log n) from its recursion tree",
+            "Implement quicksort with Lomuto or Hoare partitioning and explain the O(n^2) worst case and how random pivots avoid it",
+            "Implement quickselect to find the kth smallest element in average O(n)",
+            "Define stability, classify each sort you wrote, and learn which hybrid your language's standard library uses"
+          ],
+          "resources": [
+            {
+              "label": "Khan Academy — Sorting Algorithms",
+              "url": "https://www.khanacademy.org/computing/computer-science/algorithms/sorting-algorithms/a/sorting"
+            },
+            {
+              "label": "MIT OCW — Introduction to Algorithms (6.006)",
+              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/"
+            },
+            {
+              "label": "LeetCode — Sorting Problems",
+              "url": "https://leetcode.com/tag/sorting/"
+            }
+          ],
+          "prerequisites": [
+            "arrays-dynamic-arrays",
+            "recursion"
+          ],
+          "criteria": [
+            "You implemented insertion sort, merge sort, and quicksort from scratch and all pass on random inputs",
+            "You can explain stability and quicksort's worst case with two mitigations",
+            "You can use quickselect for kth-element problems and state its average complexity"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Trees & Heaps",
+      "description": "Hierarchical structures: binary trees, search trees, heaps, and tries, plus the traversals that unlock them.",
+      "topics": [
+        {
+          "id": "binary-trees-traversal",
+          "title": "Binary Trees & Traversals",
+          "description": "Trees where each node has up to two children, traversed depth-first (preorder, inorder, postorder) or breadth-first (level order).",
+          "why": "Trees model hierarchies everywhere: file systems, the DOM, parse trees, org charts. Traversals are the vocabulary for every tree problem, and DFS/BFS here transfer directly to graphs.",
+          "learn": [
+            "Define tree terminology: root, leaf, depth, height, subtree, balanced vs skewed",
+            "Implement all three DFS traversals recursively and level-order traversal with a queue",
+            "Solve max depth, invert binary tree, and same tree",
+            "Compute height and diameter of a tree with postorder thinking (combine children's answers)",
+            "Implement one DFS traversal iteratively with an explicit stack"
+          ],
+          "resources": [
+            {
+              "label": "NeetCode — Trees Problems",
+              "url": "https://neetcode.io/roadmap"
+            },
+            {
+              "label": "LeetCode — Binary Tree Problems",
+              "url": "https://leetcode.com/tag/binary-tree/"
+            },
+            {
+              "label": "Khan Academy — Algorithms Course",
+              "url": "https://www.khanacademy.org/computing/computer-science/algorithms"
+            }
+          ],
+          "prerequisites": [
+            "recursion",
+            "queues-deques"
+          ],
+          "criteria": [
+            "You can write preorder, inorder, postorder, and level-order traversals from memory",
+            "You solved at least 6 binary tree problems using recursive decomposition",
+            "You can explain when to use DFS vs BFS on a tree"
+          ]
+        },
+        {
+          "id": "binary-search-trees",
+          "title": "Binary Search Trees",
+          "description": "Binary trees with the ordering invariant left < node < right, giving O(log n) search, insert, and delete when balanced.",
+          "why": "BSTs are the classic ordered dictionary and the conceptual basis of database indexes and language-level sorted maps (via balanced variants like red-black and AVL trees). The invariant-based reasoning they teach appears throughout interviews.",
+          "learn": [
+            "Implement BST search, insert, and delete (handling the three delete cases)",
+            "Prove to yourself that inorder traversal of a BST yields sorted order and use it to validate a BST",
+            "Solve kth smallest element and lowest common ancestor in a BST",
+            "Understand how skewed insertion degrades to O(n) and why balanced trees (AVL, red-black) exist — conceptually, no need to implement rotations"
+          ],
+          "resources": [
+            {
+              "label": "LeetCode — Binary Search Tree Problems",
+              "url": "https://leetcode.com/tag/binary-search-tree/"
+            },
+            {
+              "label": "MIT OCW — Introduction to Algorithms (6.006)",
+              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/"
+            },
+            {
+              "label": "NeetCode — Trees Problems",
+              "url": "https://neetcode.io/roadmap"
+            }
+          ],
+          "prerequisites": [
+            "binary-trees-traversal"
+          ],
+          "criteria": [
+            "You can implement BST insert, search, and delete correctly",
+            "You can validate whether a binary tree is a BST",
+            "You can explain why balanced BSTs guarantee O(log n) and name two balanced variants"
+          ]
+        },
+        {
+          "id": "heaps-priority-queues",
+          "title": "Heaps & Priority Queues",
+          "description": "Array-backed complete binary trees maintaining the heap property, giving O(1) access to the min or max and O(log n) insert/extract.",
+          "why": "Priority queues power schedulers, Dijkstra's algorithm, merging sorted streams, and every 'top k' problem. The 'k largest/smallest/most frequent' pattern is one of the highest-frequency interview families.",
+          "learn": [
+            "Understand the heap property and how a complete tree lives in an array (parent/child index math)",
+            "Implement sift-up and sift-down, then build-heap, and derive their complexities",
+            "Use your language's built-in heap/priority queue fluently",
+            "Solve kth largest element, top k frequent elements, and merge k sorted lists",
+            "Learn the two-heap pattern with find median from data stream"
+          ],
+          "resources": [
+            {
+              "label": "Python Docs — heapq module",
+              "url": "https://docs.python.org/3/library/heapq.html"
+            },
+            {
+              "label": "LeetCode — Heap Problems",
+              "url": "https://leetcode.com/tag/heap-priority-queue/"
+            },
+            {
+              "label": "NeetCode — Heap / Priority Queue",
+              "url": "https://neetcode.io/roadmap"
+            }
+          ],
+          "prerequisites": [
+            "binary-trees-traversal",
+            "arrays-dynamic-arrays"
+          ],
+          "criteria": [
+            "You can explain the array representation of a heap and the index arithmetic",
+            "You implemented sift-up and sift-down by hand at least once",
+            "You solved three or more 'top k' style problems with a heap and stated their complexities"
+          ]
+        },
+        {
+          "id": "tries",
+          "title": "Tries (Prefix Trees)",
+          "description": "Trees keyed by characters where paths from the root spell out strings, enabling O(length) prefix queries.",
+          "why": "Tries power autocomplete, spell checkers, and IP routing tables. They show how a specialized structure can beat hash maps for a whole query class (prefix matching) and appear regularly in medium/hard interviews.",
+          "learn": [
+            "Implement a trie with insert, exact search, and startsWith prefix search",
+            "Compare trie vs hash set for prefix queries and explain the trade-offs",
+            "Solve a word-search or add-and-search-word problem combining a trie with DFS",
+            "Sketch a real use case (autocomplete) and walk through how the trie serves it"
+          ],
+          "resources": [
+            {
+              "label": "LeetCode — Trie Problems",
+              "url": "https://leetcode.com/tag/trie/"
+            },
+            {
+              "label": "NeetCode — Tries",
+              "url": "https://neetcode.io/roadmap"
+            }
+          ],
+          "prerequisites": [
+            "binary-trees-traversal",
+            "hash-tables"
+          ],
+          "criteria": [
+            "You implemented a trie supporting insert, search, and prefix search",
+            "You can explain when a trie beats a hash map and what it costs in memory",
+            "You solved at least one problem combining a trie with DFS or backtracking"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Graphs",
+      "description": "The most general structure: modeling networks, dependencies, and grids, with the traversal and shortest-path algorithms that query them.",
+      "topics": [
+        {
+          "id": "graph-representation",
+          "title": "Graph Concepts & Representation",
+          "description": "Vertices and edges in directed, undirected, and weighted flavors, stored as adjacency lists or matrices.",
+          "why": "Graphs model social networks, road maps, dependency trees, and state machines — an enormous share of real problems are graph problems in disguise. Choosing the right representation determines whether your algorithms are even feasible.",
+          "learn": [
+            "Define graph vocabulary: vertex, edge, directed/undirected, weighted, degree, path, cycle, connected component",
+            "Implement adjacency list and adjacency matrix representations and compare their space and edge-lookup costs",
+            "Convert between an edge list and an adjacency list in code",
+            "Recognize implicit graphs: 2D grids, word ladders, and state spaces where neighbors are computed on the fly"
+          ],
+          "resources": [
+            {
+              "label": "Khan Academy — Representing Graphs",
+              "url": "https://www.khanacademy.org/computing/computer-science/algorithms/graph-representation/a/representing-graphs"
+            },
+            {
+              "label": "roadmap.sh — DSA Roadmap (Graphs)",
+              "url": "https://roadmap.sh/datastructures-and-algorithms"
+            },
+            {
+              "label": "MIT OCW — Introduction to Algorithms (6.006)",
+              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/"
+            }
+          ],
+          "prerequisites": [
+            "hash-tables",
+            "recursion"
+          ],
+          "criteria": [
+            "You can build an adjacency list from an edge list and explain when a matrix is better",
+            "You can identify the graph hiding in a word problem (nodes = ?, edges = ?)",
+            "You can state the space complexity of both representations for sparse and dense graphs"
+          ]
+        },
+        {
+          "id": "graph-traversal",
+          "title": "Graph Traversal: BFS & DFS",
+          "description": "Systematic exploration of graphs: depth-first with recursion or a stack, breadth-first with a queue, both guarded by a visited set.",
+          "why": "BFS and DFS are the workhorses of graph problems — connectivity, flood fill, cycle detection, and unweighted shortest paths all reduce to them. Grid-based BFS/DFS (number of islands, rotting oranges) is a top interview category.",
+          "learn": [
+            "Implement DFS (recursive and iterative) and BFS with a visited set on an adjacency list",
+            "Solve number of islands and max area of island on a 2D grid",
+            "Use BFS to find shortest path length in an unweighted graph and explain why DFS cannot",
+            "Detect a cycle in an undirected graph and count connected components",
+            "Practice multi-source BFS with rotting oranges or walls-and-gates style problems"
+          ],
+          "resources": [
+            {
+              "label": "Khan Academy — Breadth-First Search",
+              "url": "https://www.khanacademy.org/computing/computer-science/algorithms/breadth-first-search/a/breadth-first-search-and-its-uses"
+            },
+            {
+              "label": "NeetCode — Graph Problems",
+              "url": "https://neetcode.io/roadmap"
+            },
+            {
+              "label": "LeetCode — Graph Problems",
+              "url": "https://leetcode.com/tag/graph/"
+            }
+          ],
+          "prerequisites": [
+            "graph-representation",
+            "queues-deques"
+          ],
+          "criteria": [
+            "You can write BFS and DFS from memory, including the visited set",
+            "You solved at least 5 grid-traversal problems",
+            "You can explain why BFS finds shortest paths in unweighted graphs"
+          ]
+        },
+        {
+          "id": "topological-sort",
+          "title": "Topological Sort & DAGs",
+          "description": "Ordering the vertices of a directed acyclic graph so every edge points forward, via Kahn's algorithm or DFS finish times.",
+          "why": "Topological sort schedules anything with dependencies: build systems, course prerequisites, task pipelines, spreadsheet recalculation. It is also the standard tool for detecting cycles in directed graphs.",
+          "learn": [
+            "Understand what a DAG is and why only DAGs admit a topological order",
+            "Implement Kahn's algorithm using in-degrees and a queue",
+            "Implement the DFS-based variant and detect cycles via the three-color (visiting/visited) technique",
+            "Solve course schedule I and II"
+          ],
+          "resources": [
+            {
+              "label": "LeetCode — Topological Sort Problems",
+              "url": "https://leetcode.com/tag/topological-sort/"
+            },
+            {
+              "label": "NeetCode — Advanced Graphs",
+              "url": "https://neetcode.io/roadmap"
+            },
+            {
+              "label": "MIT OCW — Introduction to Algorithms (6.006)",
+              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/"
+            }
+          ],
+          "prerequisites": [
+            "graph-traversal"
+          ],
+          "criteria": [
+            "You can implement Kahn's algorithm and the DFS variant",
+            "You can detect a cycle in a directed graph and explain how it blocks a topological order",
+            "You solved course schedule and can map any dependency problem onto it"
+          ]
+        },
+        {
+          "id": "shortest-paths",
+          "title": "Shortest Paths: Dijkstra & Friends",
+          "description": "Finding minimum-cost paths in weighted graphs with Dijkstra's algorithm, plus awareness of Bellman-Ford for negative weights.",
+          "why": "Shortest-path algorithms run your GPS, network routing, and game AI. Dijkstra with a heap is the canonical marriage of two structures you already know, and it is a frequent hard-interview topic.",
+          "learn": [
+            "Implement Dijkstra's algorithm with a priority queue and a distance map",
+            "Trace it by hand on a small weighted graph to see why greedy settling works with non-negative weights",
+            "Learn when Dijkstra fails (negative edges) and what Bellman-Ford offers instead — conceptual fluency is enough",
+            "Solve network delay time or cheapest flights within k stops"
+          ],
+          "resources": [
+            {
+              "label": "LeetCode — Shortest Path Problems",
+              "url": "https://leetcode.com/tag/shortest-path/"
+            },
+            {
+              "label": "MIT OCW — Introduction to Algorithms (6.006)",
+              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/"
+            },
+            {
+              "label": "NeetCode — Advanced Graphs",
+              "url": "https://neetcode.io/roadmap"
+            }
+          ],
+          "prerequisites": [
+            "graph-traversal",
+            "heaps-priority-queues"
+          ],
+          "criteria": [
+            "You can implement Dijkstra's algorithm with a heap and state its complexity",
+            "You can explain why Dijkstra requires non-negative edge weights",
+            "You solved at least one weighted shortest-path problem end to end"
+          ]
+        },
+        {
+          "id": "union-find",
+          "title": "Union-Find (Disjoint Set Union)",
+          "description": "A structure tracking element groupings with near-O(1) union and find operations via path compression and union by rank.",
+          "why": "Union-find answers 'are these connected?' dynamically without re-traversing the graph, powering Kruskal's minimum spanning tree, network connectivity checks, and cycle detection in edge streams. It is compact, elegant, and a frequent interview differentiator.",
+          "learn": [
+            "Implement union-find with a parent array, then add path compression and union by rank",
+            "Understand (informally) why the optimized operations are effectively constant time",
+            "Solve redundant connection and number of connected components using union-find",
+            "Compare union-find vs DFS for connectivity and note when each wins"
+          ],
+          "resources": [
+            {
+              "label": "LeetCode — Union Find Problems",
+              "url": "https://leetcode.com/tag/union-find/"
+            },
+            {
+              "label": "NeetCode — Graph Problems",
+              "url": "https://neetcode.io/roadmap"
+            }
+          ],
+          "prerequisites": [
+            "graph-representation"
+          ],
+          "criteria": [
+            "You implemented union-find with both optimizations",
+            "You can detect a cycle in an edge list using union-find",
+            "You can explain when union-find beats repeated DFS"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Backtracking, Dynamic Programming & Greedy",
+      "description": "Exhaustive search done right, then the optimization paradigms: reuse overlapping subproblems with DP or commit to greedy choices.",
+      "topics": [
+        {
+          "id": "backtracking",
+          "title": "Backtracking",
+          "description": "Systematic exhaustive search that builds candidates incrementally and abandons dead ends: permutations, combinations, subsets, and constraint puzzles.",
+          "why": "Backtracking is structured brute force — the right tool when no polynomial shortcut exists (N-queens, Sudoku, word search). Its choose-explore-unchoose template also trains the recursive discipline that dynamic programming builds on.",
+          "learn": [
+            "Learn the choose-explore-unchoose template and apply it to generate all subsets",
+            "Solve permutations and combination sum, handling duplicates correctly",
+            "Solve a grid problem like word search that combines backtracking with DFS",
+            "Add pruning to a solution and measure how much of the search tree it eliminates",
+            "Estimate the complexity of a backtracking solution (branching factor ^ depth)"
+          ],
+          "resources": [
+            {
+              "label": "LeetCode — Backtracking Problems",
+              "url": "https://leetcode.com/tag/backtracking/"
+            },
+            {
+              "label": "NeetCode — Backtracking",
+              "url": "https://neetcode.io/roadmap"
+            }
+          ],
+          "prerequisites": [
+            "recursion",
+            "graph-traversal"
+          ],
+          "criteria": [
+            "You can write the backtracking template from memory and adapt it to subsets, permutations, and combinations",
+            "You solved at least 5 backtracking problems including one grid-based one",
+            "You can explain how pruning changes the effective search space"
+          ]
+        },
+        {
+          "id": "dp-fundamentals",
+          "title": "DP Fundamentals: Memoization & Tabulation",
+          "description": "Recognizing overlapping subproblems and optimal substructure, then caching results top-down (memoization) or bottom-up (tabulation).",
+          "why": "Dynamic programming turns exponential brute force into polynomial time and is the most feared — and most learnable — interview topic. The memoize-then-tabulate workflow gives you a repeatable procedure instead of relying on flashes of insight.",
+          "learn": [
+            "Start with Fibonacci: write the exponential recursion, add memoization, then convert to a bottom-up table, then reduce to O(1) space",
+            "Learn the two DP prerequisites — overlapping subproblems and optimal substructure — and check for them explicitly",
+            "Solve climbing stairs, min cost climbing stairs, and house robber with both top-down and bottom-up approaches",
+            "Practice defining the state precisely in words ('dp[i] = the best answer for the first i items') before writing code",
+            "Derive the transition equation and base cases for each problem you solve, on paper first"
+          ],
+          "resources": [
+            {
+              "label": "NeetCode — 1-D Dynamic Programming",
+              "url": "https://neetcode.io/roadmap"
+            },
+            {
+              "label": "LeetCode — Dynamic Programming Problems",
+              "url": "https://leetcode.com/tag/dynamic-programming/"
+            },
+            {
+              "label": "MIT OCW — Introduction to Algorithms (6.006)",
+              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/"
+            }
+          ],
+          "prerequisites": [
+            "recursion",
+            "backtracking"
+          ],
+          "criteria": [
+            "You can convert a plain recursion into a memoized version and then a tabulated version",
+            "You can state a DP problem's state definition, transition, and base cases before coding",
+            "You solved at least 5 one-dimensional DP problems both top-down and bottom-up"
+          ]
+        },
+        {
+          "id": "classic-dp-patterns",
+          "title": "Classic DP Patterns",
+          "description": "The recurring DP families: knapsack, longest common subsequence, longest increasing subsequence, edit distance, and grid paths.",
+          "why": "Most DP interview problems are variations on a handful of named patterns. Learning the archetypes means you map new problems onto known state definitions instead of starting from zero every time.",
+          "learn": [
+            "Solve 0/1 knapsack and understand the item-by-capacity table; then see coin change as unbounded knapsack",
+            "Solve longest common subsequence and edit distance and note their shared two-string table structure",
+            "Solve longest increasing subsequence in O(n^2), then learn the O(n log n) patience-sorting improvement",
+            "Solve unique paths and minimum path sum on grids",
+            "Build a personal cheat sheet mapping each pattern to its state definition and transition"
+          ],
+          "resources": [
+            {
+              "label": "NeetCode — 2-D Dynamic Programming",
+              "url": "https://neetcode.io/roadmap"
+            },
+            {
+              "label": "LeetCode — Dynamic Programming Problems",
+              "url": "https://leetcode.com/tag/dynamic-programming/"
+            },
+            {
+              "label": "freeCodeCamp — Dynamic Programming Articles",
+              "url": "https://www.freecodecamp.org/news/tag/dynamic-programming/"
+            }
+          ],
+          "prerequisites": [
+            "dp-fundamentals"
+          ],
+          "criteria": [
+            "You can identify which classic pattern a new DP problem resembles",
+            "You solved knapsack, LCS, edit distance, and LIS from scratch",
+            "You maintain a written pattern-to-state cheat sheet with at least 5 entries"
+          ]
+        },
+        {
+          "id": "greedy-algorithms",
+          "title": "Greedy Algorithms",
+          "description": "Making the locally optimal choice at each step and proving (or sanity-checking) that it yields a global optimum.",
+          "why": "When greedy works it is dramatically simpler and faster than DP — interval scheduling, Huffman coding, and Dijkstra are all greedy. The crucial skill is telling greedy-safe problems from greedy-trap problems, which interviewers love to probe.",
+          "learn": [
+            "Solve interval problems: merge intervals, non-overlapping intervals (classic activity selection), and meeting rooms",
+            "Solve jump game and gas station and articulate the greedy invariant that makes each work",
+            "Find a counterexample showing greedy fails on 0/1 knapsack, and explain why it works for fractional knapsack",
+            "Learn the exchange-argument style of informal proof for why a greedy choice is safe"
+          ],
+          "resources": [
+            {
+              "label": "LeetCode — Greedy Problems",
+              "url": "https://leetcode.com/tag/greedy/"
+            },
+            {
+              "label": "NeetCode — Greedy",
+              "url": "https://neetcode.io/roadmap"
+            },
+            {
+              "label": "MIT OCW — Introduction to Algorithms (6.006)",
+              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/"
+            }
+          ],
+          "prerequisites": [
+            "sorting-algorithms",
+            "dp-fundamentals"
+          ],
+          "criteria": [
+            "You solved at least 5 greedy problems including two interval problems",
+            "You can produce a counterexample when greedy fails and switch to DP",
+            "You can state the greedy invariant for each solution you write"
+          ]
+        },
+        {
+          "id": "bit-manipulation",
+          "title": "Bit Manipulation",
+          "description": "Operating on integers at the bit level with AND, OR, XOR, NOT, and shifts to achieve constant-time tricks.",
+          "why": "Bit tricks give elegant O(1)-space solutions (single number via XOR, checking power of two) and underlie low-level systems work, flags, and bitmask DP. A small investment here pays off across many problem types.",
+          "learn": [
+            "Master the operators: &, |, ^, ~, <<, >> and common idioms (n & (n-1) clears the lowest set bit)",
+            "Solve single number with XOR and count set bits (Hamming weight)",
+            "Use a bitmask to represent a set and enumerate all subsets of a small set",
+            "Solve missing number two ways: XOR and arithmetic sum"
+          ],
+          "resources": [
+            {
+              "label": "LeetCode — Bit Manipulation Problems",
+              "url": "https://leetcode.com/tag/bit-manipulation/"
+            },
+            {
+              "label": "NeetCode — Bit Manipulation",
+              "url": "https://neetcode.io/roadmap"
+            }
+          ],
+          "prerequisites": [
+            "big-o-notation"
+          ],
+          "criteria": [
+            "You can explain and use the n & (n-1) trick",
+            "You solved single number and counting-bits problems with XOR-based reasoning",
+            "You can represent a small set as a bitmask and iterate its subsets"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Interview Practice & Mastery",
+      "description": "Turn knowledge into performance: pattern recognition, structured practice, and communicating solutions under pressure.",
+      "topics": [
+        {
+          "id": "problem-solving-framework",
+          "title": "A Repeatable Problem-Solving Framework",
+          "description": "A step-by-step method for attacking any problem: clarify, work examples, brute force, optimize, code, test.",
+          "why": "Under interview pressure, a rehearsed process beats raw talent. A framework guarantees you never freeze, surfaces edge cases early, and shows the interviewer structured thinking even when the optimal solution eludes you.",
+          "learn": [
+            "Adopt a fixed sequence: restate the problem, ask clarifying questions, work 2-3 examples by hand, state brute force with complexity, optimize, code, trace a test",
+            "Practice verbalizing your thought process out loud while solving — record yourself once and review it",
+            "Learn to use constraint hints: n <= 20 suggests exponential/backtracking, n <= 10^5 demands O(n log n) or better",
+            "Apply the full framework to 5 unseen medium problems, timing each phase"
+          ],
+          "resources": [
+            {
+              "label": "NeetCode — Practice Roadmap",
+              "url": "https://neetcode.io/roadmap"
+            },
+            {
+              "label": "LeetCode — Explore & Study Plans",
+              "url": "https://leetcode.com/explore/"
+            },
+            {
+              "label": "freeCodeCamp — Interview Preparation Articles",
+              "url": "https://www.freecodecamp.org/news/tag/interview/"
+            }
+          ],
+          "prerequisites": [
+            "classic-dp-patterns",
+            "greedy-algorithms"
+          ],
+          "criteria": [
+            "You follow the same explicit sequence on every new problem",
+            "You can infer likely complexity targets from input constraints",
+            "You can narrate a solution out loud from clarification to tested code"
+          ]
+        },
+        {
+          "id": "pattern-recognition",
+          "title": "Pattern Recognition Across Problems",
+          "description": "Mapping problem statements to the fifteen-or-so core patterns: sliding window, two pointers, BFS/DFS, heap top-k, monotonic stack, binary search on answer, DP families, and more.",
+          "why": "Experienced problem-solvers do not invent solutions from scratch — they recognize which known pattern fits. Deliberately curating and drilling patterns is the fastest route from 'solved 50 problems' to 'can solve unseen problems'.",
+          "learn": [
+            "Work through a curated list (NeetCode 150 or LeetCode study plans) grouped by pattern rather than randomly",
+            "After each solve, write one line in your journal: the trigger in the statement that identified the pattern",
+            "Re-solve previously failed problems after a one-week gap (spaced repetition) until they are clean",
+            "For 10 random problems, practice naming the likely pattern within two minutes without solving"
+          ],
+          "resources": [
+            {
+              "label": "NeetCode — NeetCode 150",
+              "url": "https://neetcode.io/practice"
+            },
+            {
+              "label": "LeetCode — Study Plans",
+              "url": "https://leetcode.com/studyplan/"
+            }
+          ],
+          "prerequisites": [
+            "problem-solving-framework"
+          ],
+          "criteria": [
+            "You can name the applicable pattern for most medium problems within minutes",
+            "You maintain a pattern journal with triggers and template snippets",
+            "You re-solved your failed problems until each passes without hints"
+          ]
+        },
+        {
+          "id": "mock-interviews",
+          "title": "Mock Interviews & Communication",
+          "description": "Simulating the real event: solving on a timer, thinking aloud, handling hints, and whiteboard-style coding without an IDE.",
+          "why": "Interviews measure communication and composure as much as correctness. Mock practice exposes the gap between solving quietly at your desk and performing while explaining — and closes it before it costs you an offer.",
+          "learn": [
+            "Do timed solo sessions: one medium problem in 25 minutes, talking aloud the entire time",
+            "Practice with a peer or a mock-interview platform, alternating interviewer and candidate roles",
+            "Drill graceful recovery: getting a hint, acknowledging it, and integrating it without derailing",
+            "Write code in a plain text editor or on paper occasionally to reduce IDE dependence",
+            "Collect feedback after each mock and pick exactly one thing to improve next session"
+          ],
+          "resources": [
+            {
+              "label": "LeetCode — Interview Simulation",
+              "url": "https://leetcode.com/interview/"
+            },
+            {
+              "label": "NeetCode — Practice Platform",
+              "url": "https://neetcode.io/"
+            },
+            {
+              "label": "freeCodeCamp — Interview Preparation Articles",
+              "url": "https://www.freecodecamp.org/news/tag/interview/"
+            }
+          ],
+          "prerequisites": [
+            "problem-solving-framework"
+          ],
+          "criteria": [
+            "You completed at least 5 timed mock interviews with think-aloud narration",
+            "You can solve a medium problem in 25 minutes while explaining your reasoning",
+            "You can take a hint mid-solution and incorporate it smoothly"
+          ]
+        },
+        {
+          "id": "complexity-tradeoffs-review",
+          "title": "Trade-off Fluency & Final Review",
+          "description": "A capstone consolidation: for every structure and algorithm, knowing its complexities cold and articulating when and why to choose it.",
+          "why": "The final differentiator is judgment: instantly weighing hash map vs BST, BFS vs Dijkstra, DP vs greedy for a given problem. This synthesis is what senior interviews and real system design actually test.",
+          "learn": [
+            "Build a one-page complexity table covering every structure in this roadmap: operations, time, space, and one ideal use case each",
+            "For 10 scenario prompts ('design autocomplete', 'find top trending items'), pick structures and defend the choice aloud",
+            "Revisit the three topics you found hardest and re-solve their flagship problems from a blank editor",
+            "Do a final mixed set: 10 problems spanning arrays, trees, graphs, DP, and greedy with no topic labels"
+          ],
+          "resources": [
+            {
+              "label": "roadmap.sh — DSA Roadmap (full review)",
+              "url": "https://roadmap.sh/datastructures-and-algorithms"
+            },
+            {
+              "label": "NeetCode — NeetCode 150",
+              "url": "https://neetcode.io/practice"
+            },
+            {
+              "label": "MIT OCW — Introduction to Algorithms (6.006)",
+              "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/"
+            }
+          ],
+          "prerequisites": [
+            "pattern-recognition",
+            "mock-interviews"
+          ],
+          "criteria": [
+            "You reproduced the full complexity table from memory with at most two errors",
+            "You can justify a data-structure choice for an open-ended scenario in under three minutes",
+            "You solved an unlabeled mixed set of 10 problems, correctly identifying each pattern"
+          ]
+        }
+      ]
+    }
+  ]
+}

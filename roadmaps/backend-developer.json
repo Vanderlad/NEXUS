@@ -1,0 +1,739 @@
+{
+  "slug": "backend-developer",
+  "title": "Backend Developer",
+  "source": "roadmap.sh",
+  "url": "https://roadmap.sh/backend",
+  "description": "A step-by-step path from internet fundamentals to building secure, tested, production-ready backend services.",
+  "sections": [
+    {
+      "title": "Internet & Web Fundamentals",
+      "description": "Understand how data actually moves between clients and servers before you write a single endpoint.",
+      "topics": [
+        {
+          "id": "how-the-internet-works",
+          "title": "How the Internet Works",
+          "description": "The core plumbing of the internet: IP addresses, packets, routers, and the TCP/UDP transport protocols that carry every request.",
+          "why": "Every backend bug that 'makes no sense' eventually traces back to networking. Knowing how packets flow, what latency and timeouts really are, and how connections are established lets you debug production issues instead of guessing.",
+          "learn": [
+            "Trace what happens when you type a URL into a browser, from your machine to a server and back",
+            "Learn what IP addresses, ports, and packets are and how routers move them",
+            "Compare TCP and UDP and identify when each is used",
+            "Use tools like ping, traceroute, and curl to observe real network behavior"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — How does the Internet work?", "url": "https://www.cloudflare.com/learning/network-layer/how-does-the-internet-work/" },
+            { "label": "Beej — Beej's Guide to Network Programming", "url": "https://beej.us/guide/bgnet/" },
+            { "label": "roadmap.sh — Backend Developer Roadmap", "url": "https://roadmap.sh/backend" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can explain the journey of a request from browser to server, naming each layer involved",
+            "You can describe the difference between TCP and UDP with a concrete use case for each",
+            "You used ping, traceroute, and curl to inspect a real website"
+          ]
+        },
+        {
+          "id": "http-fundamentals",
+          "title": "HTTP Fundamentals",
+          "description": "The protocol of the web: request/response structure, methods, status codes, headers, and cookies.",
+          "why": "HTTP is the contract between your backend and every client that talks to it. Fluency in methods, status codes, and headers is what separates APIs that behave predictably from ones that fight their consumers.",
+          "learn": [
+            "Dissect a raw HTTP request and response: start line, headers, body",
+            "Memorize the core methods (GET, POST, PUT, PATCH, DELETE) and their semantics",
+            "Learn the status code families (2xx, 3xx, 4xx, 5xx) and the 10 codes you will use daily",
+            "Understand headers, cookies, and content negotiation",
+            "Skim what changed in HTTP/1.1 vs HTTP/2 vs HTTP/3"
+          ],
+          "resources": [
+            { "label": "MDN — HTTP documentation", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" },
+            { "label": "IETF — RFC 9110: HTTP Semantics", "url": "https://datatracker.ietf.org/doc/html/rfc9110" }
+          ],
+          "prerequisites": ["how-the-internet-works"],
+          "criteria": [
+            "You can explain the difference between PUT and PATCH, and between 401 and 403",
+            "You inspected full request/response cycles with curl -v or browser dev tools",
+            "You can list the purpose of five common headers from memory"
+          ]
+        },
+        {
+          "id": "dns-and-domains",
+          "title": "DNS & Domain Names",
+          "description": "How human-readable domain names resolve to IP addresses through the hierarchical DNS system.",
+          "why": "DNS sits in front of every service you will ever deploy. Understanding records, resolution, and TTLs is essential for deployments, custom domains, load balancing, and diagnosing the classic 'it works locally but not in prod' outages.",
+          "learn": [
+            "Follow a DNS lookup from resolver to root, TLD, and authoritative nameservers",
+            "Learn the common record types: A, AAAA, CNAME, MX, TXT, NS",
+            "Understand TTLs, caching, and why DNS changes take time to propagate",
+            "Query records yourself with dig or nslookup"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — What is DNS?", "url": "https://www.cloudflare.com/learning/dns/what-is-dns/" },
+            { "label": "Wizard Zines — How DNS Works", "url": "https://wizardzines.com/zines/dns/" }
+          ],
+          "prerequisites": ["how-the-internet-works"],
+          "criteria": [
+            "You can walk through a full DNS resolution step by step",
+            "You used dig to look up A, CNAME, and MX records for a real domain",
+            "You can explain what a TTL is and how it affects a DNS change"
+          ]
+        },
+        {
+          "id": "web-servers-and-hosting",
+          "title": "Web Servers & Hosting",
+          "description": "What web servers like Nginx and Apache do: accepting connections, serving content, reverse proxying, and routing traffic to your application.",
+          "why": "Your application code almost never faces the internet alone — a web server or reverse proxy handles TLS, static files, compression, and load distribution in front of it. Knowing this layer demystifies deployment architecture diagrams.",
+          "learn": [
+            "Understand the difference between a web server, an application server, and a reverse proxy",
+            "Install Nginx locally and serve a static page",
+            "Configure Nginx as a reverse proxy in front of a simple app",
+            "Learn what virtual hosts, ports, and worker processes mean for a server"
+          ],
+          "resources": [
+            { "label": "Nginx — Official documentation", "url": "https://nginx.org/en/docs/" },
+            { "label": "Apache — HTTP Server documentation", "url": "https://httpd.apache.org/docs/" }
+          ],
+          "prerequisites": ["http-fundamentals"],
+          "criteria": [
+            "You can explain what a reverse proxy is and why it sits in front of app servers",
+            "You served a page through Nginx on your own machine",
+            "You can sketch the path of a request through proxy, app server, and back"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Language & Developer Tooling",
+      "description": "Get productive in one backend language and master the everyday tools: the terminal, Git, and package management.",
+      "topics": [
+        {
+          "id": "pick-a-backend-language",
+          "title": "Pick a Backend Language",
+          "description": "Choose one language — JavaScript/TypeScript (Node.js), Python, Go, or Java — and learn its core syntax, data structures, and idioms deeply.",
+          "why": "Depth in one language beats shallow familiarity with five. Concepts like concurrency, error handling, and modularity transfer between languages, but only once you have truly internalized them in one.",
+          "learn": [
+            "Pick one language based on the jobs and projects you care about — then stop second-guessing",
+            "Work through the language's official tutorial end to end",
+            "Practice core constructs: functions, collections, error handling, modules",
+            "Build a small CLI tool (e.g., a to-do list or file organizer) from scratch",
+            "Learn how to read stack traces and use the language's debugger or REPL"
+          ],
+          "resources": [
+            { "label": "Python — The Official Python Tutorial", "url": "https://docs.python.org/3/tutorial/" },
+            { "label": "Node.js — Learn Node.js", "url": "https://nodejs.org/en/learn" },
+            { "label": "Go — A Tour of Go", "url": "https://go.dev/tour/" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You built and ran a small CLI program without copying a tutorial line by line",
+            "You can explain your language's error-handling model",
+            "You can read a stack trace and locate the failing line"
+          ]
+        },
+        {
+          "id": "packages-and-project-structure",
+          "title": "Packages & Project Structure",
+          "description": "Your language's package manager, dependency files, semantic versioning, and how real projects are laid out.",
+          "why": "Every professional codebase is built on third-party packages and reproducible dependency management. Lockfiles, versioning, and sane project structure are what make code shippable and shareable rather than a folder of scripts.",
+          "learn": [
+            "Initialize a project with your package manager (npm/pip/go mod) and add dependencies",
+            "Understand semantic versioning and what lockfiles guarantee",
+            "Learn the conventional directory layout for projects in your language",
+            "Separate configuration from code using environment variables"
+          ],
+          "resources": [
+            { "label": "npm — Official documentation", "url": "https://docs.npmjs.com/" },
+            { "label": "PyPA — Python Packaging User Guide", "url": "https://packaging.python.org/" }
+          ],
+          "prerequisites": ["pick-a-backend-language"],
+          "criteria": [
+            "You created a project someone else can install and run with one command",
+            "You can explain what ^1.2.3 means and why lockfiles exist",
+            "Your project reads secrets from environment variables, not source code"
+          ]
+        },
+        {
+          "id": "git-and-version-control",
+          "title": "Git & Version Control",
+          "description": "Track, branch, and merge code with Git, and collaborate through platforms like GitHub using branches and pull requests.",
+          "why": "Git is non-negotiable on every team. Confident branching, merging, and history-reading lets you experiment fearlessly and collaborate without stepping on teammates' work.",
+          "learn": [
+            "Learn the core loop: status, add, commit, push, pull",
+            "Create branches, merge them, and resolve a merge conflict on purpose",
+            "Open a pull request and respond to review feedback",
+            "Use git log, diff, and blame to investigate history",
+            "Practice undoing mistakes with restore, revert, and reset"
+          ],
+          "resources": [
+            { "label": "Git — Pro Git Book (free)", "url": "https://git-scm.com/book" },
+            { "label": "Learn Git Branching — Interactive tutorial", "url": "https://learngitbranching.js.org/" },
+            { "label": "GitHub — Official documentation", "url": "https://docs.github.com/en" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can branch, commit, merge, and resolve a conflict without looking anything up",
+            "You opened at least one pull request with a clear description",
+            "You can explain the difference between revert and reset"
+          ]
+        },
+        {
+          "id": "linux-and-the-terminal",
+          "title": "Linux & the Terminal",
+          "description": "Navigating and controlling Linux systems from the shell: files, permissions, processes, pipes, and SSH.",
+          "why": "Nearly every backend runs on Linux. Servers have no GUI — the terminal is how you deploy, inspect logs, debug processes, and administer machines. Shell fluency compounds into speed everywhere else.",
+          "learn": [
+            "Master navigation and file operations: cd, ls, cp, mv, rm, find",
+            "Understand users, groups, and file permissions (chmod, chown)",
+            "Inspect processes and resources with ps, top, and kill",
+            "Chain commands with pipes and redirection; search with grep",
+            "SSH into a remote machine and work on it comfortably"
+          ],
+          "resources": [
+            { "label": "LinuxCommand.org — Learning the shell (free book)", "url": "https://linuxcommand.org/" },
+            { "label": "MIT — The Missing Semester of Your CS Education", "url": "https://missing.csail.mit.edu/" },
+            { "label": "OverTheWire — Bandit wargame", "url": "https://overthewire.org/wargames/bandit/" },
+            { "label": "man7.org — Linux man pages", "url": "https://man7.org/linux/man-pages/" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can find, filter, and follow a log file using only the terminal",
+            "You can explain rwx permissions and change them correctly",
+            "You completed at least 15 levels of OverTheWire Bandit"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Databases",
+      "description": "Store, query, and model data — the heart of almost every backend system.",
+      "topics": [
+        {
+          "id": "relational-databases",
+          "title": "Relational Databases",
+          "description": "How relational databases like PostgreSQL organize data into tables with rows, columns, keys, and constraints, with ACID transaction guarantees.",
+          "why": "Relational databases are the default choice for most applications for good reason: strong consistency, powerful querying, and decades of reliability. Understanding tables, keys, and transactions underpins everything you will build.",
+          "learn": [
+            "Install PostgreSQL and create your first database and tables",
+            "Understand primary keys, foreign keys, and constraints",
+            "Learn what ACID means and why transactions matter",
+            "Explore how indexes speed up reads (and what they cost on writes)"
+          ],
+          "resources": [
+            { "label": "PostgreSQL — Official documentation", "url": "https://www.postgresql.org/docs/" },
+            { "label": "roadmap.sh — PostgreSQL DBA Roadmap", "url": "https://roadmap.sh/postgresql-dba" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You created a database with at least two related tables and a foreign key",
+            "You can explain each letter of ACID with an example",
+            "You can describe when an index helps and when it hurts"
+          ]
+        },
+        {
+          "id": "sql-fundamentals",
+          "title": "SQL Fundamentals",
+          "description": "The query language for relational data: SELECT, filtering, JOINs, aggregation, and data modification.",
+          "why": "SQL is one of the highest-leverage skills in software — it has outlived every framework trend for 40+ years. Strong SQL means you answer data questions in seconds and design APIs that do not need ten round trips.",
+          "learn": [
+            "Write SELECT queries with WHERE, ORDER BY, and LIMIT",
+            "Master INNER and LEFT JOINs across multiple tables",
+            "Aggregate with GROUP BY, HAVING, COUNT, SUM, and AVG",
+            "Modify data safely with INSERT, UPDATE, DELETE inside transactions",
+            "Read a query plan with EXPLAIN to see how queries execute"
+          ],
+          "resources": [
+            { "label": "SQLBolt — Interactive SQL lessons", "url": "https://sqlbolt.com/" },
+            { "label": "PostgreSQL Exercises — Practice problems", "url": "https://pgexercises.com/" },
+            { "label": "PostgreSQL — Official documentation", "url": "https://www.postgresql.org/docs/" }
+          ],
+          "prerequisites": ["relational-databases"],
+          "criteria": [
+            "You can write a three-table JOIN with aggregation without references",
+            "You completed all SQLBolt lessons",
+            "You used EXPLAIN to compare an indexed vs unindexed query"
+          ]
+        },
+        {
+          "id": "data-modeling-and-normalization",
+          "title": "Data Modeling & Normalization",
+          "description": "Designing schemas that map your domain to tables: entities, relationships, normalization, and when to deliberately denormalize.",
+          "why": "A good schema makes features easy and queries fast; a bad one generates bugs for years. Modeling is where backend engineering earns its keep — the schema outlives every rewrite of the code on top of it.",
+          "learn": [
+            "Model one-to-one, one-to-many, and many-to-many relationships (with join tables)",
+            "Learn normalization through third normal form and the anomalies it prevents",
+            "Design a schema for a real domain (e.g., a bookstore or event app) before writing code",
+            "Study when denormalization is a justified trade-off for read performance"
+          ],
+          "resources": [
+            { "label": "Wikipedia — Database normalization", "url": "https://en.wikipedia.org/wiki/Database_normalization" },
+            { "label": "PostgreSQL — Official documentation", "url": "https://www.postgresql.org/docs/" }
+          ],
+          "prerequisites": ["sql-fundamentals"],
+          "criteria": [
+            "You designed and implemented a normalized schema with a many-to-many relationship",
+            "You can spot and fix an update anomaly in a denormalized table",
+            "You can argue when denormalizing is acceptable and what it costs"
+          ]
+        },
+        {
+          "id": "nosql-databases",
+          "title": "NoSQL Databases",
+          "description": "Non-relational stores — document (MongoDB), key-value (Redis), and others — and the trade-offs they make around schema, scaling, and consistency.",
+          "why": "Not every dataset fits neatly into tables, and not every workload tolerates relational scaling limits. Knowing the NoSQL families lets you pick the right tool instead of forcing everything into one database.",
+          "learn": [
+            "Learn the main NoSQL categories: document, key-value, wide-column, graph",
+            "Store and query JSON documents in MongoDB or a similar document store",
+            "Understand eventual consistency and the CAP theorem at a working level",
+            "Compare a document model to a relational model for the same domain"
+          ],
+          "resources": [
+            { "label": "MongoDB — Official documentation", "url": "https://www.mongodb.com/docs/" },
+            { "label": "Redis — Official documentation", "url": "https://redis.io/docs/" },
+            { "label": "Martin Fowler — NoSQL overview", "url": "https://martinfowler.com/nosql.html" }
+          ],
+          "prerequisites": ["relational-databases"],
+          "criteria": [
+            "You can name the four NoSQL families and one use case for each",
+            "You performed CRUD operations against a document database",
+            "You can explain a scenario where you would choose NoSQL over SQL, and one where you would not"
+          ]
+        },
+        {
+          "id": "orms-and-migrations",
+          "title": "ORMs & Migrations",
+          "description": "Object-relational mappers that bridge code and database, plus migration tools that version your schema alongside your code.",
+          "why": "Teams evolve schemas continuously and safely using migrations, and ORMs remove boilerplate for common queries. Knowing what the ORM generates under the hood keeps you from shipping N+1 query disasters.",
+          "learn": [
+            "Define models/entities in an ORM for your language (Prisma, SQLAlchemy, GORM, Hibernate)",
+            "Generate and run migrations to create and alter tables",
+            "Perform CRUD and relations through the ORM, then inspect the SQL it emits",
+            "Identify and fix an N+1 query problem",
+            "Know when to drop down to raw SQL"
+          ],
+          "resources": [
+            { "label": "Prisma — Official documentation", "url": "https://www.prisma.io/docs" },
+            { "label": "SQLAlchemy — Official documentation", "url": "https://docs.sqlalchemy.org/" }
+          ],
+          "prerequisites": ["sql-fundamentals", "pick-a-backend-language"],
+          "criteria": [
+            "You built a small app whose schema is fully managed by migrations",
+            "You can show the SQL your ORM generates for a relation query",
+            "You can explain the N+1 problem and demonstrate its fix"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "APIs",
+      "description": "Design, build, and document the interfaces through which the world talks to your backend.",
+      "topics": [
+        {
+          "id": "rest-api-design",
+          "title": "REST API Design",
+          "description": "Designing resource-oriented HTTP APIs: URL structure, correct use of methods and status codes, pagination, filtering, and versioning.",
+          "why": "A well-designed API is a product other developers love to use; a sloppy one generates support tickets forever. REST conventions give consumers predictability and give you a shared vocabulary with every backend team on earth.",
+          "learn": [
+            "Model your domain as resources with noun-based URLs (/users/42/orders)",
+            "Map CRUD operations onto HTTP methods and pick correct status codes",
+            "Design pagination, filtering, and sorting query parameters",
+            "Plan for versioning and backwards compatibility from day one",
+            "Study a great public API (Stripe, GitHub) and note its conventions"
+          ],
+          "resources": [
+            { "label": "restfulapi.net — REST API Tutorial", "url": "https://restfulapi.net/" },
+            { "label": "Microsoft — Web API design best practices", "url": "https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design" },
+            { "label": "MDN — HTTP documentation", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ],
+          "prerequisites": ["http-fundamentals"],
+          "criteria": [
+            "You designed a resource model and endpoint list for a nontrivial domain on paper",
+            "You can justify the status code for every response in your design",
+            "You can explain two API versioning strategies and their trade-offs"
+          ]
+        },
+        {
+          "id": "build-a-crud-api",
+          "title": "Build a CRUD API",
+          "description": "Put it all together: a real HTTP API with a web framework, connected to a database, handling validation and errors properly.",
+          "why": "This is the core loop of backend work — you will build variations of this for your entire career. Shipping one end-to-end forces every prior topic (HTTP, SQL, language, design) to click into place.",
+          "learn": [
+            "Scaffold an API with a framework (Express/Fastify, FastAPI/Flask, Gin, or Spring)",
+            "Implement full CRUD endpoints backed by your database",
+            "Validate input and return structured, consistent error responses",
+            "Add request logging and a health-check endpoint",
+            "Exercise every endpoint with curl or Postman, including failure cases"
+          ],
+          "resources": [
+            { "label": "Express — Official documentation", "url": "https://expressjs.com/" },
+            { "label": "FastAPI — Official documentation", "url": "https://fastapi.tiangolo.com/" },
+            { "label": "Postman — Learning Center", "url": "https://learning.postman.com/" }
+          ],
+          "prerequisites": ["rest-api-design", "pick-a-backend-language", "sql-fundamentals"],
+          "criteria": [
+            "You built a working API with at least five endpoints persisting to a real database",
+            "Invalid input returns a 4xx with a helpful error body, never a crash",
+            "You can demo every endpoint, including edge cases, with curl or Postman"
+          ]
+        },
+        {
+          "id": "api-documentation-openapi",
+          "title": "API Documentation & OpenAPI",
+          "description": "Describing your API in the machine-readable OpenAPI (Swagger) format to generate interactive docs, clients, and validation.",
+          "why": "An undocumented API might as well not exist. OpenAPI turns your contract into interactive docs and generated client code, and keeps frontend and backend teams aligned without meetings.",
+          "learn": [
+            "Read an existing OpenAPI spec and map it to the endpoints it describes",
+            "Write or generate an OpenAPI spec for your CRUD API",
+            "Serve interactive documentation with Swagger UI or similar tooling",
+            "Keep the spec in version control and treat it as the source of truth"
+          ],
+          "resources": [
+            { "label": "Swagger — OpenAPI Specification", "url": "https://swagger.io/specification/" },
+            { "label": "OpenAPI Initiative — Official site", "url": "https://www.openapis.org/" }
+          ],
+          "prerequisites": ["rest-api-design"],
+          "criteria": [
+            "Your API has a complete OpenAPI spec covering every endpoint",
+            "You can browse and try your API through generated interactive docs",
+            "A teammate (or you, a week later) can integrate using only the docs"
+          ]
+        },
+        {
+          "id": "graphql-and-grpc",
+          "title": "GraphQL & gRPC",
+          "description": "The two most common REST alternatives: GraphQL's client-driven queries and gRPC's high-performance typed service calls.",
+          "why": "REST is not always the right shape — mobile clients want flexible queries, and internal microservices want fast typed contracts. Knowing when GraphQL or gRPC fits (and when it is overkill) makes you a better architect.",
+          "learn": [
+            "Learn GraphQL's schema, query, and mutation concepts and run queries in a playground",
+            "Understand how gRPC uses Protocol Buffers and HTTP/2 for typed, fast RPC",
+            "Compare REST, GraphQL, and gRPC on caching, tooling, and client needs",
+            "Build one tiny example with either GraphQL or gRPC"
+          ],
+          "resources": [
+            { "label": "GraphQL — Introduction to GraphQL", "url": "https://graphql.org/learn/" },
+            { "label": "gRPC — Official documentation", "url": "https://grpc.io/docs/" }
+          ],
+          "prerequisites": ["rest-api-design"],
+          "criteria": [
+            "You can explain a use case where GraphQL beats REST, and one where it does not",
+            "You can describe what a .proto file defines and why gRPC is fast",
+            "You ran a working GraphQL query or gRPC call end to end"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Caching & Performance",
+      "description": "Make your services fast and resilient under load with layered caching and asynchronous processing.",
+      "topics": [
+        {
+          "id": "http-caching",
+          "title": "HTTP Caching",
+          "description": "Caching at the protocol level: Cache-Control, ETags, conditional requests, and how browsers and proxies decide what to reuse.",
+          "why": "The fastest request is the one your server never receives. Correct cache headers can eliminate huge fractions of traffic for free — and incorrect ones cause maddening stale-data bugs.",
+          "learn": [
+            "Learn the Cache-Control directives: max-age, no-cache, no-store, private, public",
+            "Implement ETag/If-None-Match conditional requests returning 304",
+            "Understand where caches live: browser, proxy, CDN, and gateway",
+            "Set deliberate cache headers on your API's responses"
+          ],
+          "resources": [
+            { "label": "MDN — HTTP caching", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching" },
+            { "label": "IETF — RFC 9111: HTTP Caching", "url": "https://datatracker.ietf.org/doc/html/rfc9111" }
+          ],
+          "prerequisites": ["http-fundamentals"],
+          "criteria": [
+            "You can explain the difference between no-cache and no-store",
+            "You implemented an endpoint that returns 304 via ETags",
+            "You can trace why a stale response was served, using headers alone"
+          ]
+        },
+        {
+          "id": "server-side-caching",
+          "title": "Server-Side Caching with Redis",
+          "description": "In-memory stores like Redis and Memcached for caching expensive computations, database queries, and sessions.",
+          "why": "When a query is slow or a computation expensive, a cache measured in microseconds transforms user experience and slashes database load. Redis is also the industry workhorse for sessions, rate limiting, and leaderboards.",
+          "learn": [
+            "Run Redis locally and practice core commands: GET, SET, EXPIRE, DEL",
+            "Add a cache-aside layer in front of a slow database query in your API",
+            "Choose TTLs and design an invalidation strategy for your data",
+            "Learn the classic pitfalls: stale data, cache stampedes, and cold starts"
+          ],
+          "resources": [
+            { "label": "Redis — Official documentation", "url": "https://redis.io/docs/" },
+            { "label": "AWS — Caching overview", "url": "https://aws.amazon.com/caching/" },
+            { "label": "Memcached — Official site", "url": "https://memcached.org/" }
+          ],
+          "prerequisites": ["build-a-crud-api"],
+          "criteria": [
+            "You measurably sped up an endpoint by adding a Redis cache",
+            "You can explain cache-aside vs write-through strategies",
+            "You can describe what a cache stampede is and one mitigation"
+          ]
+        },
+        {
+          "id": "cdns",
+          "title": "Content Delivery Networks",
+          "description": "Globally distributed edge servers that cache and serve content close to users, absorbing traffic before it reaches your origin.",
+          "why": "Physics is undefeated: a user in Tokyo hitting a server in Virginia pays for every mile. CDNs cut latency worldwide, absorb traffic spikes and DDoS attacks, and are standard in any production architecture.",
+          "learn": [
+            "Understand edge locations, origin servers, and cache hits vs misses",
+            "Learn what content is CDN-friendly (static assets) vs hard (personalized responses)",
+            "See how CDNs interact with your Cache-Control headers",
+            "Put a free CDN (e.g., Cloudflare) in front of a site and observe the headers"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — What is a CDN?", "url": "https://www.cloudflare.com/learning/cdn/what-is-a-cdn/" },
+            { "label": "Cloudflare — Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ],
+          "prerequisites": ["dns-and-domains", "http-caching"],
+          "criteria": [
+            "You can diagram how a request flows through a CDN to an origin",
+            "You can read response headers to tell a cache hit from a miss",
+            "You configured a CDN or can describe exactly how you would"
+          ]
+        },
+        {
+          "id": "message-queues",
+          "title": "Message Queues & Async Processing",
+          "description": "Brokers like RabbitMQ and Kafka that decouple services: producers enqueue work, consumers process it asynchronously.",
+          "why": "Slow work — emails, image processing, third-party calls — should never block an HTTP response. Queues let you return instantly, absorb bursts, retry failures, and decouple services so one outage does not cascade.",
+          "learn": [
+            "Understand producers, consumers, queues, and acknowledgements",
+            "Move a slow task in your API (e.g., sending email) into a background worker",
+            "Learn delivery guarantees: at-most-once, at-least-once, and idempotent consumers",
+            "Compare task queues (RabbitMQ-style) with event streams (Kafka-style)"
+          ],
+          "resources": [
+            { "label": "RabbitMQ — Official site & tutorials", "url": "https://www.rabbitmq.com/" },
+            { "label": "Apache Kafka — Official documentation", "url": "https://kafka.apache.org/documentation/" },
+            { "label": "AWS — What is a message queue?", "url": "https://aws.amazon.com/message-queue/" }
+          ],
+          "prerequisites": ["build-a-crud-api"],
+          "criteria": [
+            "You built a producer/consumer pair processing jobs through a queue",
+            "You can explain why consumers must be idempotent under at-least-once delivery",
+            "You can name a use case for a queue vs an event stream"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Security",
+      "description": "Protect your users and your systems: transport encryption, identity, secrets, and the attacks every backend must repel.",
+      "topics": [
+        {
+          "id": "https-and-tls",
+          "title": "HTTPS & TLS",
+          "description": "How TLS encrypts traffic between clients and servers: certificates, certificate authorities, and the handshake.",
+          "why": "Plaintext HTTP leaks credentials and invites tampering — HTTPS is mandatory for anything real. Understanding certificates saves you when they expire at 2 a.m. and makes tools like Let's Encrypt make sense.",
+          "learn": [
+            "Understand symmetric vs asymmetric encryption at a conceptual level",
+            "Follow a TLS handshake: certificate presentation, verification, key exchange",
+            "Learn what certificate authorities do and how trust chains work",
+            "Issue a free certificate with Let's Encrypt and serve a site over HTTPS"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — What is HTTPS?", "url": "https://www.cloudflare.com/learning/ssl/what-is-https/" },
+            { "label": "Let's Encrypt — How It Works", "url": "https://letsencrypt.org/how-it-works/" }
+          ],
+          "prerequisites": ["http-fundamentals"],
+          "criteria": [
+            "You can explain what a certificate proves and who signs it",
+            "You served a site over HTTPS with a valid certificate",
+            "You can diagnose a common TLS error (expired cert, name mismatch)"
+          ]
+        },
+        {
+          "id": "authentication-and-authorization",
+          "title": "Authentication & Authorization",
+          "description": "Verifying who a user is (sessions, JWTs, OAuth 2.0) and what they are allowed to do (roles and permissions).",
+          "why": "Almost every backend gates something behind identity. Auth is also where mistakes are most expensive — a subtle flaw becomes a breach. Knowing the standard patterns keeps you from inventing insecure ones.",
+          "learn": [
+            "Contrast authentication (who are you) with authorization (what may you do)",
+            "Implement session-based auth with secure, httpOnly cookies",
+            "Implement token-based auth with JWTs and understand their trade-offs",
+            "Walk through an OAuth 2.0 authorization code flow (e.g., 'Log in with GitHub')",
+            "Add role-based access control to protect specific endpoints"
+          ],
+          "resources": [
+            { "label": "JWT.io — Introduction to JSON Web Tokens", "url": "https://jwt.io/introduction" },
+            { "label": "OAuth.net — OAuth 2.0", "url": "https://oauth.net/2/" },
+            { "label": "OWASP — Cheat Sheet Series", "url": "https://cheatsheetseries.owasp.org/" }
+          ],
+          "prerequisites": ["build-a-crud-api"],
+          "criteria": [
+            "You built login/logout with protected endpoints in your API",
+            "You can explain sessions vs JWTs and choose correctly for a scenario",
+            "You can walk through the OAuth authorization code flow on a whiteboard"
+          ]
+        },
+        {
+          "id": "password-and-secrets-hygiene",
+          "title": "Passwords, Hashing & Secrets",
+          "description": "Storing credentials safely with modern hashing (bcrypt, Argon2) and keeping API keys and secrets out of code.",
+          "why": "Password databases get breached; proper hashing is the difference between a bad day and a catastrophe. Leaked secrets in Git repos are one of the most common real-world compromises — hygiene here is table stakes.",
+          "learn": [
+            "Understand why hashing is not encryption, and why salts defeat rainbow tables",
+            "Hash passwords with bcrypt or Argon2 in your API's signup flow",
+            "Move all secrets to environment variables or a secrets manager",
+            "Learn what to do when a secret leaks: rotate, revoke, audit"
+          ],
+          "resources": [
+            { "label": "OWASP — Password Storage Cheat Sheet", "url": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html" },
+            { "label": "OWASP — Official site", "url": "https://owasp.org/" }
+          ],
+          "prerequisites": ["authentication-and-authorization"],
+          "criteria": [
+            "Your app stores only salted, slow-hashed passwords — verified by inspecting the database",
+            "You can explain why MD5/SHA-256 alone are wrong for passwords",
+            "No secret appears anywhere in your Git history"
+          ]
+        },
+        {
+          "id": "owasp-top-ten",
+          "title": "OWASP Top 10 & Common Attacks",
+          "description": "The most common web vulnerability classes — injection, broken access control, XSS, CSRF, SSRF — and how to defend against each.",
+          "why": "Attackers use the same handful of techniques against every app on the internet, including yours. Learning to think like an attacker — and practicing the exploits safely — is the fastest way to stop writing vulnerable code.",
+          "learn": [
+            "Read the current OWASP Top 10 and map each risk to your own API",
+            "Exploit and then fix an SQL injection in a deliberately vulnerable lab",
+            "Understand XSS and CSRF and the headers/tokens that block them",
+            "Add rate limiting and input validation to every public endpoint",
+            "Work through PortSwigger Web Security Academy labs hands-on"
+          ],
+          "resources": [
+            { "label": "OWASP — Top Ten Project", "url": "https://owasp.org/www-project-top-ten/" },
+            { "label": "PortSwigger — Web Security Academy (free labs)", "url": "https://portswigger.net/web-security" },
+            { "label": "TryHackMe — Guided security rooms", "url": "https://tryhackme.com/" }
+          ],
+          "prerequisites": ["build-a-crud-api", "sql-fundamentals"],
+          "criteria": [
+            "You exploited SQL injection and XSS in a legal lab environment",
+            "You can explain how parameterized queries stop injection",
+            "You audited your own API against the Top 10 and fixed at least one finding"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Testing, CI/CD & Deployment",
+      "description": "Prove your code works, automate the proof, and ship it to real users — then keep it healthy in production.",
+      "topics": [
+        {
+          "id": "unit-testing",
+          "title": "Unit Testing",
+          "description": "Fast, isolated tests for individual functions and modules using a test framework, with mocks for external dependencies.",
+          "why": "Tests are what let you change code confidently — they turn 'I hope this still works' into 'the suite is green.' Untested backends calcify; well-tested ones evolve for years.",
+          "learn": [
+            "Set up your language's standard test framework (Jest, pytest, go test, JUnit)",
+            "Write tests following arrange-act-assert, covering happy paths and edge cases",
+            "Mock or stub external dependencies like databases and HTTP calls",
+            "Measure coverage — and learn why 100% coverage is not the goal",
+            "Run the suite on every change until it becomes reflex"
+          ],
+          "resources": [
+            { "label": "Jest — Getting Started", "url": "https://jestjs.io/docs/getting-started" },
+            { "label": "pytest — Official documentation", "url": "https://docs.pytest.org/" },
+            { "label": "Martin Fowler — The Practical Test Pyramid", "url": "https://martinfowler.com/articles/practical-test-pyramid.html" }
+          ],
+          "prerequisites": ["pick-a-backend-language"],
+          "criteria": [
+            "You wrote a suite of 20+ meaningful unit tests for real code",
+            "You can explain what mocking is and when it becomes a smell",
+            "A deliberately introduced bug is caught by your tests"
+          ]
+        },
+        {
+          "id": "integration-and-api-testing",
+          "title": "Integration & API Testing",
+          "description": "Tests that exercise your service the way clients do — real HTTP requests against real (or containerized) databases.",
+          "why": "Unit tests cannot catch a broken SQL query, a wrong route, or a misconfigured serializer. Integration tests verify the seams — which is where most production bugs actually live.",
+          "learn": [
+            "Write tests that boot your API and hit endpoints over HTTP",
+            "Run tests against a real database in a throwaway container",
+            "Assert on status codes, response bodies, and database side effects",
+            "Understand the test pyramid: many unit, fewer integration, fewest end-to-end"
+          ],
+          "resources": [
+            { "label": "Testcontainers — Official site", "url": "https://testcontainers.com/" },
+            { "label": "Postman — Learning Center", "url": "https://learning.postman.com/" },
+            { "label": "Martin Fowler — IntegrationTest", "url": "https://martinfowler.com/bliki/IntegrationTest.html" }
+          ],
+          "prerequisites": ["unit-testing", "build-a-crud-api"],
+          "criteria": [
+            "Your API has integration tests covering every endpoint including auth failures",
+            "Your tests run against an isolated, disposable database",
+            "You can explain the trade-offs between unit and integration tests"
+          ]
+        },
+        {
+          "id": "ci-cd-pipelines",
+          "title": "CI/CD Pipelines",
+          "description": "Automated pipelines (e.g., GitHub Actions) that lint, test, build, and deploy your code on every push.",
+          "why": "Manual releases are slow, scary, and error-prone. CI/CD makes shipping boring — every merge is validated automatically, and deploys become a routine button press instead of a ceremony.",
+          "learn": [
+            "Create a CI workflow that runs your linter and full test suite on every push",
+            "Fail the pipeline on test failure and make green checks required for merging",
+            "Build a deployable artifact (e.g., a container image) in the pipeline",
+            "Add a deploy step to a staging environment on merge to main"
+          ],
+          "resources": [
+            { "label": "GitHub — Actions documentation", "url": "https://docs.github.com/en/actions" },
+            { "label": "Martin Fowler — Continuous Integration", "url": "https://martinfowler.com/articles/continuousIntegration.html" }
+          ],
+          "prerequisites": ["git-and-version-control", "unit-testing"],
+          "criteria": [
+            "Every push to your repo automatically runs tests, visible as a status check",
+            "A failing test blocks the pipeline (you verified by breaking one)",
+            "Your pipeline produces a deployable artifact"
+          ]
+        },
+        {
+          "id": "docker-and-containers",
+          "title": "Docker & Containers",
+          "description": "Packaging applications with their entire runtime into portable container images, and composing multi-service stacks locally.",
+          "why": "Containers ended 'works on my machine' — the same image runs identically on your laptop, CI, and production. Docker is the lingua franca of modern deployment and the foundation for Kubernetes and most cloud platforms.",
+          "learn": [
+            "Understand images vs containers, layers, and registries",
+            "Write a Dockerfile for your API and build a lean image",
+            "Run your app plus its database together with Docker Compose",
+            "Manage the lifecycle: logs, exec, port mapping, volumes, cleanup"
+          ],
+          "resources": [
+            { "label": "Docker — Get Started guide", "url": "https://docs.docker.com/get-started/" },
+            { "label": "Docker — Official documentation", "url": "https://docs.docker.com/" }
+          ],
+          "prerequisites": ["linux-and-the-terminal"],
+          "criteria": [
+            "You wrote a Dockerfile and ran your own API from the image",
+            "Your app and database start together with one docker compose up",
+            "You can explain image layers and why order in a Dockerfile matters"
+          ]
+        },
+        {
+          "id": "deployment-and-monitoring",
+          "title": "Deployment, Observability & Monitoring",
+          "description": "Running your service in production: cloud hosting, twelve-factor configuration, structured logs, metrics, and alerts.",
+          "why": "Shipping is the whole point — and production is where you learn what your system really does. Logs, metrics, and health checks turn outages from mysteries into ten-minute fixes, and separate hobby projects from professional services.",
+          "learn": [
+            "Deploy your containerized API to a cloud host or PaaS with a managed database",
+            "Apply twelve-factor principles: config in the environment, stateless processes, logs as streams",
+            "Emit structured logs and expose health and metrics endpoints",
+            "Set up basic monitoring and one alert (e.g., error rate or downtime)",
+            "Practice an incident: break your app, find it via logs/metrics, roll back"
+          ],
+          "resources": [
+            { "label": "The Twelve-Factor App", "url": "https://12factor.net/" },
+            { "label": "Kubernetes — Official tutorials", "url": "https://kubernetes.io/docs/tutorials/" },
+            { "label": "Prometheus — Official documentation", "url": "https://prometheus.io/docs/" }
+          ],
+          "prerequisites": ["docker-and-containers", "ci-cd-pipelines"],
+          "criteria": [
+            "Your API is live on the public internet over HTTPS with a real database",
+            "You diagnosed a simulated failure using only logs and metrics",
+            "You can explain three twelve-factor principles your deployment follows"
+          ]
+        }
+      ]
+    }
+  ]
+}

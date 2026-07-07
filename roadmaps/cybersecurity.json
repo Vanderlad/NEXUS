@@ -1,0 +1,695 @@
+{
+  "slug": "cybersecurity",
+  "title": "Cybersecurity",
+  "source": "roadmap.sh",
+  "url": "https://roadmap.sh/cyber-security",
+  "description": "Go from security fundamentals through networking, web (OWASP), crypto, and defense to hands-on CTFs and labs.",
+  "sections": [
+    {
+      "title": "Security Fundamentals",
+      "description": "Build the core vocabulary and mental models that every security discipline is built on.",
+      "topics": [
+        {
+          "id": "cia-triad",
+          "title": "The CIA Triad and Core Concepts",
+          "description": "Confidentiality, Integrity, and Availability are the three goals every security control ultimately serves. This topic covers those pillars plus supporting ideas like non-repudiation and accountability.",
+          "why": "Almost every security decision is a trade-off between these three goals. Naming which one you are protecting turns vague 'be more secure' requests into concrete, testable requirements.",
+          "learn": [
+            "Define confidentiality, integrity, and availability with a real-world example of each",
+            "Map common controls (encryption, hashing, backups) to the pillar they protect",
+            "Learn how non-repudiation and authenticity extend the basic triad",
+            "Practice classifying a breach headline by which pillar failed"
+          ],
+          "resources": [
+            { "label": "Cloudflare — Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "label": "roadmap.sh — Cyber Security", "url": "https://roadmap.sh/cyber-security" },
+            { "label": "OWASP — Foundation home", "url": "https://owasp.org/" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can explain the CIA triad and give a concrete example for each pillar",
+            "You can classify a given control by which security goal it supports",
+            "You can describe non-repudiation in one sentence"
+          ]
+        },
+        {
+          "id": "threats-vulns-risk",
+          "title": "Threats, Vulnerabilities, and Risk",
+          "description": "The relationship between a threat (who or what could cause harm), a vulnerability (the weakness), and risk (likelihood times impact). Includes the basics of threat modeling.",
+          "why": "Security work is prioritization. Understanding risk lets you focus limited time on the weaknesses that actually matter instead of chasing every theoretical flaw.",
+          "learn": [
+            "Distinguish threat, threat actor, vulnerability, exploit, and risk with definitions",
+            "Learn the risk equation (likelihood x impact) and how it drives prioritization",
+            "Walk through a simple STRIDE threat model for a small app",
+            "List common threat actor types and their typical motivations"
+          ],
+          "resources": [
+            { "label": "OWASP — Threat Modeling Cheat Sheet", "url": "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html" },
+            { "label": "Cloudflare — Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "label": "roadmap.sh — Cyber Security", "url": "https://roadmap.sh/cyber-security" }
+          ],
+          "prerequisites": ["cia-triad"],
+          "criteria": [
+            "You can define threat, vulnerability, and risk and explain how they relate",
+            "You can produce a basic threat model listing assets, threats, and mitigations",
+            "You can rank two risks by likelihood and impact and justify the order"
+          ]
+        },
+        {
+          "id": "authn-authz",
+          "title": "Authentication and Authorization",
+          "description": "Authentication proves who you are; authorization decides what you may do. Covers factors, sessions, tokens, and least-privilege access models.",
+          "why": "Broken auth is one of the most common and damaging classes of vulnerability. Getting identity and access right is the foundation of protecting every other resource.",
+          "learn": [
+            "Distinguish authentication from authorization with a clear example",
+            "Learn the three authentication factors and what multi-factor auth adds",
+            "Compare role-based and attribute-based access control models",
+            "Understand the principle of least privilege and why it limits blast radius"
+          ],
+          "resources": [
+            { "label": "OWASP — Authentication Cheat Sheet", "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" },
+            { "label": "MDN — Web security", "url": "https://developer.mozilla.org/en-US/docs/Web/Security" },
+            { "label": "Cloudflare — What is identity and access management?", "url": "https://www.cloudflare.com/learning/access-management/what-is-identity-and-access-management/" }
+          ],
+          "prerequisites": ["cia-triad"],
+          "criteria": [
+            "You can explain the difference between authentication and authorization",
+            "You can list the authentication factors and describe an MFA setup",
+            "You can apply least privilege to a sample set of user roles"
+          ]
+        },
+        {
+          "id": "attacker-mindset",
+          "title": "The Attacker Mindset and Ethics",
+          "description": "Learning to think like an adversary: enumerating attack surface, chaining small flaws, and questioning assumptions, all within legal and ethical boundaries.",
+          "why": "You cannot defend what you cannot attack in your head first. An adversarial mindset, paired with strict ethics and authorization, is what separates a security professional from a liability.",
+          "learn": [
+            "Learn the phases of an attack (recon, exploitation, persistence, exfiltration)",
+            "Study why explicit authorization and scope are legally required before testing",
+            "Practice enumerating the attack surface of a familiar application",
+            "Read a responsible-disclosure policy and note what it does and does not permit"
+          ],
+          "resources": [
+            { "label": "TryHackMe — Learn platform", "url": "https://tryhackme.com/" },
+            { "label": "OWASP — Foundation home", "url": "https://owasp.org/" },
+            { "label": "roadmap.sh — Cyber Security", "url": "https://roadmap.sh/cyber-security" }
+          ],
+          "prerequisites": ["threats-vulns-risk"],
+          "criteria": [
+            "You can outline the phases of a typical attack",
+            "You can explain why written authorization and scope matter legally",
+            "You can enumerate the attack surface of a simple system"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Networking Security",
+      "description": "Understand how networks move data and how attackers and defenders operate at each layer.",
+      "topics": [
+        {
+          "id": "networking-basics",
+          "title": "Networking Fundamentals",
+          "description": "The TCP/IP and OSI models, IP addressing, packets, and how data actually travels between two machines on the internet.",
+          "why": "Nearly every attack and defense happens over a network. Without a solid grasp of how packets route and protocols layer, tools like Wireshark and Nmap are just noise.",
+          "learn": [
+            "Learn the OSI and TCP/IP layer models and what each layer does",
+            "Understand IP addresses, subnets, and the difference between TCP and UDP",
+            "Trace what happens end to end when you load a web page",
+            "Read a captured packet and identify its source, destination, and protocol"
+          ],
+          "resources": [
+            { "label": "Cloudflare — How does the internet work?", "url": "https://www.cloudflare.com/learning/network-layer/how-does-the-internet-work/" },
+            { "label": "Beej — Guide to Network Programming", "url": "https://beej.us/guide/bgnet/" },
+            { "label": "Wizard Zines — Networking comics", "url": "https://wizardzines.com/" }
+          ],
+          "prerequisites": ["cia-triad"],
+          "criteria": [
+            "You can describe the OSI layers and give an example protocol at each",
+            "You can explain the difference between TCP and UDP",
+            "You can walk through the steps of loading a web page over the network"
+          ]
+        },
+        {
+          "id": "protocols-ports",
+          "title": "Common Protocols and Ports",
+          "description": "The everyday protocols (HTTP/S, DNS, SSH, SMTP, DHCP) and their default ports, plus how insecure protocols leak data.",
+          "why": "Recognizing services by port and protocol lets you read scan output instantly and spot when something insecure (like plaintext FTP or Telnet) is exposed.",
+          "learn": [
+            "Memorize the default ports for HTTP, HTTPS, DNS, SSH, and SMTP",
+            "Compare a plaintext protocol with its encrypted equivalent (HTTP vs HTTPS)",
+            "Learn how DNS resolution works and why it is a common attack target",
+            "Run a port scan on a machine you own and interpret the open services"
+          ],
+          "resources": [
+            { "label": "Cloudflare — What is DNS?", "url": "https://www.cloudflare.com/learning/dns/what-is-dns/" },
+            { "label": "IETF — RFC index", "url": "https://www.ietf.org/standards/rfcs/" },
+            { "label": "man7.org — Linux man pages", "url": "https://man7.org/linux/man-pages/" }
+          ],
+          "prerequisites": ["networking-basics"],
+          "criteria": [
+            "You can name the default ports for the major protocols",
+            "You can explain how DNS turns a name into an IP address",
+            "You can interpret the results of a basic port scan"
+          ]
+        },
+        {
+          "id": "network-defense",
+          "title": "Firewalls, VPNs, and Network Defense",
+          "description": "The controls that segment and protect networks: firewalls, VPNs, network segmentation, and intrusion detection systems.",
+          "why": "These are the front-line defenses in every organization. Knowing how they filter, tunnel, and alert helps you both configure them and understand what an attacker must bypass.",
+          "learn": [
+            "Learn how stateful firewalls filter traffic by rules",
+            "Understand what a VPN encrypts and the threats it does and does not stop",
+            "Compare network segmentation and a flat network's blast radius",
+            "Learn the difference between an IDS and an IPS"
+          ],
+          "resources": [
+            { "label": "Cloudflare — What is a firewall?", "url": "https://www.cloudflare.com/learning/security/what-is-a-firewall/" },
+            { "label": "Cloudflare — What is a VPN?", "url": "https://www.cloudflare.com/learning/access-management/what-is-a-vpn/" },
+            { "label": "roadmap.sh — Cyber Security", "url": "https://roadmap.sh/cyber-security" }
+          ],
+          "prerequisites": ["protocols-ports"],
+          "criteria": [
+            "You can explain how a stateful firewall decides to allow or block traffic",
+            "You can describe what a VPN protects and its limitations",
+            "You can distinguish an IDS from an IPS"
+          ]
+        },
+        {
+          "id": "network-attacks",
+          "title": "Network Attacks and Analysis",
+          "description": "Common network-layer attacks such as sniffing, man-in-the-middle, ARP spoofing, and denial of service, plus how to analyze traffic to spot them.",
+          "why": "Recognizing malicious traffic patterns is core to both offense and defense. Packet analysis skills turn an invisible network into readable evidence.",
+          "learn": [
+            "Learn how sniffing and man-in-the-middle attacks intercept traffic",
+            "Understand ARP spoofing and why local networks are vulnerable to it",
+            "Study how DoS and DDoS attacks exhaust resources",
+            "Capture and inspect live traffic with Wireshark on a network you own"
+          ],
+          "resources": [
+            { "label": "Cloudflare — What is a DDoS attack?", "url": "https://www.cloudflare.com/learning/ddos/what-is-a-ddos-attack/" },
+            { "label": "Cloudflare — On-path (MITM) attack", "url": "https://www.cloudflare.com/learning/security/threats/on-path-attack/" },
+            { "label": "TryHackMe — Learn platform", "url": "https://tryhackme.com/" }
+          ],
+          "prerequisites": ["network-defense", "attacker-mindset"],
+          "criteria": [
+            "You can explain how a man-in-the-middle attack works",
+            "You can describe the difference between DoS and DDoS",
+            "You captured traffic and identified protocols in Wireshark"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Systems and Tooling",
+      "description": "Get comfortable on the command line and with the operating systems where security work happens.",
+      "topics": [
+        {
+          "id": "linux-fundamentals",
+          "title": "Linux Fundamentals",
+          "description": "Navigating the filesystem, managing users and permissions, and understanding processes on Linux, the dominant platform for security tooling.",
+          "why": "Most security tools, servers, and CTF targets run Linux. Fluency with the shell and permission model is the single highest-leverage skill for a security practitioner.",
+          "learn": [
+            "Navigate the filesystem and manage files from the shell",
+            "Understand users, groups, and the read/write/execute permission model",
+            "Inspect running processes and services",
+            "Read and search log files in /var/log"
+          ],
+          "resources": [
+            { "label": "Linux Journey — Learn Linux", "url": "https://linuxjourney.com/" },
+            { "label": "MIT — The Missing Semester", "url": "https://missing.csail.mit.edu/" },
+            { "label": "OverTheWire — Bandit wargame", "url": "https://overthewire.org/wargames/bandit/" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can navigate and manipulate files entirely from the shell",
+            "You can read and modify Linux file permissions",
+            "You completed the early levels of OverTheWire Bandit"
+          ]
+        },
+        {
+          "id": "cli-security-tools",
+          "title": "Command-Line Security Tooling",
+          "description": "The workhorse command-line tools for reconnaissance and analysis, including Nmap, Netcat, curl, and grep-based log triage.",
+          "why": "These tools are the daily drivers of security work. Chaining them fluently on the command line is far faster than any point-and-click alternative.",
+          "learn": [
+            "Run and interpret a basic Nmap host and port scan",
+            "Use curl to inspect HTTP requests and response headers",
+            "Practice filtering text with grep, awk, and pipes",
+            "Learn what Netcat can do for simple connections and listeners"
+          ],
+          "resources": [
+            { "label": "man7.org — Linux man pages", "url": "https://man7.org/linux/man-pages/" },
+            { "label": "Wizard Zines — Command-line comics", "url": "https://wizardzines.com/" },
+            { "label": "OverTheWire — Wargames", "url": "https://overthewire.org/wargames/" }
+          ],
+          "prerequisites": ["linux-fundamentals", "protocols-ports"],
+          "criteria": [
+            "You can run an Nmap scan and read its output",
+            "You can inspect HTTP headers with curl",
+            "You can filter a log file down to relevant lines using pipes"
+          ]
+        },
+        {
+          "id": "os-hardening",
+          "title": "System Hardening",
+          "description": "Reducing a system's attack surface: patching, disabling unused services, secure configuration, and applying baselines.",
+          "why": "A default installation is rarely secure. Hardening is one of the most cost-effective defensive activities, closing doors before an attacker ever finds them.",
+          "learn": [
+            "Learn why patching and update management matter and how they fail",
+            "Disable or remove unnecessary services and default accounts",
+            "Apply a configuration baseline or benchmark to a system",
+            "Enable and review host-level logging"
+          ],
+          "resources": [
+            { "label": "Cloudflare — Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "label": "OWASP — Cheat Sheet Series", "url": "https://cheatsheetseries.owasp.org/" },
+            { "label": "man7.org — Linux man pages", "url": "https://man7.org/linux/man-pages/" }
+          ],
+          "prerequisites": ["linux-fundamentals"],
+          "criteria": [
+            "You can explain why unused services should be disabled",
+            "You applied a hardening baseline to a test system",
+            "You can describe a safe patch-management process"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Cryptography Basics",
+      "description": "Learn the building blocks that make confidentiality, integrity, and trust possible on the internet.",
+      "topics": [
+        {
+          "id": "crypto-foundations",
+          "title": "Symmetric and Asymmetric Encryption",
+          "description": "The two families of encryption: shared-key (symmetric) and public/private key (asymmetric), and when each is used.",
+          "why": "Encryption underpins nearly all secure communication. Knowing which scheme solves which problem lets you reason about protocols like TLS instead of treating them as magic.",
+          "learn": [
+            "Learn how symmetric ciphers use one shared key",
+            "Understand how public/private key pairs enable encryption and signatures",
+            "See how the two are combined in practice (key exchange plus bulk encryption)",
+            "Learn why you should never roll your own crypto"
+          ],
+          "resources": [
+            { "label": "Cloudflare — How does public key encryption work?", "url": "https://www.cloudflare.com/learning/ssl/how-does-public-key-encryption-work/" },
+            { "label": "Khan Academy — Cryptography", "url": "https://www.khanacademy.org/computing/computer-science/cryptography" },
+            { "label": "Cloudflare — What is encryption?", "url": "https://www.cloudflare.com/learning/ssl/what-is-encryption/" }
+          ],
+          "prerequisites": ["cia-triad"],
+          "criteria": [
+            "You can explain the difference between symmetric and asymmetric encryption",
+            "You can describe when each type is appropriate",
+            "You can explain why implementing your own cipher is risky"
+          ]
+        },
+        {
+          "id": "hashing-integrity",
+          "title": "Hashing and Integrity",
+          "description": "One-way hash functions, message authentication codes, and how they verify integrity and protect stored passwords.",
+          "why": "Hashing is how systems verify that data has not changed and store passwords without keeping the plaintext. Confusing hashing with encryption is a classic and dangerous mistake.",
+          "learn": [
+            "Learn what makes a cryptographic hash one-way and collision-resistant",
+            "Understand why passwords are salted and hashed, not encrypted",
+            "Learn how HMACs verify both integrity and authenticity",
+            "Compare a fast hash to a purpose-built password hash like bcrypt"
+          ],
+          "resources": [
+            { "label": "OWASP — Password Storage Cheat Sheet", "url": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html" },
+            { "label": "Khan Academy — Cryptography", "url": "https://www.khanacademy.org/computing/computer-science/cryptography" },
+            { "label": "Cloudflare — Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ],
+          "prerequisites": ["crypto-foundations"],
+          "criteria": [
+            "You can explain how hashing differs from encryption",
+            "You can describe why salting passwords defeats precomputed attacks",
+            "You can explain what an HMAC provides"
+          ]
+        },
+        {
+          "id": "tls-pki",
+          "title": "TLS, Certificates, and PKI",
+          "description": "How TLS secures web traffic, and how certificates and public key infrastructure establish trust between strangers on the internet.",
+          "why": "TLS is the padlock behind HTTPS and countless other protocols. Understanding certificates and chains of trust lets you diagnose the security warnings users actually see.",
+          "learn": [
+            "Learn what the TLS handshake accomplishes at a high level",
+            "Understand how certificates bind an identity to a public key",
+            "Trace a certificate chain from a leaf up to a trusted root",
+            "Inspect a real site's certificate in your browser"
+          ],
+          "resources": [
+            { "label": "Cloudflare — What is SSL/TLS?", "url": "https://www.cloudflare.com/learning/ssl/what-is-ssl/" },
+            { "label": "Cloudflare — What is a TLS handshake?", "url": "https://www.cloudflare.com/learning/ssl/what-happens-in-a-tls-handshake/" },
+            { "label": "MDN — Transport Layer Security", "url": "https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security" }
+          ],
+          "prerequisites": ["crypto-foundations", "protocols-ports"],
+          "criteria": [
+            "You can summarize what the TLS handshake establishes",
+            "You can explain how certificate chains create trust",
+            "You inspected a live certificate and read its issuer and validity"
+          ]
+        },
+        {
+          "id": "crypto-pitfalls",
+          "title": "Practical Cryptography Pitfalls",
+          "description": "The common ways real systems misuse otherwise-sound cryptography: weak randomness, hardcoded keys, deprecated algorithms, and poor key management.",
+          "why": "In practice, crypto rarely fails because the math is broken; it fails because it is used incorrectly. Spotting these misuses is a high-value review skill.",
+          "learn": [
+            "Learn why predictable randomness breaks security guarantees",
+            "Identify deprecated algorithms (MD5, SHA-1, DES) and their replacements",
+            "Understand the risks of hardcoded secrets and how to manage keys",
+            "Review a code sample for a cryptographic misuse"
+          ],
+          "resources": [
+            { "label": "OWASP — Cryptographic Storage Cheat Sheet", "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html" },
+            { "label": "OWASP — Foundation home", "url": "https://owasp.org/" },
+            { "label": "Cloudflare — Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ],
+          "prerequisites": ["hashing-integrity", "tls-pki"],
+          "criteria": [
+            "You can name deprecated hash and cipher algorithms and their replacements",
+            "You can explain why secrets should not be hardcoded",
+            "You identified a crypto misuse in a sample"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Web Security (OWASP)",
+      "description": "Learn how web applications are attacked and hardened, using the OWASP body of knowledge.",
+      "topics": [
+        {
+          "id": "how-web-works",
+          "title": "How the Web Works",
+          "description": "The HTTP request/response cycle, cookies and sessions, the same-origin policy, and the browser security model.",
+          "why": "You cannot secure what you do not understand. A precise model of HTTP and the browser is the prerequisite for every web vulnerability class that follows.",
+          "learn": [
+            "Trace an HTTP request and response including methods, headers, and status codes",
+            "Learn how cookies maintain sessions across stateless requests",
+            "Understand the same-origin policy and why it exists",
+            "Use browser developer tools to inspect requests and cookies"
+          ],
+          "resources": [
+            { "label": "MDN — HTTP overview", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview" },
+            { "label": "MDN — Web security", "url": "https://developer.mozilla.org/en-US/docs/Web/Security" },
+            { "label": "web.dev — Learn", "url": "https://web.dev/" }
+          ],
+          "prerequisites": ["protocols-ports"],
+          "criteria": [
+            "You can describe the HTTP request/response cycle",
+            "You can explain how cookies enable sessions",
+            "You can state what the same-origin policy protects against"
+          ]
+        },
+        {
+          "id": "owasp-top-10",
+          "title": "The OWASP Top 10",
+          "description": "The industry-standard list of the most critical web application security risks, from broken access control to security misconfiguration.",
+          "why": "The OWASP Top 10 is the shared language of web security. Knowing each category gives you a checklist for reviewing, testing, and prioritizing web risks.",
+          "learn": [
+            "Read through all ten categories and summarize each in a sentence",
+            "Map each category to a concrete example vulnerability",
+            "Identify which categories relate to access control versus injection",
+            "Pick one category to study in depth via the linked labs"
+          ],
+          "resources": [
+            { "label": "OWASP — Top 10 project", "url": "https://owasp.org/www-project-top-ten/" },
+            { "label": "PortSwigger — Web Security Academy", "url": "https://portswigger.net/web-security" },
+            { "label": "OWASP — Cheat Sheet Series", "url": "https://cheatsheetseries.owasp.org/" }
+          ],
+          "prerequisites": ["how-web-works", "attacker-mindset"],
+          "criteria": [
+            "You can name and briefly describe each OWASP Top 10 category",
+            "You can give a concrete example for at least five categories",
+            "You completed at least one lab in a chosen category"
+          ]
+        },
+        {
+          "id": "injection-xss",
+          "title": "Injection and Cross-Site Scripting",
+          "description": "Injection flaws (SQL injection, command injection) and cross-site scripting (XSS), where untrusted input is executed as code or queries.",
+          "why": "Injection and XSS remain among the most exploited web flaws. Understanding how untrusted input crosses a trust boundary is central to writing and reviewing secure code.",
+          "learn": [
+            "Learn how SQL injection manipulates a query with untrusted input",
+            "Understand the difference between reflected, stored, and DOM-based XSS",
+            "Learn how parameterized queries and output encoding stop these attacks",
+            "Exploit a deliberately vulnerable lab to see the flaw first-hand"
+          ],
+          "resources": [
+            { "label": "PortSwigger — SQL injection", "url": "https://portswigger.net/web-security/sql-injection" },
+            { "label": "PortSwigger — Cross-site scripting", "url": "https://portswigger.net/web-security/cross-site-scripting" },
+            { "label": "OWASP — Cheat Sheet Series", "url": "https://cheatsheetseries.owasp.org/" }
+          ],
+          "prerequisites": ["owasp-top-10"],
+          "criteria": [
+            "You can explain how SQL injection works and how to prevent it",
+            "You can distinguish the three main types of XSS",
+            "You exploited an injection or XSS lab successfully"
+          ]
+        },
+        {
+          "id": "auth-session-web",
+          "title": "Authentication and Access Control on the Web",
+          "description": "Web-specific auth pitfalls: broken access control, insecure session handling, CSRF, and insecure direct object references.",
+          "why": "Access control failures top the OWASP list because they are easy to introduce and devastating to exploit. These bugs let attackers act as other users or admins.",
+          "learn": [
+            "Learn how broken access control lets users reach data they should not",
+            "Understand insecure direct object references (IDOR) via manipulated IDs",
+            "Learn how CSRF forces authenticated actions and how tokens stop it",
+            "Test access control by changing identifiers in a lab environment"
+          ],
+          "resources": [
+            { "label": "PortSwigger — Access control", "url": "https://portswigger.net/web-security/access-control" },
+            { "label": "PortSwigger — CSRF", "url": "https://portswigger.net/web-security/csrf" },
+            { "label": "OWASP — Cheat Sheet Series", "url": "https://cheatsheetseries.owasp.org/" }
+          ],
+          "prerequisites": ["owasp-top-10", "authn-authz"],
+          "criteria": [
+            "You can explain what broken access control looks like in practice",
+            "You can describe an IDOR and how to prevent it",
+            "You can explain how CSRF tokens defend against forged requests"
+          ]
+        },
+        {
+          "id": "web-testing-tools",
+          "title": "Web Testing with an Intercepting Proxy",
+          "description": "Using an intercepting proxy such as Burp Suite to observe, modify, and replay web traffic while testing an application.",
+          "why": "An intercepting proxy is the essential tool of web security testing. It turns the browser into an editable window on every request, revealing what the app really does.",
+          "learn": [
+            "Configure your browser to route traffic through an intercepting proxy",
+            "Intercept, edit, and forward a live request",
+            "Replay and tamper with requests to probe validation",
+            "Work through structured proxy exercises in a training lab"
+          ],
+          "resources": [
+            { "label": "PortSwigger — Web Security Academy", "url": "https://portswigger.net/web-security" },
+            { "label": "TryHackMe — Learn platform", "url": "https://tryhackme.com/" },
+            { "label": "OWASP — Web Security Testing Guide", "url": "https://owasp.org/www-project-web-security-testing-guide/" }
+          ],
+          "prerequisites": ["injection-xss"],
+          "criteria": [
+            "You configured a proxy and intercepted live traffic",
+            "You modified a request and observed the changed response",
+            "You completed proxy-based lab exercises"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Defensive Practice",
+      "description": "Apply security knowledge to detect, respond to, and reduce risk in real environments.",
+      "topics": [
+        {
+          "id": "defense-in-depth",
+          "title": "Defense in Depth",
+          "description": "Layering independent controls so that no single failure leads to compromise, spanning network, host, application, and human layers.",
+          "why": "Every control eventually fails. Defense in depth ensures a breach in one layer meets another barrier, dramatically raising the cost of a successful attack.",
+          "learn": [
+            "Learn the layered-control model and give an example at each layer",
+            "Understand how preventive, detective, and corrective controls differ",
+            "Map controls you already know onto a defense-in-depth diagram",
+            "Identify a single point of failure in a sample architecture"
+          ],
+          "resources": [
+            { "label": "Cloudflare — Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "label": "OWASP — Cheat Sheet Series", "url": "https://cheatsheetseries.owasp.org/" },
+            { "label": "roadmap.sh — Cyber Security", "url": "https://roadmap.sh/cyber-security" }
+          ],
+          "prerequisites": ["network-defense", "os-hardening"],
+          "criteria": [
+            "You can explain defense in depth with layered examples",
+            "You can classify controls as preventive, detective, or corrective",
+            "You identified a single point of failure in an architecture"
+          ]
+        },
+        {
+          "id": "vuln-management",
+          "title": "Vulnerability Management",
+          "description": "The cycle of discovering, prioritizing, remediating, and verifying vulnerabilities, including scanning and severity scoring.",
+          "why": "Organizations face more vulnerabilities than they can ever fix at once. A repeatable management process is what keeps the most dangerous issues from lingering.",
+          "learn": [
+            "Learn the vulnerability management lifecycle end to end",
+            "Understand how CVSS scores communicate severity",
+            "Run a vulnerability scan against a lab target and read the report",
+            "Prioritize a list of findings using severity and exposure"
+          ],
+          "resources": [
+            { "label": "OWASP — Foundation home", "url": "https://owasp.org/" },
+            { "label": "Cloudflare — Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "label": "TryHackMe — Learn platform", "url": "https://tryhackme.com/" }
+          ],
+          "prerequisites": ["defense-in-depth", "cli-security-tools"],
+          "criteria": [
+            "You can describe the vulnerability management lifecycle",
+            "You can interpret a CVSS severity score",
+            "You ran a scan and prioritized its findings"
+          ]
+        },
+        {
+          "id": "logging-detection",
+          "title": "Logging, Monitoring, and Detection",
+          "description": "Collecting and analyzing logs, understanding SIEM concepts, and writing detections that turn raw events into actionable alerts.",
+          "why": "You cannot respond to what you cannot see. Good logging and detection shrink the time between compromise and discovery, which is the metric attackers most want to grow.",
+          "learn": [
+            "Learn what events are worth logging and why centralization matters",
+            "Understand the role of a SIEM in correlating events",
+            "Read authentication and system logs to spot anomalies",
+            "Write a simple detection rule for a suspicious pattern"
+          ],
+          "resources": [
+            { "label": "TryHackMe — Learn platform", "url": "https://tryhackme.com/" },
+            { "label": "Cloudflare — Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "label": "man7.org — Linux man pages", "url": "https://man7.org/linux/man-pages/" }
+          ],
+          "prerequisites": ["os-hardening", "network-attacks"],
+          "criteria": [
+            "You can explain what a SIEM does",
+            "You can identify a suspicious event in a log sample",
+            "You wrote a basic detection rule for a defined pattern"
+          ]
+        },
+        {
+          "id": "incident-response",
+          "title": "Incident Response Basics",
+          "description": "The structured process for handling security incidents: preparation, identification, containment, eradication, recovery, and lessons learned.",
+          "why": "How an organization reacts in the first hours of a breach often matters more than the breach itself. A rehearsed process prevents panic-driven mistakes that make things worse.",
+          "learn": [
+            "Learn the phases of the incident response lifecycle",
+            "Understand the difference between containment and eradication",
+            "Study why preparation and playbooks decide outcomes under pressure",
+            "Walk through a tabletop scenario for a simulated incident"
+          ],
+          "resources": [
+            { "label": "TryHackMe — Learn platform", "url": "https://tryhackme.com/" },
+            { "label": "Cloudflare — Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "label": "OWASP — Foundation home", "url": "https://owasp.org/" }
+          ],
+          "prerequisites": ["logging-detection"],
+          "criteria": [
+            "You can list the incident response phases in order",
+            "You can explain the difference between containment and eradication",
+            "You walked through a tabletop incident scenario"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "CTFs, Labs, and Growth",
+      "description": "Cement your skills through deliberate hands-on practice and plug into the security community.",
+      "topics": [
+        {
+          "id": "ctf-fundamentals",
+          "title": "Capture the Flag Fundamentals",
+          "description": "How CTF competitions work, the common categories (web, crypto, forensics, reversing, pwn), and how to approach a challenge methodically.",
+          "why": "CTFs compress real skills into safe, legal challenges with instant feedback. They are the fastest way to turn theory into applied problem-solving.",
+          "learn": [
+            "Learn the standard CTF categories and what each tests",
+            "Practice a repeatable approach: enumerate, hypothesize, test, iterate",
+            "Solve a few beginner web and crypto challenges",
+            "Read a write-up to learn techniques you missed"
+          ],
+          "resources": [
+            { "label": "picoCTF — Practice platform", "url": "https://picoctf.org/" },
+            { "label": "OverTheWire — Wargames", "url": "https://overthewire.org/wargames/" },
+            { "label": "TryHackMe — Learn platform", "url": "https://tryhackme.com/" }
+          ],
+          "prerequisites": ["cli-security-tools", "crypto-foundations"],
+          "criteria": [
+            "You can describe the main CTF categories",
+            "You solved at least three beginner CTF challenges",
+            "You read a write-up and explained one new technique"
+          ]
+        },
+        {
+          "id": "hands-on-labs",
+          "title": "Guided Hands-On Labs",
+          "description": "Structured learning platforms that walk you through attacking and defending realistic machines with guidance and hints.",
+          "why": "Guided labs bridge the gap between reading and free-form CTFs. They build muscle memory on real tools against real targets in a legal, sandboxed setting.",
+          "learn": [
+            "Complete a beginner-friendly guided learning path",
+            "Reproduce an attack you read about in a controlled lab",
+            "Take notes on each tool and command as you use it",
+            "Redo a lab from memory without the hints"
+          ],
+          "resources": [
+            { "label": "TryHackMe — Learn platform", "url": "https://tryhackme.com/" },
+            { "label": "PortSwigger — Web Security Academy", "url": "https://portswigger.net/web-security" },
+            { "label": "OverTheWire — Wargames", "url": "https://overthewire.org/wargames/" }
+          ],
+          "prerequisites": ["web-testing-tools", "ctf-fundamentals"],
+          "criteria": [
+            "You completed a full guided learning path",
+            "You reproduced an attack in a controlled lab",
+            "You redid a lab without relying on hints"
+          ]
+        },
+        {
+          "id": "home-lab",
+          "title": "Building a Home Lab",
+          "description": "Setting up your own isolated environment with virtual machines and a security-focused distribution to practice safely and offline.",
+          "why": "A personal lab removes all excuses and legal risk. Owning both attacker and target machines lets you experiment freely and learn how tools behave without guardrails.",
+          "learn": [
+            "Set up a virtualization tool and create isolated virtual machines",
+            "Install a security-focused distribution as your attack box",
+            "Deploy a deliberately vulnerable target VM to practice against",
+            "Configure a host-only network so the lab stays isolated"
+          ],
+          "resources": [
+            { "label": "Kali Linux — Documentation", "url": "https://www.kali.org/docs/" },
+            { "label": "OWASP — Foundation home", "url": "https://owasp.org/" },
+            { "label": "TryHackMe — Learn platform", "url": "https://tryhackme.com/" }
+          ],
+          "prerequisites": ["linux-fundamentals", "network-defense"],
+          "criteria": [
+            "You built an isolated lab with an attacker and target VM",
+            "You confirmed the lab network cannot reach the internet",
+            "You ran an end-to-end attack in your own lab"
+          ]
+        },
+        {
+          "id": "career-community",
+          "title": "Career Paths and Community",
+          "description": "Mapping the field's roles (red team, blue team, GRC, appsec), relevant certifications, and how to plug into the security community.",
+          "why": "Cybersecurity is broad, and knowing the landscape helps you steer your learning toward a role you actually enjoy while building a network that surfaces opportunities.",
+          "learn": [
+            "Compare offensive, defensive, and governance-focused career tracks",
+            "Research entry-level certifications relevant to your target path",
+            "Build a portfolio of write-ups and completed labs",
+            "Follow reputable practitioners and join a community to stay current"
+          ],
+          "resources": [
+            { "label": "roadmap.sh — Cyber Security", "url": "https://roadmap.sh/cyber-security" },
+            { "label": "TryHackMe — Learn platform", "url": "https://tryhackme.com/" },
+            { "label": "OWASP — Foundation home", "url": "https://owasp.org/" }
+          ],
+          "prerequisites": ["hands-on-labs"],
+          "criteria": [
+            "You can describe the main cybersecurity career tracks",
+            "You identified a certification aligned with your goals",
+            "You started a portfolio of write-ups or completed labs"
+          ]
+        }
+      ]
+    }
+  ]
+}

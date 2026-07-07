@@ -1,0 +1,755 @@
+{
+  "slug": "databases",
+  "title": "Databases",
+  "source": "roadmap.sh",
+  "url": "https://roadmap.sh/sql",
+  "description": "From the relational model to production-grade SQL: design schemas, master queries, tune indexes, handle transactions, and explore NoSQL.",
+  "sections": [
+    {
+      "title": "Relational Foundations",
+      "description": "Understand what databases are, how the relational model organizes data, and get a real database running on your machine.",
+      "topics": [
+        {
+          "id": "what-is-a-database",
+          "title": "What Is a Database?",
+          "description": "A database is an organized, durable store of data managed by a database management system (DBMS) that handles storage, retrieval, and concurrent access. It is the difference between data in files and data you can trust and query.",
+          "why": "Almost every application you will ever build sits on top of a database. Knowing what a DBMS actually does — durability, concurrency, structured querying — tells you which problems you can delegate to it instead of reinventing badly in application code.",
+          "learn": [
+            "Define what a DBMS provides beyond flat files: durability, concurrent access, and a query language",
+            "Compare the main database families: relational, document, key-value, columnar, and graph",
+            "Identify the databases behind three apps you use daily and why each fits",
+            "Explain the difference between a database, a database server, and a schema"
+          ],
+          "resources": [
+            { "label": "roadmap.sh — SQL Roadmap", "url": "https://roadmap.sh/sql" },
+            { "label": "CS50 — Introduction to Databases with SQL", "url": "https://cs50.harvard.edu/sql/" },
+            { "label": "PostgreSQL Docs — Tutorial: Getting Started", "url": "https://www.postgresql.org/docs/current/tutorial.html" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can explain what a DBMS does that a folder of CSV files does not",
+            "You can name the major database families and give a real-world example of each"
+          ]
+        },
+        {
+          "id": "relational-model",
+          "title": "The Relational Model",
+          "description": "The relational model represents data as tables (relations) of rows (tuples) and columns (attributes), connected by shared values rather than pointers. It is the theoretical backbone of SQL databases.",
+          "why": "Every SQL feature — joins, constraints, normalization — falls out of this one model. Once you think in relations and sets rather than loops and objects, queries that looked like magic become obvious, and you stop fighting the database.",
+          "learn": [
+            "Learn the vocabulary: relation, tuple, attribute, domain, cardinality",
+            "Understand how tables reference each other through shared key values instead of pointers",
+            "Practice reading a small schema diagram and describing the entities and relationships in plain English",
+            "Contrast set-based thinking with row-by-row procedural thinking"
+          ],
+          "resources": [
+            { "label": "CS50 SQL — Relating (tables and relationships)", "url": "https://cs50.harvard.edu/sql/" },
+            { "label": "Khan Academy — Intro to SQL: Querying and managing data", "url": "https://www.khanacademy.org/computing/computer-programming/sql" },
+            { "label": "roadmap.sh — SQL Roadmap", "url": "https://roadmap.sh/sql" }
+          ],
+          "prerequisites": ["what-is-a-database"],
+          "criteria": [
+            "You can sketch a two-table schema with a relationship and explain it using relational vocabulary",
+            "You can explain why relational databases link rows by values rather than memory pointers"
+          ]
+        },
+        {
+          "id": "keys-and-constraints",
+          "title": "Keys and Constraints",
+          "description": "Primary keys uniquely identify rows, foreign keys enforce relationships between tables, and constraints (NOT NULL, UNIQUE, CHECK) encode business rules directly in the schema.",
+          "why": "Constraints are the cheapest, most reliable data-quality tool you will ever use: the database enforces them on every write, from every client, forever. Teams that skip them spend years cleaning up orphaned rows and duplicate records.",
+          "learn": [
+            "Define primary keys and understand natural vs. surrogate keys",
+            "Use foreign keys to enforce referential integrity and explore ON DELETE behaviors (CASCADE, RESTRICT, SET NULL)",
+            "Apply NOT NULL, UNIQUE, DEFAULT, and CHECK constraints to a sample table",
+            "Deliberately violate each constraint and read the error the database returns"
+          ],
+          "resources": [
+            { "label": "PostgreSQL Docs — Constraints", "url": "https://www.postgresql.org/docs/current/ddl-constraints.html" },
+            { "label": "SQLBolt — Interactive SQL lessons", "url": "https://sqlbolt.com/" },
+            { "label": "CS50 SQL — Designing schemas", "url": "https://cs50.harvard.edu/sql/" }
+          ],
+          "prerequisites": ["relational-model"],
+          "criteria": [
+            "You can explain the difference between a primary key and a unique constraint",
+            "You built a two-table schema where deleting a parent row behaves correctly by design",
+            "You can predict what error each constraint type raises when violated"
+          ]
+        },
+        {
+          "id": "set-up-your-database",
+          "title": "Set Up Your Own Database",
+          "description": "Install PostgreSQL (or start with SQLite), connect with a client, and load a sample dataset so every later topic has a live playground.",
+          "why": "Reading about SQL teaches you very little; running queries against real data teaches you everything. A local database you can break and rebuild removes all fear from experimentation and makes the rest of this roadmap hands-on.",
+          "learn": [
+            "Install PostgreSQL locally (or via Docker) and connect using psql",
+            "Try SQLite to see how a zero-configuration, file-based database differs from a client-server one",
+            "Create a database, create a table, insert a few rows, and query them back",
+            "Learn the essential psql meta-commands: \\l, \\dt, \\d tablename, \\q"
+          ],
+          "resources": [
+            { "label": "PostgreSQL Docs — Tutorial: Getting Started", "url": "https://www.postgresql.org/docs/current/tutorial.html" },
+            { "label": "SQLite — Official documentation", "url": "https://www.sqlite.org/docs.html" },
+            { "label": "roadmap.sh — PostgreSQL DBA Roadmap", "url": "https://roadmap.sh/postgresql-dba" }
+          ],
+          "prerequisites": ["what-is-a-database"],
+          "criteria": [
+            "You have a running PostgreSQL or SQLite instance you can connect to on demand",
+            "You created a table, inserted rows, and queried them from a client",
+            "You can inspect tables and schemas using your client's introspection commands"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "SQL Fluency",
+      "description": "Build the core querying muscle: reading, filtering, combining, aggregating, and writing data with confidence.",
+      "topics": [
+        {
+          "id": "select-fundamentals",
+          "title": "SELECT Fundamentals",
+          "description": "SELECT with WHERE, ORDER BY, LIMIT, and DISTINCT is the workhorse of SQL: choose columns, filter rows, sort results, and control output size.",
+          "why": "The vast majority of queries you will ever write are variations on SELECT-WHERE-ORDER. Fluency here means you can answer data questions in seconds instead of exporting to a spreadsheet, and it is the foundation every advanced construct builds on.",
+          "learn": [
+            "Write SELECT queries choosing specific columns and aliasing them with AS",
+            "Filter with WHERE using comparison operators, AND/OR/NOT, IN, BETWEEN, and LIKE",
+            "Handle NULL correctly with IS NULL / IS NOT NULL and understand three-valued logic",
+            "Sort with ORDER BY (multiple columns, ASC/DESC) and page results with LIMIT and OFFSET",
+            "Complete the first block of SQLBolt lessons hands-on"
+          ],
+          "resources": [
+            { "label": "SQLBolt — Interactive SQL lessons", "url": "https://sqlbolt.com/" },
+            { "label": "PostgreSQL Docs — SELECT reference", "url": "https://www.postgresql.org/docs/current/sql-select.html" },
+            { "label": "Khan Academy — Intro to SQL", "url": "https://www.khanacademy.org/computing/computer-programming/sql" }
+          ],
+          "prerequisites": ["set-up-your-database"],
+          "criteria": [
+            "You can translate a plain-English data question into a filtered, sorted query without looking up syntax",
+            "You can explain why NULL = NULL is not true and how to filter NULLs correctly",
+            "You completed the introductory SQLBolt lessons"
+          ]
+        },
+        {
+          "id": "joins",
+          "title": "Joins",
+          "description": "Joins combine rows from multiple tables based on matching values: INNER, LEFT/RIGHT OUTER, FULL, and CROSS joins each answer a different question about how tables relate.",
+          "why": "Normalized data lives in many tables, so nearly every real query is a join. Developers who are shaky on joins write N+1 query loops in application code that are hundreds of times slower than one well-written join.",
+          "learn": [
+            "Write INNER JOINs across two and three tables using foreign key relationships",
+            "Use LEFT JOIN to keep unmatched rows and find rows with no match (LEFT JOIN ... WHERE right.id IS NULL)",
+            "Understand what CROSS JOIN produces and why accidental cross joins explode row counts",
+            "Practice self-joins on hierarchical data such as employees and managers",
+            "Predict the row count of a join before running it, then verify"
+          ],
+          "resources": [
+            { "label": "SQLBolt — Multi-table queries with JOINs", "url": "https://sqlbolt.com/" },
+            { "label": "PostgreSQL Docs — Queries and joined tables", "url": "https://www.postgresql.org/docs/current/sql-select.html" },
+            { "label": "SQLZoo — JOIN practice", "url": "https://sqlzoo.net/" }
+          ],
+          "prerequisites": ["select-fundamentals", "keys-and-constraints"],
+          "criteria": [
+            "You can choose the correct join type for a question and explain the choice",
+            "You wrote a three-table join and a 'find rows without a match' anti-join",
+            "You can explain what happens to row counts when join keys are not unique"
+          ]
+        },
+        {
+          "id": "aggregation-and-grouping",
+          "title": "Aggregation and GROUP BY",
+          "description": "Aggregate functions (COUNT, SUM, AVG, MIN, MAX) collapse many rows into summaries, and GROUP BY computes those summaries per category, with HAVING filtering the groups.",
+          "why": "Every dashboard, report, and analytics question is aggregation: revenue per month, users per plan, errors per endpoint. Doing this in the database is dramatically faster and simpler than fetching raw rows and summing in application code.",
+          "learn": [
+            "Use COUNT, SUM, AVG, MIN, and MAX over whole tables and note how each treats NULL",
+            "Group results with GROUP BY on one and multiple columns",
+            "Filter groups with HAVING and articulate exactly how it differs from WHERE",
+            "Combine joins with aggregation, e.g. count orders per customer including customers with zero orders"
+          ],
+          "resources": [
+            { "label": "SQLBolt — Queries with aggregates", "url": "https://sqlbolt.com/" },
+            { "label": "PostgreSQL Docs — SELECT: GROUP BY and HAVING", "url": "https://www.postgresql.org/docs/current/sql-select.html" },
+            { "label": "PostgreSQL Exercises — Aggregates practice", "url": "https://pgexercises.com/" }
+          ],
+          "prerequisites": ["select-fundamentals"],
+          "criteria": [
+            "You can explain the WHERE vs. HAVING distinction with a concrete example",
+            "You wrote a join-plus-GROUP BY query that correctly includes zero-count groups",
+            "You can spot the classic error of selecting a column that is neither grouped nor aggregated"
+          ]
+        },
+        {
+          "id": "modifying-data",
+          "title": "Modifying Data: INSERT, UPDATE, DELETE",
+          "description": "Data manipulation statements write to the database: INSERT adds rows, UPDATE changes them, DELETE removes them, and upserts (INSERT ... ON CONFLICT) merge the two.",
+          "why": "Writes are where mistakes become permanent — an UPDATE without a WHERE clause is a career memory you only make once. Mastering safe write patterns, including upserts and RETURNING, is essential for any application backend.",
+          "learn": [
+            "INSERT single and multiple rows, and use RETURNING to get generated ids back",
+            "UPDATE with precise WHERE clauses; adopt the habit of running the matching SELECT first",
+            "DELETE safely and understand how foreign keys and cascades interact with deletes",
+            "Implement an upsert with INSERT ... ON CONFLICT and explain when you need it",
+            "Practice recovering from a bad write inside a transaction using ROLLBACK"
+          ],
+          "resources": [
+            { "label": "SQLBolt — Inserting, updating, deleting rows", "url": "https://sqlbolt.com/" },
+            { "label": "PostgreSQL Docs — Data manipulation (DML)", "url": "https://www.postgresql.org/docs/current/tutorial.html" },
+            { "label": "freeCodeCamp — Relational Database curriculum", "url": "https://www.freecodecamp.org/learn/relational-database/" }
+          ],
+          "prerequisites": ["select-fundamentals"],
+          "criteria": [
+            "You can write an upsert and explain its conflict target",
+            "You always scope UPDATE/DELETE with a verified WHERE clause and can describe your safety routine",
+            "You used RETURNING to avoid a follow-up SELECT after a write"
+          ]
+        },
+        {
+          "id": "subqueries-and-ctes",
+          "title": "Subqueries and CTEs",
+          "description": "Subqueries nest one query inside another, and Common Table Expressions (WITH clauses) name intermediate result sets, letting you build complex queries as readable, composable steps.",
+          "why": "Real analytical questions rarely fit one SELECT. CTEs turn intimidating multi-step logic into a pipeline of named steps that colleagues can actually review, and recursive CTEs unlock hierarchies like org charts and category trees.",
+          "learn": [
+            "Use scalar and IN/EXISTS subqueries in WHERE clauses",
+            "Rewrite a nested subquery as a CTE with WITH and compare readability",
+            "Chain multiple CTEs to answer a multi-step question, e.g. top customers by month",
+            "Write a recursive CTE to walk a hierarchy such as a category tree",
+            "Understand correlated subqueries and their performance implications"
+          ],
+          "resources": [
+            { "label": "PostgreSQL Docs — WITH queries (CTEs)", "url": "https://www.postgresql.org/docs/current/queries-with.html" },
+            { "label": "PostgreSQL Exercises — Advanced query practice", "url": "https://pgexercises.com/" },
+            { "label": "SQLZoo — Nested SELECT practice", "url": "https://sqlzoo.net/" }
+          ],
+          "prerequisites": ["joins", "aggregation-and-grouping"],
+          "criteria": [
+            "You refactored a three-level nested query into readable chained CTEs",
+            "You wrote a working recursive CTE over hierarchical data",
+            "You can explain when EXISTS beats IN and what a correlated subquery is"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Schema Design and Normalization",
+      "description": "Design schemas that model the real world faithfully: pick the right types, structure relationships, normalize, and evolve schemas safely over time.",
+      "topics": [
+        {
+          "id": "data-types",
+          "title": "Choosing Data Types",
+          "description": "Every column has a type — integers, numerics, text, timestamps, booleans, UUIDs, JSON — and the right choice affects correctness, storage, and query behavior.",
+          "why": "Type mistakes are expensive and sticky: money stored as floats drifts, timestamps without time zones corrupt scheduling logic, and stringly-typed everything blocks the optimizer. Good type choices are free correctness you lock in on day one.",
+          "learn": [
+            "Learn the core families: integer types, NUMERIC for money, TEXT/VARCHAR, BOOLEAN, BYTEA",
+            "Understand TIMESTAMP vs. TIMESTAMPTZ and always store moments in time zone-aware form",
+            "Compare serial/identity integers vs. UUIDs for primary keys and the trade-offs of each",
+            "Explore JSONB for semi-structured data and identify when it is a smell vs. a fit",
+            "Audit an existing schema and list every type you would change and why"
+          ],
+          "resources": [
+            { "label": "PostgreSQL Docs — Data types", "url": "https://www.postgresql.org/docs/current/datatype.html" },
+            { "label": "SQLite — Datatypes documentation", "url": "https://www.sqlite.org/docs.html" },
+            { "label": "roadmap.sh — PostgreSQL DBA Roadmap", "url": "https://roadmap.sh/postgresql-dba" }
+          ],
+          "prerequisites": ["set-up-your-database"],
+          "criteria": [
+            "You can explain why floats are wrong for money and what to use instead",
+            "You can justify a primary key type choice (identity vs. UUID) for a given system",
+            "You can name a case where JSONB is appropriate and one where it hides a modeling failure"
+          ]
+        },
+        {
+          "id": "ddl-creating-tables",
+          "title": "DDL: Creating and Altering Tables",
+          "description": "Data definition language (CREATE TABLE, ALTER TABLE, DROP) is how schemas come to life, combining types, constraints, and defaults into enforceable structure.",
+          "why": "Being fluent in DDL means your designs go from whiteboard to database exactly as intended, with every rule enforced. ALTER TABLE fluency also matters operationally: schema changes on live tables are among the riskiest changes engineers make.",
+          "learn": [
+            "Write CREATE TABLE statements combining types, defaults, and all constraint kinds",
+            "Use ALTER TABLE to add columns, add constraints, and change types on existing tables",
+            "Understand which ALTER operations are instant and which rewrite or lock the table",
+            "Organize objects with schemas/namespaces and sensible, consistent naming conventions"
+          ],
+          "resources": [
+            { "label": "PostgreSQL Docs — Data definition", "url": "https://www.postgresql.org/docs/current/ddl.html" },
+            { "label": "PostgreSQL Docs — Constraints", "url": "https://www.postgresql.org/docs/current/ddl-constraints.html" },
+            { "label": "freeCodeCamp — Relational Database curriculum", "url": "https://www.freecodecamp.org/learn/relational-database/" }
+          ],
+          "prerequisites": ["data-types", "keys-and-constraints"],
+          "criteria": [
+            "You created a multi-table schema from scratch with full constraints, entirely in SQL",
+            "You altered a populated table without losing data",
+            "You can explain why adding a NOT NULL column to a large live table needs care"
+          ]
+        },
+        {
+          "id": "modeling-relationships",
+          "title": "Modeling Relationships",
+          "description": "Entity-relationship modeling maps real-world nouns and their connections — one-to-one, one-to-many, many-to-many — onto tables, foreign keys, and junction tables.",
+          "why": "Schema design is the highest-leverage decision in a data-backed system: a good model makes features easy for years, a bad one taxes every query and migration. Many-to-many junctions and correct cardinality choices are daily tools in backend work.",
+          "learn": [
+            "Identify entities, attributes, and relationships from a written product description",
+            "Implement one-to-many with a foreign key and many-to-many with a junction table",
+            "Decide when one-to-one tables are justified (optional data, security separation)",
+            "Draw an ER diagram for a familiar app (e.g. a music service) before writing any DDL",
+            "Translate the diagram into CREATE TABLE statements and test it with real queries"
+          ],
+          "resources": [
+            { "label": "CS50 SQL — Designing database schemas", "url": "https://cs50.harvard.edu/sql/" },
+            { "label": "roadmap.sh — SQL Roadmap", "url": "https://roadmap.sh/sql" },
+            { "label": "freeCodeCamp — Relational Database curriculum", "url": "https://www.freecodecamp.org/learn/relational-database/" }
+          ],
+          "prerequisites": ["ddl-creating-tables"],
+          "criteria": [
+            "You can model a product description into an ER diagram with correct cardinalities",
+            "You built a working many-to-many relationship with a junction table and queried across it",
+            "You can defend each relationship choice against an alternative design"
+          ]
+        },
+        {
+          "id": "normalization",
+          "title": "Normalization",
+          "description": "Normalization (1NF through 3NF/BCNF) is a set of rules for eliminating redundancy and update anomalies by ensuring every fact is stored exactly once, keyed by the right identifier.",
+          "why": "Duplicated data drifts: the same customer with two addresses, an order total that disagrees with its line items. Normal forms give you a principled way to spot and fix these designs — and to know precisely when you are choosing to break the rules.",
+          "learn": [
+            "Learn 1NF, 2NF, and 3NF with the classic mantra: every non-key attribute depends on the key, the whole key, and nothing but the key",
+            "Take a deliberately messy single-table dataset and normalize it step by step to 3NF",
+            "Identify update, insert, and delete anomalies in a denormalized design",
+            "Understand functional dependencies well enough to explain why a table violates a normal form",
+            "Discuss when strict normalization is relaxed in practice and what compensates for it"
+          ],
+          "resources": [
+            { "label": "CS50 SQL — Schema design and normalization", "url": "https://cs50.harvard.edu/sql/" },
+            { "label": "freeCodeCamp — Relational Database curriculum", "url": "https://www.freecodecamp.org/learn/relational-database/" },
+            { "label": "roadmap.sh — SQL Roadmap", "url": "https://roadmap.sh/sql" }
+          ],
+          "prerequisites": ["modeling-relationships"],
+          "criteria": [
+            "You normalized a messy spreadsheet-style table into a 3NF schema",
+            "You can point at a table and name the specific normal form it violates and why",
+            "You can give one concrete anomaly that normalization prevented in your design"
+          ]
+        },
+        {
+          "id": "schema-migrations",
+          "title": "Schema Migrations",
+          "description": "Migrations are versioned, repeatable scripts that evolve a database schema over time, kept in source control and applied in order across every environment.",
+          "why": "Schemas change constantly, and hand-editing production databases is how outages happen. Migration discipline lets a whole team change the schema safely, review changes like code, and rebuild any environment from scratch.",
+          "learn": [
+            "Write forward migrations as plain SQL files with a numbering/versioning scheme",
+            "Understand up/down migrations and the limits of automatic rollback",
+            "Practice a zero-downtime pattern: expand (add new column), backfill, switch reads, contract (drop old column)",
+            "Adopt a migration tool of your stack's choice and wire it into your project workflow",
+            "Never edit an applied migration — practice fixing mistakes with a new migration instead"
+          ],
+          "resources": [
+            { "label": "Martin Fowler — Evolutionary Database Design", "url": "https://martinfowler.com/articles/evodb.html" },
+            { "label": "PostgreSQL Docs — ALTER TABLE and DDL", "url": "https://www.postgresql.org/docs/current/ddl.html" },
+            { "label": "roadmap.sh — PostgreSQL DBA Roadmap", "url": "https://roadmap.sh/postgresql-dba" }
+          ],
+          "prerequisites": ["ddl-creating-tables"],
+          "criteria": [
+            "You have a project where the schema is fully reproducible from ordered migration files",
+            "You can describe the expand-backfill-contract pattern and when it is required",
+            "You can explain why editing an already-applied migration is forbidden"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Advanced SQL and Performance",
+      "description": "Go beyond correct queries to fast ones: window functions, views, how indexes really work, and reading the query planner's mind.",
+      "topics": [
+        {
+          "id": "window-functions",
+          "title": "Window Functions",
+          "description": "Window functions (ROW_NUMBER, RANK, LAG/LEAD, running SUM OVER) compute values across related rows without collapsing them the way GROUP BY does.",
+          "why": "Rankings, running totals, deltas between rows, and top-N-per-group are everywhere in analytics and product features. Without window functions these need painful self-joins or application-side loops; with them, one elegant clause.",
+          "learn": [
+            "Understand the OVER clause: PARTITION BY, ORDER BY, and how it differs from GROUP BY",
+            "Rank rows with ROW_NUMBER, RANK, and DENSE_RANK and articulate their tie-breaking differences",
+            "Compute running totals and moving averages with aggregate functions over windows",
+            "Compare adjacent rows with LAG and LEAD, e.g. day-over-day change",
+            "Solve a top-N-per-group problem using a window function in a CTE"
+          ],
+          "resources": [
+            { "label": "PostgreSQL Docs — Tutorial: Window functions", "url": "https://www.postgresql.org/docs/current/tutorial-window.html" },
+            { "label": "PostgreSQL Docs — Window functions reference", "url": "https://www.postgresql.org/docs/current/functions-window.html" },
+            { "label": "PostgreSQL Exercises — Practice problems", "url": "https://pgexercises.com/" }
+          ],
+          "prerequisites": ["aggregation-and-grouping", "subqueries-and-ctes"],
+          "criteria": [
+            "You can explain when to use a window function instead of GROUP BY",
+            "You solved top-N-per-group and running-total problems with windows",
+            "You can describe what PARTITION BY does without running the query"
+          ]
+        },
+        {
+          "id": "views-and-materialized-views",
+          "title": "Views and Materialized Views",
+          "description": "A view is a saved query that acts like a virtual table; a materialized view physically stores the result and must be refreshed, trading freshness for speed.",
+          "why": "Views let you name and reuse complex query logic, present clean interfaces over messy schemas, and restrict what consumers can see. Materialized views are a first-class tool for making expensive aggregations instant.",
+          "learn": [
+            "Create views to encapsulate a complex join and query them like tables",
+            "Use views to expose a limited, safe subset of columns to a reporting role",
+            "Create a materialized view over a heavy aggregation and measure the speedup",
+            "Refresh a materialized view and reason about staleness trade-offs"
+          ],
+          "resources": [
+            { "label": "PostgreSQL Docs — CREATE VIEW", "url": "https://www.postgresql.org/docs/current/sql-createview.html" },
+            { "label": "PostgreSQL Docs — Materialized views", "url": "https://www.postgresql.org/docs/current/rules-materializedviews.html" },
+            { "label": "roadmap.sh — PostgreSQL DBA Roadmap", "url": "https://roadmap.sh/postgresql-dba" }
+          ],
+          "prerequisites": ["subqueries-and-ctes"],
+          "criteria": [
+            "You replaced a repeated complex query with a view",
+            "You can explain the freshness/performance trade-off of materialized views",
+            "You measured before/after query time for a materialized aggregation"
+          ]
+        },
+        {
+          "id": "how-indexes-work",
+          "title": "How Indexes Work",
+          "description": "An index is an auxiliary data structure — usually a B-tree — that lets the database find matching rows without scanning the whole table, at the cost of extra storage and slower writes.",
+          "why": "The difference between an indexed and unindexed lookup on a large table is milliseconds versus minutes; indexes are the single biggest performance lever most developers ever touch. Understanding the B-tree mechanics tells you which queries an index can and cannot help.",
+          "learn": [
+            "Understand B-tree structure conceptually: sorted keys, logarithmic lookup, range scans",
+            "Create an index and benchmark a query on a million-row table before and after",
+            "Learn what indexes cost: write amplification, storage, and maintenance",
+            "Survey other index types (hash, GIN, GiST) and the workloads they serve",
+            "Understand why the optimizer sometimes ignores your index (selectivity, small tables)"
+          ],
+          "resources": [
+            { "label": "PostgreSQL Docs — Indexes", "url": "https://www.postgresql.org/docs/current/indexes.html" },
+            { "label": "Use The Index, Luke — SQL indexing guide", "url": "https://use-the-index-luke.com/" },
+            { "label": "PostgreSQL Docs — CREATE INDEX", "url": "https://www.postgresql.org/docs/current/sql-createindex.html" }
+          ],
+          "prerequisites": ["ddl-creating-tables"],
+          "criteria": [
+            "You benchmarked a query before and after adding an index and can quote the numbers",
+            "You can explain why indexes speed reads but slow writes",
+            "You can name a query shape a B-tree index cannot accelerate"
+          ]
+        },
+        {
+          "id": "reading-query-plans",
+          "title": "EXPLAIN and Query Plans",
+          "description": "EXPLAIN (and EXPLAIN ANALYZE) reveals the execution plan the database chose — scans, join algorithms, and cost estimates — turning performance work from guessing into reading.",
+          "why": "When a query is slow, the plan tells you exactly why: a sequential scan where you expected an index, a nested loop over millions of rows, a misestimated row count. Every serious backend engineer can read a plan.",
+          "learn": [
+            "Run EXPLAIN and EXPLAIN ANALYZE and understand the difference between estimate and actual",
+            "Recognize the core plan nodes: Seq Scan, Index Scan, Nested Loop, Hash Join, Merge Join, Sort",
+            "Trace a slow query to its most expensive node and form a hypothesis",
+            "Compare plans for the same query with and without an index",
+            "Learn how stale statistics mislead the planner and how ANALYZE fixes them"
+          ],
+          "resources": [
+            { "label": "PostgreSQL Docs — Using EXPLAIN", "url": "https://www.postgresql.org/docs/current/using-explain.html" },
+            { "label": "PostgreSQL Docs — Performance tips", "url": "https://www.postgresql.org/docs/current/performance-tips.html" },
+            { "label": "Use The Index, Luke — Execution plans", "url": "https://use-the-index-luke.com/" }
+          ],
+          "prerequisites": ["how-indexes-work", "joins"],
+          "criteria": [
+            "You can read an EXPLAIN ANALYZE output and identify the dominant cost",
+            "You diagnosed why the planner chose a Seq Scan over your index at least once",
+            "You can describe the three main join algorithms and when each wins"
+          ]
+        },
+        {
+          "id": "indexing-strategies",
+          "title": "Indexing Strategies",
+          "description": "Practical indexing is choosing which columns to index and how: composite index column order, covering indexes, partial indexes, and knowing when an index is dead weight.",
+          "why": "Real systems live or die on a handful of well-chosen indexes. Column-order mistakes in composite indexes silently make them useless, and unused indexes tax every write — this topic turns index theory into production judgment.",
+          "learn": [
+            "Design composite indexes and internalize the leftmost-prefix rule for column order",
+            "Match indexes to actual query patterns rather than to columns in isolation",
+            "Use partial indexes for hot subsets (e.g. WHERE status = 'active') and expression indexes for computed lookups",
+            "Understand covering indexes / index-only scans and when they eliminate table access",
+            "Find and remove unused indexes and justify each index a table carries"
+          ],
+          "resources": [
+            { "label": "Use The Index, Luke — SQL indexing guide", "url": "https://use-the-index-luke.com/" },
+            { "label": "PostgreSQL Docs — Indexes", "url": "https://www.postgresql.org/docs/current/indexes.html" },
+            { "label": "PostgreSQL Docs — Performance tips", "url": "https://www.postgresql.org/docs/current/performance-tips.html" }
+          ],
+          "prerequisites": ["reading-query-plans"],
+          "criteria": [
+            "You can explain why index (a, b) serves 'WHERE a = ?' but not 'WHERE b = ?'",
+            "You designed an index that turned a slow production-style query into an index-only scan",
+            "You can articulate a policy for when to add and when to remove an index"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Transactions and Concurrency",
+      "description": "Learn how databases keep data correct when many things happen at once: ACID, isolation levels, locking, and writing transaction-safe application code.",
+      "topics": [
+        {
+          "id": "acid-and-transactions",
+          "title": "ACID and Transactions",
+          "description": "A transaction groups statements into an all-or-nothing unit with ACID guarantees: Atomicity, Consistency, Isolation, and Durability.",
+          "why": "Money transfers, inventory decrements, and signup flows all break catastrophically if half their writes succeed. Transactions are the mechanism that makes multi-step changes safe, and ACID is the vocabulary of every database reliability conversation.",
+          "learn": [
+            "Define each ACID property with a concrete failure it prevents",
+            "Use BEGIN, COMMIT, and ROLLBACK around a multi-statement change",
+            "Simulate a mid-transaction failure and verify atomicity by observing the rollback",
+            "Understand what durability means physically (write-ahead logging, fsync) at a high level",
+            "Use SAVEPOINT for partial rollback within a transaction"
+          ],
+          "resources": [
+            { "label": "PostgreSQL Docs — Tutorial: Transactions", "url": "https://www.postgresql.org/docs/current/tutorial-transactions.html" },
+            { "label": "CS50 SQL — Scaling and transactions", "url": "https://cs50.harvard.edu/sql/" },
+            { "label": "roadmap.sh — SQL Roadmap", "url": "https://roadmap.sh/sql" }
+          ],
+          "prerequisites": ["modifying-data"],
+          "criteria": [
+            "You can explain each ACID letter with a real-world failure story",
+            "You demonstrated a rollback preserving consistency across two tables",
+            "You can explain what happens to uncommitted work when a connection dies"
+          ]
+        },
+        {
+          "id": "isolation-levels",
+          "title": "Isolation Levels and MVCC",
+          "description": "Isolation levels (Read Committed, Repeatable Read, Serializable) define what concurrent transactions can see of each other, and MVCC is how databases implement this with row versions instead of read locks.",
+          "why": "Concurrency anomalies — lost updates, phantom reads, write skew — cause bugs that only appear under load and are brutal to reproduce. Knowing your database's default isolation level and its blind spots keeps these bugs out of production.",
+          "learn": [
+            "Learn the classic anomalies: dirty read, non-repeatable read, phantom read, lost update, write skew",
+            "Map each standard isolation level to the anomalies it allows and prevents",
+            "Reproduce a concurrency anomaly yourself using two open psql sessions",
+            "Understand MVCC: how row versions let readers avoid blocking writers",
+            "Know when to escalate to SERIALIZABLE or use SELECT ... FOR UPDATE"
+          ],
+          "resources": [
+            { "label": "PostgreSQL Docs — Transaction isolation", "url": "https://www.postgresql.org/docs/current/transaction-iso.html" },
+            { "label": "PostgreSQL Docs — Concurrency control (MVCC)", "url": "https://www.postgresql.org/docs/current/mvcc.html" }
+          ],
+          "prerequisites": ["acid-and-transactions"],
+          "criteria": [
+            "You reproduced a non-repeatable read or lost update in two terminals",
+            "You know your database's default isolation level and one anomaly it permits",
+            "You can explain how MVCC lets readers and writers avoid blocking each other"
+          ]
+        },
+        {
+          "id": "locking-and-deadlocks",
+          "title": "Locking and Deadlocks",
+          "description": "Databases use row and table locks to serialize conflicting writes; deadlocks occur when transactions wait on each other in a cycle and one must be killed.",
+          "why": "Lock contention is the classic way healthy apps fall over under load, and deadlock errors confuse teams that have never studied them. Understanding lock ordering and lock scope lets you design write paths that stay fast under concurrency.",
+          "learn": [
+            "Observe row-level locking: make one transaction block another with concurrent UPDATEs",
+            "Create a deadlock deliberately with two sessions locking rows in opposite orders, and read the error",
+            "Learn the standard cure: acquire locks in a consistent order and keep transactions short",
+            "Use SELECT ... FOR UPDATE to lock rows you intend to modify",
+            "Learn which DDL statements take heavy locks and why that matters for migrations"
+          ],
+          "resources": [
+            { "label": "PostgreSQL Docs — Explicit locking", "url": "https://www.postgresql.org/docs/current/explicit-locking.html" },
+            { "label": "PostgreSQL Docs — Concurrency control", "url": "https://www.postgresql.org/docs/current/mvcc.html" }
+          ],
+          "prerequisites": ["isolation-levels"],
+          "criteria": [
+            "You produced and explained a deadlock between two sessions",
+            "You can state the lock-ordering rule that prevents most deadlocks",
+            "You can explain why long-running transactions are dangerous in production"
+          ]
+        },
+        {
+          "id": "transactions-in-app-code",
+          "title": "Transactions in Application Code",
+          "description": "Applying transaction discipline from application code: connection pooling, retry logic for serialization failures, idempotency, and keeping transactions short.",
+          "why": "Most transaction bugs are written in the application, not the database: transactions held open across network calls, missing retries, or double-applied writes. These patterns separate demo code from systems that survive real traffic.",
+          "learn": [
+            "Wrap multi-step business operations in a transaction from your language's database driver",
+            "Handle serialization and deadlock errors with bounded retries",
+            "Design idempotent write operations so retries and duplicate requests are safe",
+            "Understand connection pooling and why transactions must never span user think-time",
+            "Parameterize every query and explain how that prevents SQL injection"
+          ],
+          "resources": [
+            { "label": "OWASP Cheat Sheet Series — SQL Injection Prevention", "url": "https://cheatsheetseries.owasp.org/" },
+            { "label": "PostgreSQL Docs — Tutorial: Transactions", "url": "https://www.postgresql.org/docs/current/tutorial-transactions.html" },
+            { "label": "roadmap.sh — PostgreSQL DBA Roadmap", "url": "https://roadmap.sh/postgresql-dba" }
+          ],
+          "prerequisites": ["acid-and-transactions", "isolation-levels"],
+          "criteria": [
+            "You built an application code path that retries safely on transaction conflicts",
+            "You can explain idempotency and give one technique for achieving it (e.g. idempotency keys)",
+            "Every query in your project is parameterized — no string-concatenated SQL"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Beyond Relational: NoSQL",
+      "description": "Survey the non-relational landscape — documents, key-value stores, and caching — and learn to choose the right database for each job.",
+      "topics": [
+        {
+          "id": "nosql-landscape",
+          "title": "The NoSQL Landscape",
+          "description": "NoSQL is an umbrella for databases that trade parts of the relational model — rigid schemas, joins, or strong consistency — for flexibility, horizontal scale, or specialized access patterns.",
+          "why": "Modern systems are polyglot: Postgres next to Redis next to a document or search store. Knowing the four NoSQL families and what each sacrifices lets you evaluate architecture decisions instead of following hype in either direction.",
+          "learn": [
+            "Learn the four families: document, key-value, wide-column, and graph, with a flagship example of each",
+            "Understand the CAP theorem intuition: what a distributed store gives up during a network partition",
+            "Contrast schema-on-write (relational) with schema-on-read (document) and the failure modes of each",
+            "Learn what eventual consistency means concretely for application behavior"
+          ],
+          "resources": [
+            { "label": "MongoDB Docs — Documentation home", "url": "https://www.mongodb.com/docs/" },
+            { "label": "Designing Data-Intensive Applications — Book site", "url": "https://dataintensive.net/" },
+            { "label": "roadmap.sh — MongoDB Roadmap", "url": "https://roadmap.sh/mongodb" }
+          ],
+          "prerequisites": ["relational-model"],
+          "criteria": [
+            "You can name the four NoSQL families and a canonical use case for each",
+            "You can explain the CAP theorem trade-off in one minute without notes",
+            "You can describe one concrete bug eventual consistency can cause in a UI"
+          ]
+        },
+        {
+          "id": "document-databases",
+          "title": "Document Databases",
+          "description": "Document stores like MongoDB persist JSON-like documents with flexible schemas, favoring denormalized data that is read and written as a unit.",
+          "why": "Document models shine when data is naturally hierarchical and read together — content, catalogs, user profiles. Working through embedding-vs-referencing decisions also sharpens your relational instincts by contrast.",
+          "learn": [
+            "Install MongoDB (or use a local container) and perform CRUD on documents",
+            "Learn the embed vs. reference decision and how it inverts normalization thinking",
+            "Query with filters, projections, and the aggregation pipeline",
+            "Understand how document databases index fields, including nested ones",
+            "Model one of your earlier relational schemas as documents and compare the trade-offs"
+          ],
+          "resources": [
+            { "label": "MongoDB Docs — Manual", "url": "https://www.mongodb.com/docs/" },
+            { "label": "roadmap.sh — MongoDB Roadmap", "url": "https://roadmap.sh/mongodb" }
+          ],
+          "prerequisites": ["nosql-landscape"],
+          "criteria": [
+            "You performed CRUD and an aggregation pipeline query on a document collection",
+            "You can argue both sides of embed vs. reference for a concrete schema",
+            "You re-modeled a relational schema as documents and listed what got easier and harder"
+          ]
+        },
+        {
+          "id": "key-value-and-caching",
+          "title": "Key-Value Stores and Caching",
+          "description": "Key-value stores like Redis hold data in memory behind a simple get/set interface, powering caches, sessions, queues, rate limiters, and leaderboards.",
+          "why": "A cache in front of a relational database is the most common performance architecture in the industry. Redis also teaches the hard parts of caching — invalidation, expiry, and stampedes — that every backend engineer eventually confronts.",
+          "learn": [
+            "Run Redis locally and practice core commands: GET/SET, EXPIRE, INCR, and hashes, lists, and sorted sets",
+            "Implement the cache-aside pattern in front of a SQL query and measure the latency difference",
+            "Set TTLs and understand eviction policies when memory fills",
+            "Study cache invalidation strategies and the thundering-herd/stampede problem",
+            "Build one non-cache use case: a rate limiter or leaderboard with sorted sets"
+          ],
+          "resources": [
+            { "label": "Redis — Official documentation", "url": "https://redis.io/docs/" },
+            { "label": "roadmap.sh — Redis Roadmap", "url": "https://roadmap.sh/redis" }
+          ],
+          "prerequisites": ["nosql-landscape"],
+          "criteria": [
+            "You built a working cache-aside layer and measured the speedup",
+            "You can explain TTL, eviction, and one invalidation strategy",
+            "You implemented a rate limiter or leaderboard in Redis"
+          ]
+        },
+        {
+          "id": "choosing-the-right-database",
+          "title": "Choosing the Right Database",
+          "description": "A decision framework for matching workloads to storage engines: consistency needs, access patterns, scale expectations, and operational cost — often landing on relational-by-default.",
+          "why": "Database choices are among the most expensive decisions to reverse, and resume-driven picks sink projects. A clear framework — and the confidence to default to Postgres until requirements prove otherwise — is a senior-engineer superpower.",
+          "learn": [
+            "List the questions that actually decide the choice: consistency requirements, query patterns, data shape, scale, team expertise",
+            "Study why 'Postgres until proven otherwise' is a defensible default, including its JSONB escape hatch",
+            "Analyze three real workloads (e-commerce orders, session storage, activity feed) and assign each a store with justification",
+            "Understand polyglot persistence and the operational tax every additional database adds"
+          ],
+          "resources": [
+            { "label": "Designing Data-Intensive Applications — Book site", "url": "https://dataintensive.net/" },
+            { "label": "PostgreSQL Docs — JSON types", "url": "https://www.postgresql.org/docs/current/datatype.html" },
+            { "label": "roadmap.sh — Backend Roadmap", "url": "https://roadmap.sh/backend" }
+          ],
+          "prerequisites": ["document-databases", "key-value-and-caching", "normalization"],
+          "criteria": [
+            "You can produce a one-page storage decision for a described system, with trade-offs",
+            "You can name two workloads where a relational database is the wrong choice and why",
+            "You can explain the operational cost of adding a second database to a stack"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Practical Projects",
+      "description": "Cement everything with end-to-end builds: investigative querying, a full schema from scratch, and a real performance-tuning exercise.",
+      "topics": [
+        {
+          "id": "project-sql-detective",
+          "title": "Project: SQL Detective",
+          "description": "Solve query-driven puzzles — the SQL Murder Mystery and a full pass through PostgreSQL Exercises — using only SELECT, joins, aggregation, CTEs, and window functions.",
+          "why": "Puzzle datasets force you to compose everything you have learned under a goal, not a syntax prompt. This is the fastest way to convert lesson knowledge into the instinctive query-building that interviews and real analysis demand.",
+          "learn": [
+            "Solve the SQL Murder Mystery end to end, narrating your reasoning at each step",
+            "Work through the PostgreSQL Exercises aggregate and join sections without hints",
+            "Redo three of your hardest solutions using a different construct (subquery vs. CTE vs. window)",
+            "Time-box a data question on a public dataset and write up the answer with the queries that produced it"
+          ],
+          "resources": [
+            { "label": "Knight Lab — SQL Murder Mystery", "url": "https://mystery.knightlab.com/" },
+            { "label": "PostgreSQL Exercises", "url": "https://pgexercises.com/" },
+            { "label": "SQLZoo — Practice problems", "url": "https://sqlzoo.net/" }
+          ],
+          "prerequisites": ["subqueries-and-ctes", "window-functions"],
+          "criteria": [
+            "You solved the SQL Murder Mystery using only SQL",
+            "You completed the joins and aggregates tracks on PostgreSQL Exercises",
+            "You answered an open-ended question on a real dataset and can defend your queries"
+          ]
+        },
+        {
+          "id": "project-build-a-schema",
+          "title": "Project: Design and Build a Real Schema",
+          "description": "Design, migrate, and populate a complete database for a realistic application — e.g. a booking system or library — from ER diagram to constraint-enforced, transaction-safe SQL.",
+          "why": "Nothing exposes gaps like a blank schema and real requirements. This project makes you exercise modeling, normalization, constraints, migrations, and transactions as one integrated skill, exactly as a backend role demands.",
+          "learn": [
+            "Write a short product spec, then model it as an ER diagram with all cardinalities",
+            "Implement the schema as ordered migration files with full constraints and sensible types",
+            "Seed realistic data and write the ten queries the application would actually run",
+            "Wrap the critical multi-table operation (e.g. 'book a slot') in a transaction and prove double-booking is impossible under concurrency",
+            "Have someone (or your future self) review the schema and apply one revision via a new migration"
+          ],
+          "resources": [
+            { "label": "freeCodeCamp — Relational Database curriculum", "url": "https://www.freecodecamp.org/learn/relational-database/" },
+            { "label": "PostgreSQL Docs — Data definition", "url": "https://www.postgresql.org/docs/current/ddl.html" },
+            { "label": "Martin Fowler — Evolutionary Database Design", "url": "https://martinfowler.com/articles/evodb.html" }
+          ],
+          "prerequisites": ["normalization", "schema-migrations", "acid-and-transactions"],
+          "criteria": [
+            "You built a 3NF, constraint-enforced schema entirely from migration files",
+            "Your booking/critical path is transaction-safe under two concurrent sessions",
+            "All ten application queries run correctly against seeded data"
+          ]
+        },
+        {
+          "id": "project-performance-tuning",
+          "title": "Project: Performance Tuning Lab",
+          "description": "Load a table with millions of rows, deliberately write slow queries, then use EXPLAIN ANALYZE and targeted indexes to make each one fast — documenting the numbers.",
+          "why": "Performance skills are only real once you have watched a 40-second query become 4 milliseconds because of a decision you made. This lab builds the diagnose-hypothesize-fix-measure loop you will run for the rest of your career.",
+          "learn": [
+            "Generate a multi-million-row dataset with generate_series or a bulk data loader",
+            "Write five realistic slow queries: unindexed filters, wildcard LIKE, bad join order, unnecessary sorts",
+            "For each, capture the EXPLAIN ANALYZE plan, apply one fix (index, rewrite, or both), and record before/after timings",
+            "Add a composite and a partial index where the query patterns justify them",
+            "Write a short tuning log: symptom, plan evidence, fix, and measured result for each query"
+          ],
+          "resources": [
+            { "label": "PostgreSQL Docs — Using EXPLAIN", "url": "https://www.postgresql.org/docs/current/using-explain.html" },
+            { "label": "PostgreSQL Docs — Performance tips", "url": "https://www.postgresql.org/docs/current/performance-tips.html" },
+            { "label": "Use The Index, Luke — SQL indexing guide", "url": "https://use-the-index-luke.com/" }
+          ],
+          "prerequisites": ["indexing-strategies", "locking-and-deadlocks"],
+          "criteria": [
+            "You have a tuning log with before/after timings for at least five queries",
+            "At least one fix achieved a 100x or greater improvement, and you can explain why from the plan",
+            "You can demonstrate a case where adding an index was the wrong fix and a query rewrite won"
+          ]
+        }
+      ]
+    }
+  ]
+}

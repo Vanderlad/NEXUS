@@ -1,0 +1,728 @@
+{
+  "slug": "linux",
+  "title": "Linux",
+  "source": "roadmap.sh",
+  "url": "https://roadmap.sh/linux",
+  "description": "From first shell commands to systemd and real troubleshooting: become genuinely at home on any Linux box.",
+  "sections": [
+    {
+      "title": "The Terminal & Shell Fluency",
+      "description": "Get comfortable living in the terminal: what Linux is, how the shell works, and how to compose commands.",
+      "topics": [
+        {
+          "id": "what-is-linux",
+          "title": "What Linux Is",
+          "description": "Linux is a kernel plus a userland of tools, packaged into distributions like Debian, Ubuntu, Fedora, and Arch.",
+          "why": "Knowing the kernel/userspace split and how distros differ explains why commands, paths, and package tools vary between systems. It also demystifies where 'Linux' ends and GNU tools, shells, and desktop environments begin.",
+          "learn": [
+            "Explain the difference between the kernel, the shell, and the distribution",
+            "Pick one distro (Ubuntu or Fedora) and install it in a VM or use WSL2",
+            "Run uname -a and cat /etc/os-release and interpret every field",
+            "Skim the history: Unix, GNU, and the Linux kernel"
+          ],
+          "resources": [
+            { "label": "Linux Journey — Getting Started", "url": "https://linuxjourney.com/" },
+            { "label": "roadmap.sh — Linux roadmap", "url": "https://roadmap.sh/linux" },
+            { "label": "kernel.org — The Linux Kernel", "url": "https://www.kernel.org/" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can explain kernel vs userspace and what a distribution adds",
+            "You have a working Linux environment (VM, WSL2, or bare metal) you can experiment in",
+            "You can identify your distro and kernel version from the command line"
+          ]
+        },
+        {
+          "id": "terminal-basics",
+          "title": "Terminal & Navigation Basics",
+          "description": "The shell (usually bash) reads your commands, and a handful of verbs — pwd, cd, ls, cat, less — let you move around and inspect the system.",
+          "why": "Everything else in Linux builds on fast, confident navigation. Muscle memory for paths, tab completion, and history turns the terminal from intimidating to faster than any GUI.",
+          "learn": [
+            "Navigate with pwd, cd, ls -la and explain absolute vs relative paths",
+            "View files with cat, less, head, and tail",
+            "Use Tab completion, Ctrl+R history search, and arrow-key history constantly",
+            "Learn shortcuts: ~, -, .., and Ctrl+C / Ctrl+L / Ctrl+D"
+          ],
+          "resources": [
+            { "label": "MIT Missing Semester — Course overview + the shell", "url": "https://missing.csail.mit.edu/2020/course-shell/" },
+            { "label": "LinuxCommand.org — Learning the shell", "url": "https://linuxcommand.org/" },
+            { "label": "Linux Journey — Command Line", "url": "https://linuxjourney.com/" }
+          ],
+          "prerequisites": ["what-is-linux"],
+          "criteria": [
+            "You can navigate anywhere on the system without a file manager",
+            "You reflexively use Tab completion and Ctrl+R instead of retyping",
+            "You can explain what the prompt, $PATH, and the working directory are"
+          ]
+        },
+        {
+          "id": "getting-help",
+          "title": "Getting Help: man & friends",
+          "description": "Linux ships its own documentation: man pages, --help flags, and info documents describe nearly every command and config file.",
+          "why": "Nobody memorizes every flag — professionals look things up fast. Reading man pages fluently makes you self-sufficient on any machine, including servers with no internet access.",
+          "learn": [
+            "Read a man page end to end (try man ls) and learn to search inside it with /",
+            "Understand man sections: 1 commands, 5 file formats, 8 admin tools",
+            "Use command --help for quick syntax reminders",
+            "Find commands you don't know the name of with man -k / apropos"
+          ],
+          "resources": [
+            { "label": "man7.org — Linux man pages", "url": "https://man7.org/linux/man-pages/" },
+            { "label": "man7.org — man(1)", "url": "https://man7.org/linux/man-pages/man1/man.1.html" }
+          ],
+          "prerequisites": ["terminal-basics"],
+          "criteria": [
+            "You can answer your own 'what flag does X' questions from man pages",
+            "You can explain what man 5 passwd means vs man 1 passwd",
+            "You reach for --help or man before searching the web"
+          ]
+        },
+        {
+          "id": "pipes-and-redirection",
+          "title": "Pipes, Redirection & Composition",
+          "description": "Every process has stdin, stdout, and stderr; pipes and redirection let you chain small tools into powerful one-liners.",
+          "why": "Composition is the core idea of Unix — mastering | , >, >>, and 2> is what separates typing commands from wielding the shell. It unlocks log analysis, data munging, and ad-hoc automation with zero extra software.",
+          "learn": [
+            "Explain stdin, stdout, stderr and file descriptors 0, 1, 2",
+            "Redirect output with >, >>, 2>, and &> and input with <",
+            "Chain tools with pipes: sort, uniq -c, wc -l, cut, tr, head",
+            "Use tee to watch and save output at the same time",
+            "Combine commands with &&, ||, and ; and explain exit codes"
+          ],
+          "resources": [
+            { "label": "MIT Missing Semester — Shell tools and scripting", "url": "https://missing.csail.mit.edu/2020/shell-tools/" },
+            { "label": "GNU — Coreutils manual", "url": "https://www.gnu.org/software/coreutils/manual/" },
+            { "label": "OverTheWire — Bandit wargame", "url": "https://overthewire.org/wargames/bandit/" }
+          ],
+          "prerequisites": ["terminal-basics", "getting-help"],
+          "criteria": [
+            "You can build a pipeline that answers 'top 10 most frequent lines in this file'",
+            "You can redirect stderr and stdout to different places on purpose",
+            "You completed at least 10 levels of OverTheWire Bandit"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "The Filesystem",
+      "description": "Learn how Linux organizes everything as files, and how to create, find, link, and archive them efficiently.",
+      "topics": [
+        {
+          "id": "filesystem-hierarchy",
+          "title": "Filesystem Hierarchy (FHS)",
+          "description": "Linux lays out the system in a standard tree: /etc for config, /var for changing data, /usr for installed software, /home for users, and more.",
+          "why": "Knowing where things live means you can find config files, logs, and binaries on any machine in seconds. It's the mental map every troubleshooting session starts from.",
+          "learn": [
+            "Tour the top-level directories and state what each is for: /etc, /var, /usr, /home, /tmp, /opt, /proc, /dev",
+            "Explain why /proc and /dev contain 'files' that aren't on disk",
+            "Locate the config file and log file for one service you use (e.g. sshd)",
+            "Read man hier for the canonical description"
+          ],
+          "resources": [
+            { "label": "man7.org — hier(7) filesystem hierarchy", "url": "https://man7.org/linux/man-pages/man7/hier.7.html" },
+            { "label": "Linux Journey — The Filesystem", "url": "https://linuxjourney.com/" }
+          ],
+          "prerequisites": ["terminal-basics"],
+          "criteria": [
+            "You can say where config, logs, binaries, and user data live without looking it up",
+            "You can explain the difference between /bin, /usr/bin, and /usr/local/bin",
+            "You found a real service's config and logs using only the hierarchy"
+          ]
+        },
+        {
+          "id": "file-operations",
+          "title": "Creating, Copying & Deleting Files",
+          "description": "cp, mv, rm, mkdir, and touch manipulate files and directories, with globbing patterns (*, ?, [ ]) selecting groups of them.",
+          "why": "These verbs are the hands of the shell — every deploy, backup, and cleanup uses them. Understanding globbing and the sharp edges of rm keeps you fast and safe.",
+          "learn": [
+            "Create, copy, move, and rename files and whole directory trees (cp -r, mv)",
+            "Delete carefully: rm, rm -r, and why rm -rf demands a second look",
+            "Use globs (*.log, file?.txt, [0-9]*) and brace expansion (file{1..5}.txt)",
+            "Understand hidden dotfiles and how ls -a reveals them"
+          ],
+          "resources": [
+            { "label": "GNU — Coreutils manual", "url": "https://www.gnu.org/software/coreutils/manual/" },
+            { "label": "LinuxCommand.org — Learning the shell", "url": "https://linuxcommand.org/" }
+          ],
+          "prerequisites": ["filesystem-hierarchy"],
+          "criteria": [
+            "You can reorganize a messy directory tree entirely from the shell",
+            "You can predict what a glob will match before pressing Enter",
+            "You can explain why rm has no trash can and how to mitigate that"
+          ]
+        },
+        {
+          "id": "finding-and-searching",
+          "title": "Finding Files & Searching Text",
+          "description": "find locates files by name, size, time, or type; grep searches inside files with patterns; xargs feeds results into other commands.",
+          "why": "'Where is that config?' and 'which file mentions this error?' are daily questions. find + grep + xargs answer them on any system, no IDE required.",
+          "learn": [
+            "Use find by name, type, mtime, and size (find /var/log -name '*.log' -mtime -1)",
+            "Search file contents with grep -r, -i, -n, -v and basic regex",
+            "Chain find results into commands with -exec and xargs",
+            "Practice regular expressions until character classes and anchors feel natural"
+          ],
+          "resources": [
+            { "label": "man7.org — find(1)", "url": "https://man7.org/linux/man-pages/man1/find.1.html" },
+            { "label": "man7.org — grep(1)", "url": "https://man7.org/linux/man-pages/man1/grep.1.html" },
+            { "label": "RegexOne — Interactive regex lessons", "url": "https://regexone.com/" }
+          ],
+          "prerequisites": ["file-operations", "pipes-and-redirection"],
+          "criteria": [
+            "You can find every file changed in the last day under a directory",
+            "You can grep a codebase or /etc for a string with the right flags first try",
+            "You built a find | xargs pipeline that transforms many files at once"
+          ]
+        },
+        {
+          "id": "links-and-inodes",
+          "title": "Links, Inodes & File Metadata",
+          "description": "Files are inodes — metadata plus data blocks — and names are just links to them; ln creates hard links and symlinks that point at the same content.",
+          "why": "Symlinks power version switching (like /usr/bin/python), config management, and deploys. Understanding inodes explains weird phenomena like deleted files still consuming disk space.",
+          "learn": [
+            "Inspect metadata with stat and ls -li and identify the inode number",
+            "Create hard links and symlinks with ln and ln -s and compare their behavior",
+            "Break a symlink on purpose and recognize how it fails",
+            "Explain why a deleted-but-open file still uses disk until the process exits"
+          ],
+          "resources": [
+            { "label": "man7.org — inode(7)", "url": "https://man7.org/linux/man-pages/man7/inode.7.html" },
+            { "label": "man7.org — ln(1)", "url": "https://man7.org/linux/man-pages/man1/ln.1.html" }
+          ],
+          "prerequisites": ["file-operations"],
+          "criteria": [
+            "You can explain hard link vs symlink and when each is appropriate",
+            "You can read stat output: size, inode, link count, timestamps",
+            "You used a symlink to switch between two versions of something"
+          ]
+        },
+        {
+          "id": "archives-and-compression",
+          "title": "Archives & Compression",
+          "description": "tar bundles trees of files into one archive; gzip, xz, and zstd compress them — the .tar.gz you meet everywhere.",
+          "why": "Backups, releases, and log rotation all speak tar and gzip. Being able to pack and unpack archives without googling the flags is table stakes for server work.",
+          "learn": [
+            "Create and extract tarballs: tar -czf and tar -xzf, plus -t to list contents",
+            "Compress and decompress single files with gzip/gunzip and xz",
+            "Extract only part of an archive and extract into a specific directory (-C)",
+            "Compare compression tools (gzip vs xz vs zstd) on speed and ratio"
+          ],
+          "resources": [
+            { "label": "man7.org — tar(1)", "url": "https://man7.org/linux/man-pages/man1/tar.1.html" },
+            { "label": "GNU — gzip manual", "url": "https://www.gnu.org/software/gzip/manual/" }
+          ],
+          "prerequisites": ["file-operations"],
+          "criteria": [
+            "You can create and extract a .tar.gz from memory",
+            "You can list an archive's contents before extracting it",
+            "You backed up and restored a real directory tree with tar"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Users, Groups & Permissions",
+      "description": "Understand Linux's multi-user model: who can read, write, and execute what, and how privilege is granted safely.",
+      "topics": [
+        {
+          "id": "users-and-groups",
+          "title": "Users & Groups",
+          "description": "Every process and file belongs to a user and group, defined in /etc/passwd and /etc/group and managed with useradd, usermod, and passwd.",
+          "why": "The user model underpins all Linux security — services run as unprivileged users, and access is granted through group membership. You can't reason about permissions until you know who 'you' are.",
+          "learn": [
+            "Inspect identity with id, whoami, and groups",
+            "Read /etc/passwd and /etc/group and explain each field",
+            "Create a user and a group, and add the user to the group",
+            "Switch users with su - and explain login vs non-login shells"
+          ],
+          "resources": [
+            { "label": "man7.org — passwd(5)", "url": "https://man7.org/linux/man-pages/man5/passwd.5.html" },
+            { "label": "Linux Journey — Users and Groups", "url": "https://linuxjourney.com/" }
+          ],
+          "prerequisites": ["filesystem-hierarchy"],
+          "criteria": [
+            "You can explain every field of an /etc/passwd line",
+            "You created a new user and group and verified membership with id",
+            "You can explain why services run as their own users"
+          ]
+        },
+        {
+          "id": "file-permissions",
+          "title": "File Permissions: chmod & chown",
+          "description": "The rwx permission triplets for user, group, and other control access to every file; chmod changes them and chown changes ownership.",
+          "why": "Permission errors are among the most common Linux problems, and misconfigured permissions are a top security hole. Reading rwxr-xr-x at a glance and fixing it correctly is a daily skill.",
+          "learn": [
+            "Decode ls -l output: type, permission triplets, owner, group",
+            "Change permissions both ways: symbolic (u+x, go-w) and octal (644, 755)",
+            "Change ownership with chown user:group and use -R with care",
+            "Explain umask and why new files aren't created executable",
+            "Know why directories need x to be entered, not just r"
+          ],
+          "resources": [
+            { "label": "man7.org — chmod(1)", "url": "https://man7.org/linux/man-pages/man1/chmod.1.html" },
+            { "label": "man7.org — chown(1)", "url": "https://man7.org/linux/man-pages/man1/chown.1.html" },
+            { "label": "ArchWiki — File permissions and attributes", "url": "https://wiki.archlinux.org/title/File_permissions_and_attributes" }
+          ],
+          "prerequisites": ["users-and-groups"],
+          "criteria": [
+            "You can translate between rwxr-x--- and 750 instantly",
+            "You diagnosed and fixed a real 'Permission denied' error",
+            "You can explain what x means on a directory vs a file"
+          ]
+        },
+        {
+          "id": "sudo-and-root",
+          "title": "root, sudo & Least Privilege",
+          "description": "root is the all-powerful superuser; sudo grants controlled, logged, temporary root access configured through /etc/sudoers.",
+          "why": "Running everything as root is how systems get destroyed by typos and attackers alike. sudo lets you do admin work safely, and understanding it is essential for any shared or production machine.",
+          "learn": [
+            "Use sudo for single commands and sudo -i for a root shell, and know the difference",
+            "Edit sudo config safely with visudo, never by editing /etc/sudoers directly",
+            "Grant a user or group specific commands via sudoers rules",
+            "Explain the principle of least privilege and where sudo actions get logged"
+          ],
+          "resources": [
+            { "label": "sudo.ws — Sudo official documentation", "url": "https://www.sudo.ws/" },
+            { "label": "ArchWiki — Sudo", "url": "https://wiki.archlinux.org/title/Sudo" }
+          ],
+          "prerequisites": ["file-permissions"],
+          "criteria": [
+            "You can explain why sudo beats logging in as root",
+            "You wrote a sudoers rule granting one specific command",
+            "You know where to find the log of who ran what with sudo"
+          ]
+        },
+        {
+          "id": "special-permissions",
+          "title": "Special Permissions: setuid, setgid, sticky",
+          "description": "Three extra permission bits change execution and ownership rules: setuid runs a program as its owner, setgid shares group ownership, and the sticky bit protects shared directories like /tmp.",
+          "why": "These bits explain how passwd changes a root-owned file as a normal user, and how team directories keep consistent group ownership. They're also a classic privilege-escalation vector, so security work requires spotting them.",
+          "learn": [
+            "Find setuid binaries on your system: find / -perm -4000 -type f 2>/dev/null",
+            "Explain why /usr/bin/passwd needs setuid and what the s in its permissions means",
+            "Set setgid on a shared directory and watch new files inherit the group",
+            "Explain the sticky bit on /tmp (the t in drwxrwxrwt)"
+          ],
+          "resources": [
+            { "label": "ArchWiki — File permissions and attributes", "url": "https://wiki.archlinux.org/title/File_permissions_and_attributes" },
+            { "label": "man7.org — chmod(1)", "url": "https://man7.org/linux/man-pages/man1/chmod.1.html" }
+          ],
+          "prerequisites": ["file-permissions", "sudo-and-root"],
+          "criteria": [
+            "You can explain setuid, setgid, and sticky with a real example of each",
+            "You built a setgid shared directory and verified group inheritance",
+            "You can say why unexpected setuid binaries are a security red flag"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Processes & System Resources",
+      "description": "See what the machine is actually doing: how processes live and die, and how to monitor CPU, memory, and disk.",
+      "topics": [
+        {
+          "id": "process-lifecycle",
+          "title": "Processes & the /proc Filesystem",
+          "description": "Every running program is a process with a PID, a parent, an environment, and open files — all visible through /proc and standard tools.",
+          "why": "Processes are the unit of everything on Linux: services, shells, and scripts. Understanding fork/exec, parent-child trees, and /proc turns 'the server is doing something weird' into a question you can answer.",
+          "learn": [
+            "Explain PID, PPID, and the process tree; view it with ps -ef and pstree",
+            "Describe the fork/exec model of how new processes start",
+            "Explore /proc/<pid>: cmdline, environ, fd, status",
+            "Explain zombie and orphan processes and why they exist"
+          ],
+          "resources": [
+            { "label": "man7.org — proc(5)", "url": "https://man7.org/linux/man-pages/man5/proc.5.html" },
+            { "label": "Linux Journey — Processes", "url": "https://linuxjourney.com/" }
+          ],
+          "prerequisites": ["pipes-and-redirection", "filesystem-hierarchy"],
+          "criteria": [
+            "You can trace any process back to its parent up to PID 1",
+            "You inspected a live process's open files and environment via /proc",
+            "You can explain what a zombie process is and who reaps it"
+          ]
+        },
+        {
+          "id": "monitoring-processes",
+          "title": "Monitoring: ps, top & Load",
+          "description": "ps snapshots processes; top and htop show live CPU and memory usage; uptime's load average summarizes how busy the system is.",
+          "why": "'Why is the server slow?' starts here. Reading top and load averages correctly tells you in seconds whether you're CPU-bound, memory-bound, or fine — and which process is to blame.",
+          "learn": [
+            "Master one ps incantation (ps aux or ps -ef) and read every column",
+            "Drive top/htop: sort by CPU and memory, filter, and kill from inside",
+            "Interpret load average relative to CPU core count",
+            "Read memory correctly with free -h, including buffers/cache vs available"
+          ],
+          "resources": [
+            { "label": "man7.org — ps(1)", "url": "https://man7.org/linux/man-pages/man1/ps.1.html" },
+            { "label": "man7.org — top(1)", "url": "https://man7.org/linux/man-pages/man1/top.1.html" },
+            { "label": "Wizard Zines — Julia Evans' systems comics", "url": "https://wizardzines.com/" }
+          ],
+          "prerequisites": ["process-lifecycle"],
+          "criteria": [
+            "You can find the top CPU and memory consumers in under 30 seconds",
+            "You can explain a load average of 8.0 on a 4-core machine",
+            "You can explain why 'free' memory being low is usually fine"
+          ]
+        },
+        {
+          "id": "signals-and-job-control",
+          "title": "Signals & Job Control",
+          "description": "Signals like SIGTERM, SIGKILL, and SIGINT are how processes are asked (or forced) to stop; job control (&, Ctrl+Z, fg, bg) manages processes from your shell.",
+          "why": "Killing processes correctly — graceful first, forceful last — prevents data corruption and understands why some processes won't die. Job control lets you juggle long-running tasks in a single terminal or over SSH.",
+          "learn": [
+            "Send signals with kill, killall, and pkill; know TERM (15) vs KILL (9) vs HUP",
+            "Explain what Ctrl+C and Ctrl+Z actually send",
+            "Manage jobs: command &, jobs, fg, bg, and disown",
+            "Keep processes alive after logout with nohup (and know tmux exists)"
+          ],
+          "resources": [
+            { "label": "man7.org — signal(7)", "url": "https://man7.org/linux/man-pages/man7/signal.7.html" },
+            { "label": "man7.org — kill(1)", "url": "https://man7.org/linux/man-pages/man1/kill.1.html" },
+            { "label": "MIT Missing Semester — Command-line environment", "url": "https://missing.csail.mit.edu/2020/command-line/" }
+          ],
+          "prerequisites": ["process-lifecycle"],
+          "criteria": [
+            "You always try SIGTERM before SIGKILL and can explain why",
+            "You can suspend, background, and resume a job in one terminal",
+            "You can explain why kill -9 can't kill a process in uninterruptible sleep"
+          ]
+        },
+        {
+          "id": "disk-and-resource-usage",
+          "title": "Disk & Resource Usage",
+          "description": "df shows filesystem capacity, du shows what's eating space, and nice/ionice control how much CPU and I/O priority a process gets.",
+          "why": "Full disks are the most common cause of mysterious outages — services fail in strange ways when they can't write. Finding and clearing space fast, and prioritizing workloads, are core operations skills.",
+          "learn": [
+            "Check filesystem usage with df -h and inode usage with df -i",
+            "Hunt space hogs with du -sh * and du -h --max-depth=1 | sort -h",
+            "Explain why df and du can disagree (deleted-but-open files)",
+            "Lower a heavy job's priority with nice and renice"
+          ],
+          "resources": [
+            { "label": "man7.org — df(1)", "url": "https://man7.org/linux/man-pages/man1/df.1.html" },
+            { "label": "man7.org — du(1)", "url": "https://man7.org/linux/man-pages/man1/du.1.html" }
+          ],
+          "prerequisites": ["monitoring-processes", "links-and-inodes"],
+          "criteria": [
+            "You can find the biggest directories on a full disk in under a minute",
+            "You can explain a full-inodes failure even when df shows free space",
+            "You resolved a df/du mismatch by finding a deleted-but-open file"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Package Management",
+      "description": "Install, update, and remove software the right way with your distro's package manager — and know the alternatives.",
+      "topics": [
+        {
+          "id": "package-management-concepts",
+          "title": "Packages, Repositories & Dependencies",
+          "description": "Distros ship software as packages — signed archives with metadata and dependency lists — pulled from online repositories by a package manager.",
+          "why": "Package managers are why Linux systems stay consistent, updatable, and secure. Understanding repos, dependencies, and signing explains both the power of apt/dnf and what goes wrong when you bypass them.",
+          "learn": [
+            "Explain what a package contains: files, metadata, dependencies, scripts",
+            "Explain repositories, mirrors, and why packages are cryptographically signed",
+            "Describe dependency resolution and what 'dependency hell' means",
+            "Map the ecosystems: deb/apt (Debian, Ubuntu) vs rpm/dnf (Fedora, RHEL) vs pacman (Arch)"
+          ],
+          "resources": [
+            { "label": "Linux Journey — Packages", "url": "https://linuxjourney.com/" },
+            { "label": "roadmap.sh — Linux roadmap", "url": "https://roadmap.sh/linux" }
+          ],
+          "prerequisites": ["sudo-and-root"],
+          "criteria": [
+            "You can explain what happens end-to-end when you install a package",
+            "You can name your distro's package format, manager, and repo config location",
+            "You can explain why installing random binaries from the web is riskier than packages"
+          ]
+        },
+        {
+          "id": "apt-debian-ubuntu",
+          "title": "apt on Debian & Ubuntu",
+          "description": "apt is the front-end for Debian-family package management: update indexes, install, upgrade, remove, and search, with dpkg underneath.",
+          "why": "Debian and Ubuntu run a huge share of servers and containers, so apt fluency pays off almost everywhere. Knowing the update/upgrade rhythm and how to inspect packages keeps systems patched and debuggable.",
+          "learn": [
+            "Run the core loop: apt update, apt upgrade, apt install, apt remove/purge",
+            "Search and inspect: apt search, apt show, apt list --installed",
+            "Answer 'which package owns this file?' with dpkg -S and list contents with dpkg -L",
+            "Understand /etc/apt/sources.list and what adding a repository means"
+          ],
+          "resources": [
+            { "label": "Debian — The Debian Administrator's Handbook", "url": "https://www.debian.org/doc/manuals/debian-handbook/" },
+            { "label": "Ubuntu — Official documentation", "url": "https://help.ubuntu.com/" }
+          ],
+          "prerequisites": ["package-management-concepts"],
+          "criteria": [
+            "You can explain the difference between apt update and apt upgrade",
+            "You installed, inspected, and cleanly removed a package including its config",
+            "You traced a file on disk back to the package that owns it"
+          ]
+        },
+        {
+          "id": "dnf-fedora-rhel",
+          "title": "dnf on Fedora & RHEL",
+          "description": "dnf manages rpm packages on Fedora, RHEL, and derivatives, with the same install/upgrade/search workflow plus rpm for low-level queries.",
+          "why": "Enterprise Linux (RHEL, Rocky, Alma, Amazon Linux) dominates corporate servers, and it speaks rpm/dnf. Being bilingual across apt and dnf means no environment slows you down.",
+          "learn": [
+            "Run the core loop: dnf install, dnf upgrade, dnf remove, dnf search, dnf info",
+            "Query installed packages with rpm -qa and file ownership with rpm -qf",
+            "List and enable repositories with dnf repolist",
+            "Review transaction history and roll back with dnf history"
+          ],
+          "resources": [
+            { "label": "Fedora — Official documentation", "url": "https://docs.fedoraproject.org/" },
+            { "label": "roadmap.sh — Linux roadmap", "url": "https://roadmap.sh/linux" }
+          ],
+          "prerequisites": ["package-management-concepts"],
+          "criteria": [
+            "You can perform install/search/remove on a Fedora-family system without notes",
+            "You can map each apt command you know to its dnf equivalent",
+            "You used dnf history to inspect or undo a transaction"
+          ]
+        },
+        {
+          "id": "source-and-alternative-installs",
+          "title": "Building from Source & Universal Packages",
+          "description": "Some software arrives as source tarballs (./configure && make && make install) or as distro-agnostic formats like Flatpak, Snap, and AppImage.",
+          "why": "Not everything is packaged for your distro, and sometimes you need a newer version than the repos offer. Knowing how to build from source — and where it puts files — keeps your system comprehensible instead of littered.",
+          "learn": [
+            "Build a small project from source and install it under /usr/local",
+            "Explain what ./configure, make, and make install each do",
+            "Install something as a Flatpak and explain the sandboxing trade-offs",
+            "Know why mixing 'make install' into package-managed paths causes conflicts"
+          ],
+          "resources": [
+            { "label": "GNU — Make manual", "url": "https://www.gnu.org/software/make/manual/" },
+            { "label": "Flatpak — Official documentation", "url": "https://docs.flatpak.org/" }
+          ],
+          "prerequisites": ["apt-debian-ubuntu"],
+          "criteria": [
+            "You compiled and installed a real program from a source tarball",
+            "You can explain why /usr/local exists and what belongs there",
+            "You can compare native packages vs Flatpak/Snap in two sentences"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Shell Scripting & Automation",
+      "description": "Turn command-line knowledge into reusable, robust scripts and scheduled automation.",
+      "topics": [
+        {
+          "id": "bash-scripting-basics",
+          "title": "Bash Scripting Basics",
+          "description": "A shell script is a file of commands with a shebang line (#!/usr/bin/env bash), variables, and command substitution, made runnable with chmod +x.",
+          "why": "Scripts capture what you'd otherwise retype — setup steps, deploys, backups — and make them repeatable and shareable. This is the gateway from using Linux to automating it.",
+          "learn": [
+            "Write a script with a shebang, make it executable, and run it from $PATH",
+            "Use variables, $(command) substitution, and arithmetic $(( ))",
+            "Read arguments with $1, $#, and \"$@\" and prompt for input with read",
+            "Return meaningful exit codes and check them with $?"
+          ],
+          "resources": [
+            { "label": "GNU — Bash Reference Manual", "url": "https://www.gnu.org/software/bash/manual/" },
+            { "label": "LinuxCommand.org — Writing shell scripts", "url": "https://linuxcommand.org/" },
+            { "label": "MIT Missing Semester — Shell tools and scripting", "url": "https://missing.csail.mit.edu/2020/shell-tools/" }
+          ],
+          "prerequisites": ["pipes-and-redirection", "file-permissions"],
+          "criteria": [
+            "You wrote a script that takes arguments and does something useful",
+            "You can explain what the shebang line does",
+            "Your scripts exit non-zero on failure"
+          ]
+        },
+        {
+          "id": "control-flow-and-functions",
+          "title": "Conditionals, Loops & Functions",
+          "description": "if/[[ ]], for, while, case, and functions give bash real programming structure for branching on files, strings, and exit codes.",
+          "why": "Real automation needs decisions: retry on failure, loop over servers, branch on environment. Control flow plus functions turns fragile one-liners into maintainable tools.",
+          "learn": [
+            "Branch with if and [[ ]] tests: string compare, -f/-d file tests, numeric -eq/-lt",
+            "Loop over files and lines safely: for f in *.log and while read -r line",
+            "Dispatch with case for argument handling",
+            "Extract repeated logic into functions with local variables and return codes"
+          ],
+          "resources": [
+            { "label": "GNU — Bash Reference Manual", "url": "https://www.gnu.org/software/bash/manual/" },
+            { "label": "man7.org — bash(1)", "url": "https://man7.org/linux/man-pages/man1/bash.1.html" }
+          ],
+          "prerequisites": ["bash-scripting-basics"],
+          "criteria": [
+            "You wrote a script with branching, a loop, and at least one function",
+            "You can loop over filenames with spaces without breaking",
+            "You can explain the difference between [ ] and [[ ]]"
+          ]
+        },
+        {
+          "id": "robust-scripts",
+          "title": "Robust Scripts: Quoting, set -e & ShellCheck",
+          "description": "Defensive bash means quoting every expansion, failing fast with set -euo pipefail, and linting with ShellCheck to catch bugs before they run.",
+          "why": "Unquoted variables and ignored failures are how scripts delete the wrong directory at 2 a.m. A small set of habits makes shell scripts trustworthy enough for production.",
+          "learn": [
+            "Quote all expansions (\"$var\", \"$@\") and explain word splitting and globbing bugs",
+            "Start scripts with set -euo pipefail and understand what each flag does",
+            "Run ShellCheck on every script and fix what it reports",
+            "Add traps for cleanup (trap 'rm -f \"$tmp\"' EXIT) and use mktemp for temp files"
+          ],
+          "resources": [
+            { "label": "ShellCheck — Shell script linter", "url": "https://www.shellcheck.net/" },
+            { "label": "GNU — Bash Reference Manual", "url": "https://www.gnu.org/software/bash/manual/" },
+            { "label": "Wizard Zines — Bite Size Bash and friends", "url": "https://wizardzines.com/" }
+          ],
+          "prerequisites": ["control-flow-and-functions"],
+          "criteria": [
+            "Your scripts pass ShellCheck with no warnings",
+            "You can demonstrate a concrete bug caused by an unquoted variable",
+            "You can explain what set -e, -u, and -o pipefail each catch"
+          ]
+        },
+        {
+          "id": "cron-and-scheduling",
+          "title": "cron & Scheduled Tasks",
+          "description": "cron runs commands on a schedule defined in crontab entries; systemd timers are the modern alternative with logging and dependency support.",
+          "why": "Backups, cleanups, report generation, and certificate renewals all run unattended. Scheduling work correctly — with sane environments and logged output — is automation's last mile.",
+          "learn": [
+            "Read and write the five-field cron syntax (minute hour day month weekday)",
+            "Manage your schedule with crontab -e and crontab -l",
+            "Handle cron's gotchas: minimal PATH, no interactive environment, capturing output to a log",
+            "Compare cron with systemd timers and know when to prefer each"
+          ],
+          "resources": [
+            { "label": "man7.org — crontab(5)", "url": "https://man7.org/linux/man-pages/man5/crontab.5.html" },
+            { "label": "ArchWiki — Cron", "url": "https://wiki.archlinux.org/title/Cron" }
+          ],
+          "prerequisites": ["robust-scripts"],
+          "criteria": [
+            "You can write the cron expression for 'every weekday at 6:30 am' unaided",
+            "You scheduled a real script and verified it ran by checking its log",
+            "You can name two environment differences between cron and your shell"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "systemd, Networking & Troubleshooting",
+      "description": "Manage services with systemd, read the journal, inspect the network, and debug real problems with a repeatable method.",
+      "topics": [
+        {
+          "id": "systemd-basics",
+          "title": "systemd & systemctl",
+          "description": "systemd is PID 1 on most distros: it boots the system, supervises services, and exposes control through systemctl.",
+          "why": "Nearly every 'start/stop/restart the service' task on modern Linux goes through systemctl. Knowing units, states, and enable-vs-start is the difference between administering a server and poking at it.",
+          "learn": [
+            "Control services: systemctl start/stop/restart/reload and read systemctl status",
+            "Explain enabled vs started, and wire boot behavior with enable/disable",
+            "List units with systemctl list-units and inspect one with systemctl cat",
+            "Name the main unit types: service, socket, timer, target, mount"
+          ],
+          "resources": [
+            { "label": "systemd.io — Official systemd site", "url": "https://systemd.io/" },
+            { "label": "man7.org — systemd(1)", "url": "https://man7.org/linux/man-pages/man1/systemd.1.html" },
+            { "label": "ArchWiki — systemd", "url": "https://wiki.archlinux.org/title/Systemd" }
+          ],
+          "prerequisites": ["process-lifecycle", "sudo-and-root"],
+          "criteria": [
+            "You can start, stop, enable, and check any service without notes",
+            "You can read every section of systemctl status output",
+            "You can explain why enabled and running are independent"
+          ]
+        },
+        {
+          "id": "writing-unit-files",
+          "title": "Writing Service Units & Timers",
+          "description": "Unit files in /etc/systemd/system declare how to run a service — ExecStart, User, Restart policy, dependencies — and timers replace many cron jobs.",
+          "why": "Turning your script or app into a proper service gets you supervised restarts, ordered startup, resource limits, and journal logging for free. It's how software becomes production-grade on Linux.",
+          "learn": [
+            "Write a minimal .service file with [Unit], [Service], and [Install] sections",
+            "Run it as a dedicated user with Restart=on-failure, then daemon-reload and enable it",
+            "Express dependencies and ordering with After= and Wants=",
+            "Create a .timer unit paired with a service and compare it to cron"
+          ],
+          "resources": [
+            { "label": "man7.org — systemd.unit(5)", "url": "https://man7.org/linux/man-pages/man5/systemd.unit.5.html" },
+            { "label": "man7.org — systemd.service(5)", "url": "https://man7.org/linux/man-pages/man5/systemd.service.5.html" },
+            { "label": "freedesktop.org — systemd manual pages", "url": "https://www.freedesktop.org/software/systemd/man/" }
+          ],
+          "prerequisites": ["systemd-basics", "bash-scripting-basics"],
+          "criteria": [
+            "You wrote a working .service unit for one of your own scripts or apps",
+            "Your service survives crashes via its Restart policy and runs as a non-root user",
+            "You created a timer unit and verified its schedule with systemctl list-timers"
+          ]
+        },
+        {
+          "id": "logs-and-journalctl",
+          "title": "Logs: journalctl & /var/log",
+          "description": "The systemd journal collects logs from services and the kernel, queried with journalctl; classic text logs still live in /var/log.",
+          "why": "Logs are the primary evidence in every incident. Filtering the journal by unit, time, and priority — instead of scrolling — is what makes root-causing fast.",
+          "learn": [
+            "Follow a service's logs: journalctl -u <unit> -f",
+            "Filter by time (--since, --until) and priority (-p err), and check the last boot (-b)",
+            "Read kernel messages with dmesg or journalctl -k",
+            "Tour /var/log and explain log rotation with logrotate"
+          ],
+          "resources": [
+            { "label": "man7.org — journalctl(1)", "url": "https://man7.org/linux/man-pages/man1/journalctl.1.html" },
+            { "label": "man7.org — dmesg(1)", "url": "https://man7.org/linux/man-pages/man1/dmesg.1.html" }
+          ],
+          "prerequisites": ["systemd-basics"],
+          "criteria": [
+            "You can pull all errors from one service in a given time window in one command",
+            "You used journal logs to explain why a service failed to start",
+            "You can say which logs live in the journal vs /var/log on your system"
+          ]
+        },
+        {
+          "id": "networking-basics",
+          "title": "Network Inspection: ip, ss & DNS",
+          "description": "ip shows addresses and routes, ss shows listening ports and connections, and ping/curl/dig test reachability, HTTP, and DNS.",
+          "why": "'Is it the network?' is half of all troubleshooting. A tight loop — link, IP, route, DNS, port, service — localizes connectivity failures in minutes instead of guesswork.",
+          "learn": [
+            "Read interfaces and routes with ip addr and ip route",
+            "Find what's listening with ss -tlnp and match ports to processes",
+            "Test layer by layer: ping the gateway, ping an IP, resolve with dig, fetch with curl -v",
+            "Explain what /etc/resolv.conf and /etc/hosts do"
+          ],
+          "resources": [
+            { "label": "man7.org — ip(8)", "url": "https://man7.org/linux/man-pages/man8/ip.8.html" },
+            { "label": "man7.org — ss(8)", "url": "https://man7.org/linux/man-pages/man8/ss.8.html" },
+            { "label": "Cloudflare Learning — What is DNS?", "url": "https://www.cloudflare.com/learning/dns/what-is-dns/" }
+          ],
+          "prerequisites": ["monitoring-processes"],
+          "criteria": [
+            "You can list your machine's IP, gateway, and DNS servers in three commands",
+            "You can identify which process owns any listening port",
+            "You can bisect 'the site is down' into DNS vs routing vs service in minutes"
+          ]
+        },
+        {
+          "id": "troubleshooting-methodology",
+          "title": "A Troubleshooting Methodology",
+          "description": "A repeatable loop — observe symptoms, check resources (USE: utilization, saturation, errors), read logs, form one hypothesis, test it — beats random command-flailing.",
+          "why": "Tools without method produce noise. A disciplined process makes you the person who calmly finds root causes during incidents, and it transfers to every system you'll ever debug.",
+          "learn": [
+            "Adopt a first-five-minutes checklist: uptime, dmesg -T | tail, df -h, free -h, top, journalctl -p err -b",
+            "Apply the USE method to CPU, memory, disk, and network in order",
+            "Go deeper when logs are silent: trace syscalls with strace and list open files with lsof",
+            "Change one thing at a time and keep notes of what you ruled out",
+            "Do a mini post-mortem after each incident: root cause, fix, prevention"
+          ],
+          "resources": [
+            { "label": "MIT Missing Semester — Debugging and profiling", "url": "https://missing.csail.mit.edu/2020/debugging-profiling/" },
+            { "label": "ArchWiki — General troubleshooting", "url": "https://wiki.archlinux.org/title/General_troubleshooting" },
+            { "label": "strace — Official site", "url": "https://strace.io/" },
+            { "label": "Wizard Zines — Julia Evans' debugging zines", "url": "https://wizardzines.com/" }
+          ],
+          "prerequisites": ["logs-and-journalctl", "disk-and-resource-usage", "networking-basics"],
+          "criteria": [
+            "You can run your first-five-minutes checklist from memory",
+            "You diagnosed a real or simulated outage and wrote down the root cause",
+            "You can explain the USE method and apply it to a slow server"
+          ]
+        }
+      ]
+    }
+  ]
+}

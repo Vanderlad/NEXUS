@@ -1,0 +1,228 @@
+# AGENTS.md — Project handoff & continuity
+
+This file lets any AI coding agent (Claude, Codex, ChatGPT, …) or human pick up the
+project without conversation history. Keep it updated when you change architecture,
+schema, or feature status.
+
+## What this app is
+
+**NEXUS** is a local-first, gamified "Developer Life OS" / second brain. It models
+school (courses/assignments/exams), software-development learning (skills, roadmap.sh-style
+learning paths), projects, goals, notes and file locations as **nodes on an interactive
+graph** (React Flow), with XP/levels/streaks/badges and **evidence-based skill confidence**.
+Design brief: *futuristic developer command center* (Jarvis/HUD, dark glassmorphism,
+neon accents, skill-tree feel) — not a CRUD dashboard.
+
+**Clean-slate policy:** the app starts EMPTY. Demo data lives only in `server/demo.js`,
+loads only into an empty DB (in-app button or `npm run demo`), and is fully removed by
+"Reset workspace" / `POST /api/workspace/reset`. Never auto-seed. Never hardcode
+personal data.
+
+## Tech stack
+
+- **Frontend:** React 18 + Vite, [React Flow 11](https://reactflow.dev) for the graph,
+  `marked` + `dompurify` for markdown notes. Plain CSS design system in `src/theme.css`
+  (CSS variables, glass panels, HUD corner brackets, per-type accent colors). No router —
+  views are component state; deep links via `?view=` and `?node=` query params.
+- **Backend:** Express (ESM) + `better-sqlite3`. Single process, serves the built UI in production.
+- **Storage:** SQLite at `data/nexus.db` (WAL mode, FK cascades). Created automatically, empty.
+- **Dev:** `npm run dev` runs API (:4000) and Vite (:5173, proxies `/api`). Prod: `npm start` → :4000.
+- **Docker:** `docker compose up --build`; named volume `nexus-data` for the DB.
+- No TypeScript, no test framework yet. Plain JS, ESM, 2-space indent.
+
+## Folder structure
+
+```
+server/
+  db.js            DB open + schema + additive column migrations (ensureColumn) + meta k/v
+  index.js         All API routes + static serving (NO auto-seed)
+  gamification.js  XP defaults, level curve, streaks, badge definitions & checks
+  confidence.js    Evidence-based skill confidence heuristic (scoreConfidence, bulkConfidence)
+  roadmaps.js      Roadmap JSON format docs, list/read/import (JSON → nodes+edges+guides)
+  demo.js          OPTIONAL generic demo workspace; loadDemo/wipeWorkspace/workspaceCounts; CLI
+src/
+  main.jsx, App.jsx        Shell: bg FX layers, sidebar nav, player card, toasts, palette, modal
+  api.js                   fetch wrapper for all endpoints
+  meta.js                  TYPE_META (icons/colors), statuses, confidence ramp, date helpers
+  theme.css                Entire design system (tokens at top; validated chart colors)
+  components/
+    GraphView.jsx          React Flow canvas; collapse, connect, drag, focus/jump, locked
+                           derivation, empty-state onboarding
+    NexusNode.jsx          Custom node card (accent, progress, lock, done chip, confidence ring)
+    NodePanel.jsx          Right panel: edit everything, guide renderer, confidence meter, links
+    Dashboard.jsx          Mission Control: stats, weekly XP strip, deadlines, courses, goals
+    StatsView.jsx          Operator Profile: rings, XP charts, records, confidence dist, badges,
+                           workspace demo/reset controls
+    Tracker.jsx            Coursework table grouped by course, inline status changes
+    Roadmaps.jsx           Roadmap cards + custom JSON import
+    SearchPalette.jsx      Ctrl/⌘+K search
+    NewNodeModal.jsx       Create node (+optional parent 'contains' edge)
+roadmaps/*.json    11 curated learning paths (see format below) — all schema-validated,
+                   resource links live-checked
+data/nexus.db      SQLite (git-ignored)
+docs/              Screenshots for the README
+```
+
+## Database schema (see server/db.js)
+
+- **nodes**: `id` (text pk), `title`, `type`, `description`, `notes` (markdown),
+  `next_actions`, `status` ('Not Started' | 'In Progress' | 'Submitted' | 'Completed'),
+  `progress` (0-100), `due_date` (YYYY-MM-DD or null), `category`, `xp` (override, 0 = type
+  default), `pos_x/pos_y`, `collapsed` (0/1), `github_repo`, `url`,
+  `guide` (JSON string: `{why, learn[], resources[{label,url}], prerequisites[titles], criteria[]}`),
+  `instructor`, `semester` (courses), timestamps, `completed_at`.
+  - Node types: `hub, domain, course, assignment, exam, quiz, lab, task, project, skill,
+    topic, goal, note, file, roadmap, section`.
+  - **'Overdue' is derived, never stored** — `effective_status` when `due_date < today`
+    and status isn't done.
+  - **Container progress is derived** — for `CONTAINER_TYPES`
+    (course/project/roadmap/section/domain/goal/hub) with `contains` children, `/api/graph`
+    returns the recursive average of children.
+  - New columns are added via `ensureColumn()` in db.js — additive migrations only.
+- **edges**: `id`, `source`, `target`, `kind` (whitelisted:
+  `contains` (hierarchy → collapse + derived progress; server rejects containment cycles),
+  `related` (cross-link), `next` (sequence, animated), `prereq` (drives **locked** display:
+  a 'Not Started' node with an incomplete prereq source renders locked — soft lock, visual
+  only, computed client-side in GraphView.computeLocked)).
+- **links**: file/folder/repo/url attachments per node (evidence for confidence).
+- **xp_events**: append-only XP log. **badges**: earned keys. **meta**: k/v
+  (streak_count, streak_last, demo_loaded).
+
+## Skill confidence (server/confidence.js)
+
+Transparent heuristic for `skill` and `topic` nodes; every signal capped, breakdown shown in UI:
+
+| Signal | Points |
+|---|---|
+| Links on the node (repo 15 / folder 10 / file 8 / url 4) | cap 30 |
+| Notes ≥40 chars +6, ≥250 chars +12 | cap 12 |
+| Own status done +20, else progress × 0.15 | cap 20 |
+| Completed connected work (assignment/exam/quiz/lab/task/topic/section) ×10 | cap 30 |
+| Connected projects (done 15 / ≥40% 10 / else 5) | cap 25 |
+
+Tiers: ≤25 Not enough evidence · ≤50 Some exposure · ≤75 Practiced · ≤100 Demonstrated.
+`bulkConfidence(nodes, edges)` powers `/api/graph` + `/api/stats`; `scoreConfidence` powers
+node detail. Shown as ring on nodes, meter+breakdown in panel, distribution in Stats.
+
+## Roadmap JSON format (roadmaps/*.json, importer in server/roadmaps.js)
+
+```jsonc
+{
+  "slug": "networking", "title": "Networking", "source": "roadmap.sh|custom",
+  "url": "https://roadmap.sh/…", "description": "…",
+  "sections": [{
+    "title": "…", "description": "…",
+    "topics": [{
+      "id": "kebab-id", "title": "…", "description": "what it is",
+      "why": "why it matters", "learn": ["step 1", "step 2"],
+      "resources": [{"label": "MDN — HTTP", "url": "https://…"}],
+      "prerequisites": ["earlier-topic-id"],   // → 'prereq' edges → locked states
+      "criteria": ["You can explain…", "You built…"]
+    }]
+  }]
+}
+```
+
+Import: root roadmap node → section nodes ('contains', chained 'next') → topic nodes
+('contains', guide JSON stored on node, prereq edges). Legacy string resources still accepted.
+This is the seam for a future live roadmap.sh sync or LMS import: produce this JSON, POST it.
+
+## API (all JSON, no auth)
+
+All node-returning endpoints return COMPUTED nodes (derived progress + effective_status),
+never raw rows. Body values are coerced/clamped server-side (progress 0-100, due_date
+YYYY-MM-DD or null, free text stringified) so malformed input yields 4xx, not 500.
+**Date policy:** due dates, streaks and chart buckets all use the server's LOCAL calendar
+day (local-first ⇒ server tz = user tz); `xp_events.created_at` is stored UTC and bucketed
+with `date(…, 'localtime')`.
+
+```
+GET  /api/graph                    → { nodes (+progress/effective_status/confidence), edges }
+POST /api/nodes                    → create (optional parent_id → contains edge); dup id → 409
+PATCH /api/nodes/:id               → partial update; status→done awards XP, returns
+                                     { node, gamification: {xpAwarded, levelUp, newBadges, streak} };
+                                     un-completing clears completed_at (XP kept);
+                                     notes edits re-check badges (Scribe)
+DELETE /api/nodes/:id              GET /api/nodes/:id → { node, links, related, guide,
+                                                          confidence, xp_value }
+POST /api/edges  DELETE /api/edges/:id     (duplicate edges rejected 409)
+POST /api/nodes/:id/links  DELETE /api/links/:id
+GET  /api/dashboard                → deadlines, courses/projects/goals, domain %s, overall,
+                                     week (7-day XP), gamification
+GET  /api/stats                    → gamification, counts, overall, confidenceTiers, topSkills,
+                                     daily (14d), weekly (8w)
+GET  /api/search?q=                GET /api/gamification
+GET  /api/roadmaps                 POST /api/roadmaps/:slug/import
+POST /api/roadmaps/import          ← custom roadmap JSON body
+GET  /api/workspace                → { nodes, demo }
+POST /api/workspace/demo           → load demo (409 if not empty)
+POST /api/workspace/reset          → wipe ALL data
+```
+
+## Gamification rules
+
+- XP on transition into Completed/Submitted (once — no clawback on revert, by design).
+  Defaults per type in `gamification.js` (`DEFAULT_XP`), node.xp overrides.
+- Level thresholds: level 2 at 100 XP, each next level costs +50 more (`levelThreshold`).
+- Streak: consecutive days with ≥1 completion. Badges: 9 in `BADGES`, checked after
+  completions/links/imports.
+
+## Design system notes (src/theme.css)
+
+- Tokens at the top (`--bg-*, --panel, --accent-a/b/c, --gradient`). Glass = `.glass`,
+  HUD frame = `.corners`. Ambient background = `.bg-fx` (grid/aurora/scanline) rendered
+  once in App.jsx; respects `prefers-reduced-motion`.
+- Chart colors are contrast-validated against the panel surface: single-series bars use
+  `--accent-b` (#818cf8, 6.2:1) / `--accent-a`; the confidence ramp
+  `#0e7490 → #06b6d4 → #22d3ee → #67e8f9` is monotonic in lightness, min 3.45:1.
+  If you change chart colors, re-check contrast (≥3:1 vs #0d1324).
+- Per-type node colors live in `src/meta.js` `TYPE_META`.
+
+## Completed features
+
+Clean-slate onboarding (empty graph → create/import/demo), graph view (custom nodes,
+connect, drag-persist, collapse, legend, minimap, locked states, confidence rings),
+node panel (all fields, guide renderer, confidence breakdown, XP chip, course
+instructor/semester, markdown notes, links, related jumping), dashboard (+weekly XP strip,
+overall %), Operator Profile stats view (rings, charts, records, badges, activity feed,
+demo/reset), tracker, 11 rich roadmaps + custom import, prereq edges + locking,
+gamification, search, deep links (`?view=`, `?node=`), Docker, production static serving.
+
+## Known issues / limitations
+
+- No automated tests yet.
+- XP is not reverted if you un-complete a node (intentional; revisit).
+- Local file/folder links copy the path to clipboard (browsers can't open `file://`);
+  a Tauri/Electron wrapper would enable "reveal in file manager".
+- Graph initial camera is a static `defaultViewport` centered on the hub (0,0);
+  for an empty workspace the onboarding overlay covers this.
+- Minor a11y lint warnings (labels without htmlFor, clickable divs) — pre-existing pattern.
+- Roadmap import positions are static columns; a force layout could be nicer.
+- Confidence recomputes on every /api/graph call — fine locally (<1k nodes), revisit if slow.
+
+## Next recommended steps
+
+1. **Tests** — Vitest for `confidence.js`, `gamification.js` (level/streak math) and the
+   roadmap importer (schema + prereq edges) first; they're pure and easy to cover.
+2. **LMS/Brightspace import** — an importer producing nodes/edges like `roadmaps.js` does;
+   iCal feed → assignment nodes under a course is the cheapest win.
+3. Tauri wrapper for a real desktop app + opening local files natively.
+4. Spaced-repetition review queue on topic nodes.
+5. Edge-kind editing UI; XP history view; weekly review screen.
+6. Optional GitHub integration: link a repo to a project and count commits as evidence
+   for connected skills (raises confidence automatically).
+
+## How to continue as an AI agent
+
+- Run `npm install && npm run dev`, open http://localhost:5173.
+- DB is disposable: `npm run demo:reset` gives a populated demo state;
+  `curl -X POST localhost:4000/api/workspace/reset` wipes it.
+- Verify UI changes headlessly (build first: `npm run build`, run `npm run server`):
+  `google-chrome --headless=new --screenshot=x.png --window-size=1600,950 --virtual-time-budget=8000 "http://localhost:4000/?view=graph"`
+  — views: graph | dashboard | tracker | roadmaps | stats; `&node=<id>` opens a node panel.
+- Validate roadmap JSONs after editing: every topic id unique + kebab-case, prerequisites
+  reference EARLIER ids only, resources are `{label, url}` with https URLs.
+- Style: plain JS (no TS), ESM everywhere, 2-space indent, keep the design language in
+  `theme.css` (CSS vars, glass, per-type accents from `src/meta.js`). Match existing idiom.
+- Keep the clean-slate policy: nothing personal in code or seed data; demo stays optional.
+- **Update this file** when you add features, change the schema, or discover issues.

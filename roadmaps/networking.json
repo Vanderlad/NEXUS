@@ -1,0 +1,729 @@
+{
+  "slug": "networking",
+  "title": "Networking",
+  "source": "custom",
+  "description": "From packets to sockets: master how data moves across networks — IP, TCP/UDP, DNS, HTTP(S), TLS — and the tools to see it all.",
+  "sections": [
+    {
+      "title": "Networking Foundations",
+      "description": "Build a mental model of how data travels across the Internet before diving into any single protocol.",
+      "topics": [
+        {
+          "id": "how-the-internet-works",
+          "title": "How the Internet Works",
+          "description": "A big-picture tour of the Internet: clients, servers, ISPs, backbones, and how a request travels from your machine to a server and back.",
+          "why": "Every debugging session and design decision in networking sits on top of this mental model. Once you can narrate what happens when you load a web page, every later topic slots into a place you already understand.",
+          "learn": [
+            "Sketch the journey of a request from your browser to a web server and back, naming each hop",
+            "Distinguish clients, servers, routers, and switches, and what each one does",
+            "Explain what an ISP is and how networks of networks interconnect",
+            "Describe at a high level what happens when you type a URL and press Enter"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — How does the Internet work?", "url": "https://www.cloudflare.com/learning/network-layer/how-does-the-internet-work/" },
+            { "label": "MDN — How the Web works", "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works" },
+            { "label": "Khan Academy — Computers and the Internet", "url": "https://www.khanacademy.org/computing/computers-and-internet" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can narrate 'what happens when I visit a website' end to end in your own words",
+            "You can explain the difference between a router and a switch",
+            "You can describe how independent networks form the Internet"
+          ]
+        },
+        {
+          "id": "osi-model",
+          "title": "The OSI Model",
+          "description": "The seven-layer reference model that splits networking into physical, data link, network, transport, session, presentation, and application concerns.",
+          "why": "The OSI model is the shared vocabulary of networking: 'layer 4 load balancer', 'L7 firewall', 'layer 2 switch'. Knowing which layer a problem lives at is the fastest way to narrow down any network issue.",
+          "learn": [
+            "Memorize the seven layers in order and one responsibility of each",
+            "Place familiar things on the model: Ethernet, IP, TCP, TLS, HTTP",
+            "Practice layer-by-layer troubleshooting: is the cable up, is IP reachable, is the port open, does the app respond?",
+            "Learn why the model is a teaching abstraction, not an exact description of real stacks"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — What is the OSI model?", "url": "https://www.cloudflare.com/learning/ddos/glossary/open-systems-interconnection-model-osi/" },
+            { "label": "Wizard Zines — Julia Evans networking zines", "url": "https://wizardzines.com/" }
+          ],
+          "prerequisites": ["how-the-internet-works"],
+          "criteria": [
+            "You can name all seven layers and give an example protocol or device at each",
+            "You can assign a real-world bug (e.g. 'connection refused') to a likely layer",
+            "You can explain what 'L4 vs L7 load balancing' means"
+          ]
+        },
+        {
+          "id": "tcp-ip-model",
+          "title": "The TCP/IP Model",
+          "description": "The four-layer model (link, internet, transport, application) that actually describes how the Internet protocol suite is built.",
+          "why": "Real systems are engineered against TCP/IP, not OSI. Understanding it tells you exactly which protocol owns which job — and why IP does not guarantee delivery but TCP does.",
+          "learn": [
+            "Map the four TCP/IP layers to the seven OSI layers",
+            "Identify the core protocol at each layer: Ethernet/Wi-Fi, IP, TCP/UDP, HTTP/DNS",
+            "Explain the end-to-end principle: smart edges, dumb (fast) core",
+            "Describe which guarantees each layer does and does not provide"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — What is TCP/IP?", "url": "https://www.cloudflare.com/learning/ddos/glossary/tcp-ip/" },
+            { "label": "IETF — RFC 1122: Requirements for Internet Hosts", "url": "https://datatracker.ietf.org/doc/html/rfc1122" }
+          ],
+          "prerequisites": ["osi-model"],
+          "criteria": [
+            "You can draw the TCP/IP stack and place IP, TCP, UDP, DNS, and HTTP on it",
+            "You can explain why IP alone can lose, duplicate, or reorder packets",
+            "You can articulate the end-to-end principle with an example"
+          ]
+        },
+        {
+          "id": "packets-encapsulation",
+          "title": "Packets & Encapsulation",
+          "description": "How data is wrapped layer by layer: application payloads inside TCP/UDP segments, inside IP packets, inside Ethernet frames.",
+          "why": "Encapsulation is the trick that makes layering work, and it is exactly what you see when you open a packet capture. Understanding headers, MAC vs IP vs port addressing, and MTU explains a whole class of mysterious production issues.",
+          "learn": [
+            "Trace one HTTP request as it gets wrapped in TCP, IP, and Ethernet headers",
+            "Distinguish the three addresses in play: MAC address, IP address, port number",
+            "Learn what MTU and fragmentation are and why huge packets cause problems",
+            "Explain what each device (switch, router, host) reads and rewrites in transit"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — What is a packet?", "url": "https://www.cloudflare.com/learning/network-layer/what-is-a-packet/" },
+            { "label": "Wireshark — Documentation", "url": "https://www.wireshark.org/docs/" }
+          ],
+          "prerequisites": ["tcp-ip-model"],
+          "criteria": [
+            "You can draw the header stack of a single HTTP-over-TCP packet",
+            "You can explain when MAC addresses change in transit but IP addresses do not",
+            "You can define MTU and describe one symptom of exceeding it"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "IP Addressing & Routing",
+      "description": "Learn how machines are addressed, how networks are carved up, and how packets find their way.",
+      "topics": [
+        {
+          "id": "ipv4-addressing",
+          "title": "IPv4 Addressing",
+          "description": "The 32-bit addressing scheme of IPv4: dotted-decimal notation, network vs host portions, and special addresses like loopback and broadcast.",
+          "why": "Every server config, firewall rule, and cloud VPC you will ever touch speaks IPv4. Being fluent in reading addresses and masks is table stakes for backend, DevOps, and security work.",
+          "learn": [
+            "Convert IPv4 addresses between dotted-decimal and binary",
+            "Split an address into network and host parts using a subnet mask",
+            "Memorize the special ranges: 127.0.0.1 loopback, broadcast, 0.0.0.0, link-local",
+            "Inspect your own machine's addresses with `ip addr` (or `ifconfig`)"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — What is the Internet Protocol?", "url": "https://www.cloudflare.com/learning/network-layer/internet-protocol/" },
+            { "label": "IETF — RFC 791: Internet Protocol", "url": "https://datatracker.ietf.org/doc/html/rfc791" },
+            { "label": "Linux Journey", "url": "https://linuxjourney.com/" }
+          ],
+          "prerequisites": ["tcp-ip-model"],
+          "criteria": [
+            "You can convert any IPv4 address to binary and back without a tool",
+            "You can identify the network and host portion given an address and mask",
+            "You can explain what 127.0.0.1 and 0.0.0.0 mean in a server config"
+          ]
+        },
+        {
+          "id": "subnetting-cidr",
+          "title": "Subnetting & CIDR",
+          "description": "Dividing networks with CIDR notation (like 10.0.0.0/16): calculating subnet sizes, ranges, and usable host counts.",
+          "why": "CIDR blocks are everywhere: cloud VPCs, Kubernetes pod ranges, firewall allowlists, VPN configs. Engineers who can subnet in their head design cleaner networks and spot overlapping-range bugs instantly.",
+          "learn": [
+            "Read /8 through /32 prefixes and compute how many hosts each allows",
+            "Calculate the network address, broadcast address, and usable range for a given CIDR block",
+            "Split a /16 into smaller subnets for a multi-tier network design",
+            "Detect overlapping CIDR ranges and explain why they break routing"
+          ],
+          "resources": [
+            { "label": "IETF — RFC 4632: CIDR", "url": "https://datatracker.ietf.org/doc/html/rfc4632" },
+            { "label": "freeCodeCamp — Subnet Cheat Sheet", "url": "https://www.freecodecamp.org/news/subnet-cheat-sheet-24-subnet-mask-30-26-27-29-and-other-ip-address-cidr-network-references/" }
+          ],
+          "prerequisites": ["ipv4-addressing"],
+          "criteria": [
+            "You can compute the host range of any /20–/30 network on paper",
+            "You designed a subnet plan splitting one block into at least four subnets",
+            "You can explain why 10.0.0.0/24 and 10.0.0.128/25 overlap"
+          ]
+        },
+        {
+          "id": "ipv6",
+          "title": "IPv6",
+          "description": "The 128-bit successor to IPv4: hex notation, address abbreviation rules, address types, and why NAT is largely unnecessary in v6.",
+          "why": "IPv6 already carries a huge share of Internet traffic, and mobile networks and clouds increasingly default to it. Services that mishandle v6 (or dual-stack) hit real user-facing bugs.",
+          "learn": [
+            "Read and abbreviate IPv6 addresses (zero compression, ::)",
+            "Learn the main address types: global unicast, link-local (fe80::), loopback (::1)",
+            "Understand dual-stack operation and how clients pick between v4 and v6",
+            "Check your own machine and a public site for IPv6 connectivity"
+          ],
+          "resources": [
+            { "label": "IETF — RFC 8200: IPv6 Specification", "url": "https://datatracker.ietf.org/doc/html/rfc8200" },
+            { "label": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ],
+          "prerequisites": ["ipv4-addressing"],
+          "criteria": [
+            "You can expand and abbreviate any IPv6 address correctly",
+            "You can explain the difference between link-local and global unicast addresses",
+            "You can describe how a dual-stack client chooses a protocol"
+          ]
+        },
+        {
+          "id": "nat-private-networks",
+          "title": "NAT & Private Networks",
+          "description": "Private address ranges (RFC 1918) and Network Address Translation: how many devices share one public IP, and what that breaks.",
+          "why": "NAT is why your laptop's 192.168.x.x address works on the Internet — and why peer-to-peer apps, self-hosted servers, and webhooks need port forwarding or tunnels. It shapes how you deploy anything reachable from outside.",
+          "learn": [
+            "Memorize the RFC 1918 private ranges: 10/8, 172.16/12, 192.168/16",
+            "Trace how source NAT rewrites addresses and ports on outbound traffic",
+            "Explain why inbound connections fail behind NAT and how port forwarding fixes it",
+            "Find your private and public IP and explain why they differ"
+          ],
+          "resources": [
+            { "label": "IETF — RFC 1918: Private Address Allocation", "url": "https://datatracker.ietf.org/doc/html/rfc1918" },
+            { "label": "Beej's Guide to Network Programming", "url": "https://beej.us/guide/bgnet/" }
+          ],
+          "prerequisites": ["subnetting-cidr"],
+          "criteria": [
+            "You can list the three private IPv4 ranges from memory",
+            "You can diagram how NAT translates an outbound connection",
+            "You can explain why a webhook can't reach a service behind NAT and name two workarounds"
+          ]
+        },
+        {
+          "id": "routing-basics",
+          "title": "Routing Basics",
+          "description": "How packets choose their path: routing tables, default gateways, longest-prefix match, and a glimpse of BGP between networks.",
+          "why": "When 'the network is down', it is usually a routing problem — a wrong gateway, a missing route, a misconfigured VPC route table. Reading a routing table is a superpower in cloud and on-prem work alike.",
+          "learn": [
+            "Print and interpret your machine's routing table with `ip route`",
+            "Explain the default gateway and longest-prefix-match selection",
+            "Follow a packet across multiple routers with traceroute",
+            "Read a one-paragraph overview of BGP and why route leaks cause outages"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — What is routing?", "url": "https://www.cloudflare.com/learning/network-layer/what-is-routing/" },
+            { "label": "man7 — ip-route(8)", "url": "https://man7.org/linux/man-pages/man8/ip-route.8.html" },
+            { "label": "Linux Journey", "url": "https://linuxjourney.com/" }
+          ],
+          "prerequisites": ["ipv4-addressing", "subnetting-cidr"],
+          "criteria": [
+            "You can read your routing table and identify the default gateway",
+            "You can predict which route wins for a given destination using longest-prefix match",
+            "You ran traceroute to a public host and explained each hop"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Transport Layer: TCP & UDP",
+      "description": "Understand the two workhorses of the transport layer and the trade-offs between reliability and speed.",
+      "topics": [
+        {
+          "id": "ports-and-sockets",
+          "title": "Ports & Sockets (the Concept)",
+          "description": "How ports multiplex many conversations over one IP address, and how a socket — the 5-tuple of protocol, addresses, and ports — identifies a connection.",
+          "why": "'Address already in use', 'connection refused', 'port 8080 vs 80' — daily developer life is full of port and socket concepts. This is also the exact vocabulary the sockets API uses later.",
+          "learn": [
+            "Explain what a port is and memorize common ones: 22, 53, 80, 443",
+            "Define a connection as the 5-tuple (protocol, src IP, src port, dst IP, dst port)",
+            "Distinguish listening sockets from established connections",
+            "List the sockets open on your machine with `ss -tulpn`"
+          ],
+          "resources": [
+            { "label": "Beej's Guide to Network Programming", "url": "https://beej.us/guide/bgnet/" },
+            { "label": "man7 — socket(7)", "url": "https://man7.org/linux/man-pages/man7/socket.7.html" }
+          ],
+          "prerequisites": ["tcp-ip-model", "packets-encapsulation"],
+          "criteria": [
+            "You can name the standard port for SSH, DNS, HTTP, and HTTPS",
+            "You can explain why two browser tabs to the same site are distinct connections",
+            "You inspected listening ports on your own machine and identified each process"
+          ]
+        },
+        {
+          "id": "tcp-deep-dive",
+          "title": "TCP Deep Dive",
+          "description": "The reliable, ordered, byte-stream protocol: three-way handshake, sequence and acknowledgment numbers, retransmission, and connection teardown.",
+          "why": "TCP underlies HTTP, SSH, databases — nearly everything. Understanding handshakes, ACKs, and states like TIME_WAIT lets you decode packet captures and diagnose timeouts, resets, and slow connections with confidence.",
+          "learn": [
+            "Walk through the SYN, SYN-ACK, ACK handshake and what state each side holds",
+            "Explain sequence/acknowledgment numbers and how lost segments are retransmitted",
+            "Trace connection teardown (FIN/ACK) and what TIME_WAIT is for",
+            "Interpret RST packets and the classic errors: connection refused vs timeout",
+            "Observe a real handshake in a packet capture or with `ss` states"
+          ],
+          "resources": [
+            { "label": "IETF — RFC 9293: Transmission Control Protocol", "url": "https://datatracker.ietf.org/doc/html/rfc9293" },
+            { "label": "man7 — tcp(7)", "url": "https://man7.org/linux/man-pages/man7/tcp.7.html" }
+          ],
+          "prerequisites": ["ports-and-sockets"],
+          "criteria": [
+            "You can draw the three-way handshake and teardown from memory",
+            "You can explain the difference between 'connection refused' and 'connection timed out' at the packet level",
+            "You can describe what TIME_WAIT is and why it exists"
+          ]
+        },
+        {
+          "id": "udp-essentials",
+          "title": "UDP Essentials",
+          "description": "The minimal, connectionless transport: no handshake, no ordering, no retransmission — just datagrams with ports and a checksum.",
+          "why": "DNS, video calls, game servers, and QUIC/HTTP-3 all ride on UDP because sometimes losing a packet beats waiting for it. Knowing when UDP's trade-offs win makes you a better systems designer.",
+          "learn": [
+            "Compare the UDP header to TCP's and note everything UDP leaves out",
+            "List what applications must handle themselves over UDP: loss, ordering, duplication",
+            "Identify real protocols built on UDP: DNS, DHCP, QUIC, WebRTC media",
+            "Explain why UDP is both great for latency and a favorite for DDoS amplification"
+          ],
+          "resources": [
+            { "label": "IETF — RFC 768: User Datagram Protocol", "url": "https://datatracker.ietf.org/doc/html/rfc768" },
+            { "label": "Cloudflare Learning — What is UDP?", "url": "https://www.cloudflare.com/learning/ddos/glossary/user-datagram-protocol-udp/" },
+            { "label": "man7 — udp(7)", "url": "https://man7.org/linux/man-pages/man7/udp.7.html" }
+          ],
+          "prerequisites": ["ports-and-sockets"],
+          "criteria": [
+            "You can list three guarantees TCP provides that UDP does not",
+            "You can name two applications where UDP is the right choice and justify why",
+            "You can explain how a UDP-based protocol might implement its own reliability"
+          ]
+        },
+        {
+          "id": "flow-congestion-control",
+          "title": "Flow & Congestion Control",
+          "description": "How TCP avoids overwhelming receivers (flow control via windows) and the network itself (congestion control: slow start, congestion avoidance).",
+          "why": "This is why file transfers ramp up gradually, why latency spikes under load, and why long-distance connections feel slow. It is the key to reasoning about throughput, bufferbloat, and 'why is this download slow?'.",
+          "learn": [
+            "Distinguish flow control (receiver window) from congestion control (network limit)",
+            "Walk through slow start and congestion avoidance as the window grows and shrinks",
+            "Understand how packet loss and RTT determine maximum throughput",
+            "Skim what modern algorithms like CUBIC and BBR improve"
+          ],
+          "resources": [
+            { "label": "IETF — RFC 5681: TCP Congestion Control", "url": "https://datatracker.ietf.org/doc/html/rfc5681" },
+            { "label": "man7 — tcp(7)", "url": "https://man7.org/linux/man-pages/man7/tcp.7.html" }
+          ],
+          "prerequisites": ["tcp-deep-dive"],
+          "criteria": [
+            "You can explain flow control vs congestion control in one sentence each",
+            "You can sketch how the congestion window changes across slow start and a loss event",
+            "You can explain why high-latency links reduce TCP throughput"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Naming the Network: DNS",
+      "description": "Master the distributed database that turns names into addresses — and breaks everything when it misbehaves.",
+      "topics": [
+        {
+          "id": "dns-fundamentals",
+          "title": "DNS Fundamentals",
+          "description": "How name resolution works: the hierarchy from root servers to TLDs to authoritative servers, and the role of recursive resolvers.",
+          "why": "'It's always DNS' is a meme because it's true — DNS sits in front of every request your systems make. Understanding the resolution chain turns spooky outages into ten-minute diagnoses.",
+          "learn": [
+            "Trace a full resolution: stub resolver → recursive resolver → root → TLD → authoritative",
+            "Distinguish recursive resolvers from authoritative name servers",
+            "Explain why DNS typically uses UDP port 53 and when it falls back to TCP",
+            "Resolve a name step by step using `dig +trace`"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — What is DNS?", "url": "https://www.cloudflare.com/learning/dns/what-is-dns/" },
+            { "label": "IETF — RFC 1034: Domain Names, Concepts", "url": "https://datatracker.ietf.org/doc/html/rfc1034" },
+            { "label": "Wizard Zines — Julia Evans", "url": "https://wizardzines.com/" }
+          ],
+          "prerequisites": ["how-the-internet-works", "udp-essentials"],
+          "criteria": [
+            "You can diagram the full resolution path for a fresh domain lookup",
+            "You can explain the difference between a recursive and an authoritative server",
+            "You ran `dig +trace` and explained each delegation step"
+          ]
+        },
+        {
+          "id": "dns-record-types",
+          "title": "DNS Record Types",
+          "description": "The records that make up a zone: A, AAAA, CNAME, MX, TXT, NS, SOA — what each maps and where each is used.",
+          "why": "Deploying a website, verifying a domain, setting up email, pointing at a load balancer — all of it is editing DNS records. Knowing the record types (and CNAME's sharp edges) prevents costly misconfigurations.",
+          "learn": [
+            "Define A, AAAA, CNAME, MX, TXT, NS, and SOA records and their purposes",
+            "Query each record type for a real domain with dig",
+            "Learn the CNAME-at-apex restriction and why providers offer ALIAS/ANAME workarounds",
+            "Read a zone file and explain every line"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — DNS records", "url": "https://www.cloudflare.com/learning/dns/dns-records/" },
+            { "label": "IETF — RFC 1035: Domain Names, Implementation", "url": "https://datatracker.ietf.org/doc/html/rfc1035" }
+          ],
+          "prerequisites": ["dns-fundamentals"],
+          "criteria": [
+            "You can pick the correct record type for five common scenarios without looking it up",
+            "You queried A, MX, TXT, and NS records for a domain and interpreted the answers",
+            "You can explain why a CNAME cannot coexist with other records at the same name"
+          ]
+        },
+        {
+          "id": "dns-caching-and-security",
+          "title": "DNS Caching, TTLs & Security",
+          "description": "How TTLs control caching at every layer, and how DNSSEC, DNS-over-HTTPS, and DNS-over-TLS harden a protocol designed without security.",
+          "why": "TTLs decide how fast your DNS changes propagate (and how bad a mistake lingers), while cache poisoning and plaintext lookups are real attack surfaces. Modern infra work expects you to reason about both.",
+          "learn": [
+            "Explain how TTLs drive caching in resolvers, operating systems, and browsers",
+            "Plan a low-downtime DNS migration by lowering TTLs ahead of a cutover",
+            "Understand cache poisoning and how DNSSEC's signatures counter it",
+            "Compare DNS-over-HTTPS and DNS-over-TLS and what they protect against"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — DNS security", "url": "https://www.cloudflare.com/learning/dns/dns-security/" },
+            { "label": "IETF — RFC 4033: DNSSEC Introduction", "url": "https://datatracker.ietf.org/doc/html/rfc4033" },
+            { "label": "IETF — RFC 8484: DNS over HTTPS", "url": "https://datatracker.ietf.org/doc/html/rfc8484" }
+          ],
+          "prerequisites": ["dns-record-types"],
+          "criteria": [
+            "You can explain why a DNS change 'hasn't propagated' and estimate when it will",
+            "You planned (or executed) a TTL-lowering migration strategy",
+            "You can describe what DoH encrypts that classic DNS does not"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "The Web: HTTP & TLS",
+      "description": "Go deep on the protocols that carry the web — and the cryptography that keeps it private.",
+      "topics": [
+        {
+          "id": "http-fundamentals",
+          "title": "HTTP Fundamentals",
+          "description": "The request/response protocol of the web: methods, status codes, URLs, and the anatomy of HTTP messages.",
+          "why": "Every API you build or consume is HTTP. Fluency in methods, status codes, and message structure is the difference between guessing at API bugs and reading them straight off the wire.",
+          "learn": [
+            "Dissect a raw HTTP request and response: start line, headers, body",
+            "Learn the core methods (GET, POST, PUT, PATCH, DELETE) and their semantics, including idempotency",
+            "Memorize the status code classes (1xx–5xx) and the famous individuals: 200, 201, 301, 304, 400, 401, 403, 404, 429, 500, 502, 503",
+            "Send a hand-written request with netcat or curl and read the raw response"
+          ],
+          "resources": [
+            { "label": "MDN — An overview of HTTP", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview" },
+            { "label": "MDN — HTTP reference", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" },
+            { "label": "IETF — RFC 9110: HTTP Semantics", "url": "https://datatracker.ietf.org/doc/html/rfc9110" }
+          ],
+          "prerequisites": ["tcp-deep-dive", "dns-fundamentals"],
+          "criteria": [
+            "You can write a valid HTTP/1.1 request by hand from memory",
+            "You can explain idempotency and classify each method",
+            "You can name the right status code for eight common API situations"
+          ]
+        },
+        {
+          "id": "http-headers-cookies-caching",
+          "title": "Headers, Cookies & Caching",
+          "description": "The header fields that control content negotiation, state (cookies and their security attributes), and HTTP caching semantics.",
+          "why": "Headers are where real-world HTTP problems live: broken caching, CORS errors, insecure cookies, wrong content types. Mastering them unlocks faster sites and fewer security findings.",
+          "learn": [
+            "Inspect request/response headers in browser devtools and with curl -v",
+            "Learn cookie attributes — Secure, HttpOnly, SameSite, Domain, Path — and what each defends against",
+            "Understand Cache-Control, ETag, and conditional requests (304 Not Modified)",
+            "Get a working mental model of CORS: origins, preflights, and the headers involved"
+          ],
+          "resources": [
+            { "label": "MDN — HTTP headers reference", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers" },
+            { "label": "MDN — Using HTTP cookies", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies" },
+            { "label": "MDN — HTTP caching", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching" }
+          ],
+          "prerequisites": ["http-fundamentals"],
+          "criteria": [
+            "You can configure a cookie correctly for a session and justify each attribute",
+            "You can explain how an ETag round-trip produces a 304",
+            "You diagnosed (or simulated) a CORS error and fixed it at the server"
+          ]
+        },
+        {
+          "id": "tls-fundamentals",
+          "title": "TLS Fundamentals",
+          "description": "The protocol that encrypts the Internet: the TLS handshake, symmetric vs asymmetric cryptography, and what confidentiality, integrity, and authenticity mean.",
+          "why": "TLS fronts every serious service, and its failures — expired certs, protocol mismatches, handshake errors — land on developers to debug. Understanding the handshake demystifies the whole 'padlock' stack.",
+          "learn": [
+            "Explain the goals: confidentiality, integrity, and authentication",
+            "Walk through a TLS 1.3 handshake: key exchange, certificate verification, session keys",
+            "Understand why asymmetric crypto bootstraps a symmetric session",
+            "Inspect a live handshake with `openssl s_client -connect host:443`"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — What is TLS?", "url": "https://www.cloudflare.com/learning/ssl/transport-layer-security-tls/" },
+            { "label": "Cloudflare Learning — What happens in a TLS handshake?", "url": "https://www.cloudflare.com/learning/ssl/what-happens-in-a-tls-handshake/" },
+            { "label": "IETF — RFC 8446: TLS 1.3", "url": "https://datatracker.ietf.org/doc/html/rfc8446" }
+          ],
+          "prerequisites": ["tcp-deep-dive"],
+          "criteria": [
+            "You can narrate a TLS 1.3 handshake step by step",
+            "You can explain why TLS uses both asymmetric and symmetric cryptography",
+            "You connected to a server with openssl s_client and read the negotiated protocol and cipher"
+          ]
+        },
+        {
+          "id": "certificates-pki",
+          "title": "Certificates & PKI",
+          "description": "X.509 certificates, certificate authorities, chains of trust, and automated issuance with ACME/Let's Encrypt.",
+          "why": "Certificate expiry is one of the most common causes of self-inflicted outages. Knowing how chains, SANs, and issuance work lets you set up TLS correctly once and automate it forever.",
+          "learn": [
+            "Read a certificate: subject, SANs, issuer, validity period, chain to a root CA",
+            "Explain how a browser validates a chain of trust",
+            "Issue a free certificate with Let's Encrypt / certbot and set up auto-renewal",
+            "Understand what goes wrong: expired certs, name mismatches, incomplete chains, self-signed warnings"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — What is an SSL certificate?", "url": "https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/" },
+            { "label": "Let's Encrypt — How It Works", "url": "https://letsencrypt.org/how-it-works/" },
+            { "label": "MDN — Transport Layer Security", "url": "https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Transport_Layer_Security" }
+          ],
+          "prerequisites": ["tls-fundamentals", "dns-record-types"],
+          "criteria": [
+            "You obtained and installed a real certificate with automated renewal",
+            "You can explain the chain of trust from leaf to root CA",
+            "You can diagnose the three most common certificate errors from their messages"
+          ]
+        },
+        {
+          "id": "https-http2-http3",
+          "title": "HTTPS, HTTP/2 & HTTP/3",
+          "description": "How HTTP rides on TLS, and how HTTP/2 (multiplexing over TCP) and HTTP/3 (QUIC over UDP) reinvented web transport for speed.",
+          "why": "Version choice has real performance consequences: head-of-line blocking, connection setup cost, mobile roaming. Modern web performance work assumes you know what each version fixes.",
+          "learn": [
+            "Explain what HTTPS adds over HTTP and why every site should use it",
+            "Understand HTTP/2 multiplexing and the TCP head-of-line blocking it cannot fix",
+            "Learn how HTTP/3/QUIC moves to UDP to fix transport-level head-of-line blocking and speed up handshakes",
+            "Check which protocol version real sites negotiate using browser devtools or curl"
+          ],
+          "resources": [
+            { "label": "Cloudflare Learning — What is HTTPS?", "url": "https://www.cloudflare.com/learning/ssl/what-is-https/" },
+            { "label": "IETF — RFC 9114: HTTP/3", "url": "https://datatracker.ietf.org/doc/html/rfc9114" },
+            { "label": "IETF — RFC 9113: HTTP/2", "url": "https://datatracker.ietf.org/doc/html/rfc9113" }
+          ],
+          "prerequisites": ["http-fundamentals", "tls-fundamentals", "udp-essentials"],
+          "criteria": [
+            "You can explain head-of-line blocking at both the HTTP and TCP levels",
+            "You can state why HTTP/3 uses UDP instead of TCP",
+            "You verified the negotiated HTTP version for three major websites"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Tools of the Trade",
+      "description": "Get hands-on with the command-line and capture tools professionals use to interrogate networks every day.",
+      "topics": [
+        {
+          "id": "curl-mastery",
+          "title": "curl Mastery",
+          "description": "The universal HTTP(S) client: crafting requests, setting headers and bodies, following redirects, and debugging APIs from the terminal.",
+          "why": "curl is the lingua franca of API debugging — bug reports, docs, and runbooks all speak it. Deep curl fluency means you can reproduce and isolate any HTTP issue in seconds without writing code.",
+          "learn": [
+            "Send GET/POST/PUT requests with custom headers and JSON bodies",
+            "Use -v and -i to inspect request/response headers and TLS details",
+            "Follow redirects (-L), send cookies (-b/-c), and authenticate (-u, bearer headers)",
+            "Time and dissect a request with -w and --resolve for testing DNS/host overrides"
+          ],
+          "resources": [
+            { "label": "curl — Official documentation", "url": "https://curl.se/docs/" },
+            { "label": "Everything curl (free book)", "url": "https://everything.curl.dev/" }
+          ],
+          "prerequisites": ["http-fundamentals", "https-http2-http3"],
+          "criteria": [
+            "You can reproduce any API call from browser devtools as a curl command",
+            "You debugged a redirect chain and a failing TLS connection with curl -v",
+            "You can override DNS resolution for a request without editing /etc/hosts"
+          ]
+        },
+        {
+          "id": "dig-dns-tools",
+          "title": "dig & DNS Debugging",
+          "description": "Interrogating DNS from the command line: dig for precise queries, tracing delegation, checking propagation, and comparing resolvers.",
+          "why": "When DNS breaks, dig is how you prove where. Querying specific record types against specific servers separates resolver caching issues from authoritative misconfigurations instantly.",
+          "learn": [
+            "Query specific record types: `dig example.com A`, `MX`, `TXT`, `NS`",
+            "Query a specific server (`dig @1.1.1.1`) to compare resolver answers",
+            "Trace the full delegation chain with `dig +trace`",
+            "Read the answer sections, TTLs, and flags (AA, RD, RA) in dig output"
+          ],
+          "resources": [
+            { "label": "BIND 9 — Official documentation", "url": "https://bind9.readthedocs.io/" },
+            { "label": "Cloudflare Learning — What is DNS?", "url": "https://www.cloudflare.com/learning/dns/what-is-dns/" },
+            { "label": "Wizard Zines — Julia Evans", "url": "https://wizardzines.com/" }
+          ],
+          "prerequisites": ["dns-record-types", "dns-caching-and-security"],
+          "criteria": [
+            "You can query any record type against any resolver from memory",
+            "You used +trace to walk a delegation and explained each step",
+            "You diagnosed a stale-cache vs wrong-record situation by comparing resolvers"
+          ]
+        },
+        {
+          "id": "network-diagnostics",
+          "title": "ping, traceroute, ss & netcat",
+          "description": "The core connectivity toolkit: ping for reachability, traceroute for path discovery, ss for socket state, and netcat for raw TCP/UDP conversations.",
+          "why": "These four tools answer the first questions of any incident: is the host up, where does the path break, is the port listening, can I actually connect? They work everywhere, with no installation drama.",
+          "learn": [
+            "Use ping to test reachability and interpret latency and packet loss",
+            "Run traceroute and explain how TTL expiry reveals each hop",
+            "List listening ports and connection states with `ss -tulpn` and `ss -t state established`",
+            "Use netcat to test open ports, chat over raw TCP, and mock a quick server"
+          ],
+          "resources": [
+            { "label": "man7 — ss(8)", "url": "https://man7.org/linux/man-pages/man8/ss.8.html" },
+            { "label": "man7 — ping(8)", "url": "https://man7.org/linux/man-pages/man8/ping.8.html" },
+            { "label": "Linux Journey", "url": "https://linuxjourney.com/" }
+          ],
+          "prerequisites": ["routing-basics", "ports-and-sockets"],
+          "criteria": [
+            "You can explain how traceroute uses the TTL field",
+            "You verified whether a service was listening and reachable using ss and netcat",
+            "You can pick the right first tool for 'I can't reach host X' and justify it"
+          ]
+        },
+        {
+          "id": "wireshark-packet-analysis",
+          "title": "Wireshark & Packet Analysis",
+          "description": "Capturing and dissecting live traffic with Wireshark and tcpdump: filters, following streams, and reading protocol layers directly off the wire.",
+          "why": "Packet captures are ground truth — logs can lie, but the wire cannot. Being able to capture and filter traffic makes you the person who resolves the mystery bugs everyone else is guessing at.",
+          "learn": [
+            "Capture traffic on an interface and apply capture vs display filters",
+            "Filter by host, port, and protocol (e.g. `tcp.port == 443`, `dns`)",
+            "Follow a TCP stream and identify the handshake, data, and teardown you studied",
+            "Capture on a server with tcpdump and analyze the pcap in Wireshark locally"
+          ],
+          "resources": [
+            { "label": "Wireshark — Official documentation", "url": "https://www.wireshark.org/docs/" },
+            { "label": "tcpdump & libpcap — Official site", "url": "https://www.tcpdump.org/" }
+          ],
+          "prerequisites": ["tcp-deep-dive", "packets-encapsulation"],
+          "criteria": [
+            "You captured a full TCP handshake and labeled every packet",
+            "You can write display filters for a given host, port, and protocol",
+            "You moved a tcpdump capture from a remote box into Wireshark and answered a question with it"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Sockets Programming",
+      "description": "Turn theory into code: build real network programs on the sockets API, from echo servers to a working HTTP server.",
+      "topics": [
+        {
+          "id": "socket-api-fundamentals",
+          "title": "The Sockets API",
+          "description": "The classic Berkeley sockets interface: socket, bind, listen, accept, connect, send/recv — the API every language wraps.",
+          "why": "Every HTTP library, database driver, and RPC framework bottoms out in these calls. Knowing the raw API demystifies connection errors, lets you read systems code, and makes any language's networking layer feel familiar.",
+          "learn": [
+            "Learn the lifecycle calls: socket, bind, listen, accept (server) and connect (client)",
+            "Understand address structures and what SO_REUSEADDR fixes",
+            "Grasp that TCP is a byte stream: send/recv boundaries do not equal message boundaries",
+            "Map the C API onto your favorite language's socket module"
+          ],
+          "resources": [
+            { "label": "Beej's Guide to Network Programming", "url": "https://beej.us/guide/bgnet/" },
+            { "label": "man7 — socket(2)", "url": "https://man7.org/linux/man-pages/man2/socket.2.html" },
+            { "label": "Python — Socket Programming HOWTO", "url": "https://docs.python.org/3/howto/sockets.html" }
+          ],
+          "prerequisites": ["ports-and-sockets", "tcp-deep-dive"],
+          "criteria": [
+            "You can list the server-side socket lifecycle calls in order and explain each",
+            "You can explain why recv may return partial messages and how to handle it",
+            "You can explain what 'address already in use' means and two ways to resolve it"
+          ]
+        },
+        {
+          "id": "tcp-client-server",
+          "title": "Build a TCP Client & Server",
+          "description": "Write a working echo server and client from scratch: accept connections, exchange data, frame messages, and shut down cleanly.",
+          "why": "This is the 'hello world' of network programming — and the moment handshakes, ports, and byte streams stop being trivia and become muscle memory. Everything from chat apps to databases starts here.",
+          "learn": [
+            "Write a TCP echo server that accepts a connection and returns what it receives",
+            "Write the matching client, then test both with netcat as counterpart",
+            "Implement a simple message-framing scheme (length prefix or delimiter)",
+            "Handle disconnects and errors gracefully; watch your traffic in Wireshark"
+          ],
+          "resources": [
+            { "label": "Beej's Guide to Network Programming", "url": "https://beej.us/guide/bgnet/" },
+            { "label": "Python — socket module", "url": "https://docs.python.org/3/library/socket.html" },
+            { "label": "Node.js — net module", "url": "https://nodejs.org/api/net.html" }
+          ],
+          "prerequisites": ["socket-api-fundamentals"],
+          "criteria": [
+            "You built a working echo server and client that talk to each other",
+            "Your server interoperates with netcat as a client",
+            "You implemented message framing and can explain why it is necessary"
+          ]
+        },
+        {
+          "id": "udp-sockets",
+          "title": "UDP Sockets",
+          "description": "Datagram programming with sendto/recvfrom: connectionless messaging, handling loss, and building a tiny reliability layer of your own.",
+          "why": "UDP programming teaches you what TCP quietly does for you — and it is the required foundation for real-time apps, custom protocols, and understanding QUIC. Building mini-reliability yourself is the best TCP lesson there is.",
+          "learn": [
+            "Write a UDP echo server and client using sendto/recvfrom",
+            "Observe datagram boundaries: one send equals one receive, unlike TCP",
+            "Simulate packet loss and add sequence numbers plus retry-on-timeout",
+            "Compare your code's behavior to the TCP version under an unreliable network"
+          ],
+          "resources": [
+            { "label": "Beej's Guide to Network Programming", "url": "https://beej.us/guide/bgnet/" },
+            { "label": "man7 — udp(7)", "url": "https://man7.org/linux/man-pages/man7/udp.7.html" },
+            { "label": "Node.js — dgram module", "url": "https://nodejs.org/api/dgram.html" }
+          ],
+          "prerequisites": ["socket-api-fundamentals", "udp-essentials"],
+          "criteria": [
+            "You built a working UDP client/server pair",
+            "You added sequence numbers and retransmission to survive simulated loss",
+            "You can articulate two behavioral differences you observed between TCP and UDP sockets"
+          ]
+        },
+        {
+          "id": "build-http-server",
+          "title": "Build an HTTP Server from Scratch",
+          "description": "Implement a minimal HTTP/1.1 server on raw TCP sockets: parse requests, serve files, and return correct status codes — no frameworks allowed.",
+          "why": "Nothing cements HTTP and sockets knowledge like implementing the protocol yourself. Afterward, every framework, reverse proxy, and load balancer behavior makes sense, because you have been on the other side of the request line.",
+          "learn": [
+            "Parse the request line and headers from a raw TCP stream",
+            "Serve static files with correct Content-Type and Content-Length headers",
+            "Return proper status codes: 200, 404, 405, 500",
+            "Test your server with curl and a real browser, then add keep-alive support"
+          ],
+          "resources": [
+            { "label": "IETF — RFC 9112: HTTP/1.1", "url": "https://datatracker.ietf.org/doc/html/rfc9112" },
+            { "label": "MDN — HTTP messages", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages" },
+            { "label": "Beej's Guide to Network Programming", "url": "https://beej.us/guide/bgnet/" }
+          ],
+          "prerequisites": ["tcp-client-server", "http-fundamentals"],
+          "criteria": [
+            "A real browser can load a static page from your server",
+            "Your server returns correct status codes and headers verified with curl -v",
+            "You can explain how your parser finds the end of headers and reads the body"
+          ]
+        },
+        {
+          "id": "concurrent-servers",
+          "title": "Concurrency & Non-Blocking I/O",
+          "description": "Handling many connections at once: threads vs event loops, blocking vs non-blocking sockets, and readiness APIs like select and epoll.",
+          "why": "One-connection-at-a-time servers fall over immediately in the real world. The C10K ideas here are the foundation of nginx, Node.js, and every async runtime — understanding them lets you choose and tune server architectures deliberately.",
+          "learn": [
+            "Make your echo or HTTP server handle multiple clients with threads",
+            "Rebuild it with an event loop using select/epoll or your language's async framework",
+            "Understand blocking vs non-blocking sockets and what 'readiness' means",
+            "Benchmark both versions under concurrent load and compare resource usage"
+          ],
+          "resources": [
+            { "label": "man7 — epoll(7)", "url": "https://man7.org/linux/man-pages/man7/epoll.7.html" },
+            { "label": "man7 — select(2)", "url": "https://man7.org/linux/man-pages/man2/select.2.html" },
+            { "label": "Python — asyncio", "url": "https://docs.python.org/3/library/asyncio.html" }
+          ],
+          "prerequisites": ["tcp-client-server", "build-http-server"],
+          "criteria": [
+            "Your server handles at least 100 simultaneous clients without dropping connections",
+            "You built both a threaded and an event-loop version and can compare their trade-offs",
+            "You can explain the difference between blocking, non-blocking, and async I/O"
+          ]
+        }
+      ]
+    }
+  ]
+}

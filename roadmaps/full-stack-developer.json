@@ -1,0 +1,713 @@
+{
+  "slug": "full-stack-developer",
+  "title": "Full Stack Developer",
+  "source": "roadmap.sh",
+  "url": "https://roadmap.sh/full-stack",
+  "description": "An end-to-end path from web fundamentals through frontend, backend, databases, auth, and deployment to a shipped capstone project.",
+  "sections": [
+    {
+      "title": "Web Foundations",
+      "description": "Understand how the web works and get fluent in the core building blocks: HTML, CSS, JavaScript, and version control.",
+      "topics": [
+        {
+          "id": "how-the-web-works",
+          "title": "How the Web Works",
+          "description": "The request/response cycle: browsers, DNS, HTTP, servers, and what actually happens when you type a URL and hit enter.",
+          "why": "Every full stack decision — routing, caching, cookies, CORS, deployment — sits on top of this model. Developers who can trace a request end to end debug faster and design better systems.",
+          "learn": [
+            "Trace what happens when you visit a URL: DNS lookup, TCP/TLS connection, HTTP request, HTML response, rendering",
+            "Learn the anatomy of an HTTP request and response: methods, status codes, headers, body",
+            "Understand the difference between a client, a web server, and an API server",
+            "Open your browser DevTools Network tab and inspect real requests on a site you use daily"
+          ],
+          "resources": [
+            { "label": "MDN — An overview of HTTP", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" },
+            { "label": "Cloudflare Learning — What is DNS?", "url": "https://www.cloudflare.com/learning/dns/what-is-dns/" },
+            { "label": "roadmap.sh — Full Stack roadmap", "url": "https://roadmap.sh/full-stack" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can explain what happens between typing a URL and seeing a page, step by step",
+            "You can name five common HTTP status codes and when each is returned",
+            "You used the Network tab to inspect a request's method, headers, and response"
+          ]
+        },
+        {
+          "id": "html-fundamentals",
+          "title": "HTML Fundamentals",
+          "description": "The markup language that structures every web page: elements, semantics, forms, and document structure.",
+          "why": "Semantic HTML is the skeleton of accessibility, SEO, and maintainable frontends. Forms in particular are the workhorse of every real application — sign-ups, checkouts, settings pages all start here.",
+          "learn": [
+            "Build a page with proper document structure: doctype, head, body, headings, paragraphs, lists, links, images",
+            "Use semantic elements (header, nav, main, article, section, footer) instead of generic divs",
+            "Build a form with labels, inputs, validation attributes, and a submit button",
+            "Run your page through an HTML validator and fix every warning"
+          ],
+          "resources": [
+            { "label": "MDN — HTML reference and guides", "url": "https://developer.mozilla.org/en-US/docs/Web/HTML" },
+            { "label": "web.dev — Learn HTML", "url": "https://web.dev/learn/html" },
+            { "label": "freeCodeCamp — Interactive curriculum", "url": "https://www.freecodecamp.org/learn" }
+          ],
+          "prerequisites": ["how-the-web-works"],
+          "criteria": [
+            "You built a multi-section page using semantic elements with no layout divs where semantics fit",
+            "You built a working form with client-side validation attributes",
+            "You can explain why semantic HTML matters for accessibility"
+          ]
+        },
+        {
+          "id": "css-fundamentals",
+          "title": "CSS Fundamentals",
+          "description": "Styling the web: selectors, the cascade, specificity, the box model, colors, and typography.",
+          "why": "CSS is where most beginners get stuck guessing. Understanding the box model and the cascade turns styling from trial-and-error into a predictable system, and it is the foundation for every layout technique that follows.",
+          "learn": [
+            "Master the box model: content, padding, border, margin — and inspect it in DevTools",
+            "Learn selectors and specificity: element, class, attribute, pseudo-class, and how conflicts resolve",
+            "Style text and color deliberately: font stacks, sizes in rem, line-height, contrast",
+            "Rebuild the styling of a simple site you like, from scratch, without copying its CSS"
+          ],
+          "resources": [
+            { "label": "MDN — CSS reference and guides", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+            { "label": "web.dev — Learn CSS", "url": "https://web.dev/learn/css" }
+          ],
+          "prerequisites": ["html-fundamentals"],
+          "criteria": [
+            "You can predict which of two conflicting rules wins and explain why",
+            "You can explain the box model and debug spacing issues with DevTools",
+            "You restyled an existing HTML page from scratch to match a reference design"
+          ]
+        },
+        {
+          "id": "javascript-fundamentals",
+          "title": "JavaScript Fundamentals",
+          "description": "The programming language of the web: variables, functions, objects, arrays, control flow, and asynchronous basics.",
+          "why": "JavaScript runs your frontend and (via Node.js) your backend, so investing here pays off twice. Solid fundamentals — especially functions, arrays, and async — are what separate copy-paste coding from real problem solving.",
+          "learn": [
+            "Learn core syntax: let/const, data types, conditionals, loops, and functions (including arrow functions)",
+            "Work with objects and arrays fluently: destructuring, spread, map, filter, reduce",
+            "Understand asynchronous code: callbacks, promises, async/await, and fetch",
+            "Solve 20+ small practice problems using only the language, no libraries"
+          ],
+          "resources": [
+            { "label": "MDN — JavaScript guide and reference", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+            { "label": "javascript.info — The Modern JavaScript Tutorial", "url": "https://javascript.info" },
+            { "label": "Eloquent JavaScript — Free book", "url": "https://eloquentjavascript.net" }
+          ],
+          "prerequisites": ["html-fundamentals"],
+          "criteria": [
+            "You can transform data with map/filter/reduce without looking up syntax",
+            "You can fetch JSON from a public API with async/await and handle errors",
+            "You solved a set of practice problems using plain JavaScript"
+          ]
+        },
+        {
+          "id": "git-and-github",
+          "title": "Git & GitHub",
+          "description": "Version control for tracking changes, branching, and collaborating on code, plus GitHub for hosting and pull requests.",
+          "why": "Git is non-negotiable in professional development — every team, every project. It also unlocks fearless experimentation: you can try anything knowing you can always get back to a working state.",
+          "learn": [
+            "Learn the core loop: init, status, add, commit, log, diff",
+            "Create branches, merge them, and resolve a merge conflict on purpose",
+            "Push a repository to GitHub, clone it elsewhere, and open a pull request against your own repo",
+            "Write clear commit messages and keep commits small and focused"
+          ],
+          "resources": [
+            { "label": "Pro Git — The official Git book", "url": "https://git-scm.com/book/en/v2" },
+            { "label": "GitHub Docs — Get started", "url": "https://docs.github.com/en/get-started" },
+            { "label": "MIT — The Missing Semester (version control)", "url": "https://missing.csail.mit.edu" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can explain the difference between working directory, staging area, and commit history",
+            "You resolved a merge conflict without panic or deleting the repo",
+            "All your practice projects live on GitHub with meaningful commit history"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Frontend Development",
+      "description": "Turn static pages into interactive, responsive applications with the DOM, modern layout, tooling, and React.",
+      "topics": [
+        {
+          "id": "dom-and-events",
+          "title": "The DOM & Events",
+          "description": "The browser's live object model of your page, and the event system that lets JavaScript respond to user actions.",
+          "why": "Every frontend framework is ultimately manipulating the DOM for you. Knowing how to do it by hand demystifies React, makes you dangerous in DevTools, and lets you debug what frameworks hide.",
+          "learn": [
+            "Select and modify elements: querySelector, textContent, classList, creating and removing nodes",
+            "Handle events: click, input, submit — and use preventDefault on forms",
+            "Understand event bubbling and use event delegation on a list",
+            "Build a small app (todo list or quiz) with vanilla JavaScript only"
+          ],
+          "resources": [
+            { "label": "MDN — Document Object Model", "url": "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model" },
+            { "label": "javascript.info — Document, events, interfaces", "url": "https://javascript.info" }
+          ],
+          "prerequisites": ["javascript-fundamentals"],
+          "criteria": [
+            "You built an interactive app with vanilla JS: rendering, events, and state in plain objects",
+            "You can explain event bubbling and when to use delegation",
+            "You can intercept a form submit and validate input before sending"
+          ]
+        },
+        {
+          "id": "responsive-layouts",
+          "title": "Responsive Layouts",
+          "description": "Building layouts that adapt to any screen size using Flexbox, CSS Grid, and media queries.",
+          "why": "More than half of web traffic is mobile, and employers expect responsive work by default. Flexbox and Grid replace the fragile hacks of the past with layout systems that are actually pleasant to use.",
+          "learn": [
+            "Build one-dimensional layouts (navbars, card rows, centering) with Flexbox",
+            "Build two-dimensional page layouts with CSS Grid and named areas",
+            "Apply mobile-first media queries and fluid units (%, rem, min/max, clamp)",
+            "Rebuild a real site's homepage so it works from 320px to 1440px wide"
+          ],
+          "resources": [
+            { "label": "web.dev — Learn Responsive Design", "url": "https://web.dev/learn/design" },
+            { "label": "CSS-Tricks — A Complete Guide to Flexbox", "url": "https://css-tricks.com/snippets/css/a-guide-to-flexbox/" },
+            { "label": "MDN — CSS layout guides", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" }
+          ],
+          "prerequisites": ["css-fundamentals"],
+          "criteria": [
+            "You can choose between Flexbox and Grid for a given layout and justify it",
+            "You built a page that looks intentional at mobile, tablet, and desktop widths",
+            "You can center anything, horizontally and vertically, on demand"
+          ]
+        },
+        {
+          "id": "npm-and-build-tools",
+          "title": "npm & Build Tooling",
+          "description": "Managing dependencies with npm and understanding modern build tools, modules, and dev servers like Vite.",
+          "why": "Real projects are assembled from packages and compiled by build tools. Understanding package.json, node_modules, and ES modules means tooling errors become readable instead of terrifying.",
+          "learn": [
+            "Initialize a project with npm, install dependencies, and understand package.json and lockfiles",
+            "Use ES modules: import/export between your own files",
+            "Scaffold a project with Vite and understand dev server vs production build",
+            "Add npm scripts for dev, build, and any repeatable task"
+          ],
+          "resources": [
+            { "label": "npm Docs — Official documentation", "url": "https://docs.npmjs.com" },
+            { "label": "Vite — Guide", "url": "https://vitejs.dev/guide/" },
+            { "label": "Node.js — Learn", "url": "https://nodejs.org/en/learn" }
+          ],
+          "prerequisites": ["javascript-fundamentals"],
+          "criteria": [
+            "You can explain what package.json, package-lock.json, and node_modules each do",
+            "You scaffolded, ran, and built a Vite project",
+            "You can explain the difference between dependencies and devDependencies"
+          ]
+        },
+        {
+          "id": "react-fundamentals",
+          "title": "React Fundamentals",
+          "description": "The most widely used UI library: components, props, state, hooks, and rendering lists and forms declaratively.",
+          "why": "React dominates frontend job postings and its component model shapes how the entire industry thinks about UI. Once state and props click, you can build complex interfaces that stay maintainable as they grow.",
+          "learn": [
+            "Build function components and compose them with props and children",
+            "Manage state with useState and side effects with useEffect",
+            "Render lists with keys, handle forms as controlled inputs, and lift state up",
+            "Fetch data from an API and render loading, error, and success states",
+            "Build a small multi-component app (e.g. a searchable movie or recipe browser)"
+          ],
+          "resources": [
+            { "label": "react.dev — Learn React (official tutorial)", "url": "https://react.dev/learn" },
+            { "label": "roadmap.sh — React roadmap", "url": "https://roadmap.sh/react" }
+          ],
+          "prerequisites": ["dom-and-events", "npm-and-build-tools"],
+          "criteria": [
+            "You can explain when a component re-renders and where state should live",
+            "You built a React app that fetches, filters, and displays API data",
+            "You can explain props vs state to someone new in under two minutes"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Backend Development",
+      "description": "Move to the server side: the command line, Node.js, web servers, and automated testing.",
+      "topics": [
+        {
+          "id": "linux-and-cli",
+          "title": "Linux & the Command Line",
+          "description": "Navigating and controlling a Unix-like system from the terminal: files, permissions, processes, pipes, and SSH.",
+          "why": "Servers run Linux, and deployment, debugging, and tooling all assume shell fluency. The command line is also a massive productivity multiplier on your own machine.",
+          "learn": [
+            "Navigate and manipulate files: cd, ls, cp, mv, rm, mkdir, cat, less, find",
+            "Chain commands with pipes and redirection; search with grep",
+            "Understand permissions (chmod, chown) and processes (ps, kill, top)",
+            "SSH into a remote machine or VM and get comfortable working there"
+          ],
+          "resources": [
+            { "label": "Linux Journey — Guided lessons", "url": "https://linuxjourney.com" },
+            { "label": "MIT — The Missing Semester of Your CS Education", "url": "https://missing.csail.mit.edu" },
+            { "label": "OverTheWire — Bandit wargame", "url": "https://overthewire.org/wargames/bandit/" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You can navigate, search, and edit files on a server without a GUI",
+            "You completed at least ten levels of OverTheWire Bandit",
+            "You can explain what a pipe does and combine three commands with one"
+          ]
+        },
+        {
+          "id": "nodejs-fundamentals",
+          "title": "Node.js Fundamentals",
+          "description": "JavaScript on the server: the Node runtime, its module system, the event loop, and core APIs like fs and http.",
+          "why": "Node lets you use one language across the whole stack, and it powers a huge share of modern backends and tooling. Understanding its async, event-driven model is key to writing servers that stay fast under load.",
+          "learn": [
+            "Run scripts with Node and read/write files with the fs module",
+            "Understand the event loop and why Node handles many connections with one thread",
+            "Create a bare HTTP server with the built-in http module before touching any framework",
+            "Use environment variables for configuration instead of hardcoding values"
+          ],
+          "resources": [
+            { "label": "Node.js — Official learning path", "url": "https://nodejs.org/en/learn" },
+            { "label": "Node.js — API documentation", "url": "https://nodejs.org/docs" },
+            { "label": "roadmap.sh — Node.js roadmap", "url": "https://roadmap.sh/nodejs" }
+          ],
+          "prerequisites": ["javascript-fundamentals", "npm-and-build-tools"],
+          "criteria": [
+            "You built an HTTP server with only Node built-ins that serves JSON",
+            "You can explain the event loop and what 'blocking the loop' means",
+            "You configure your apps via environment variables"
+          ]
+        },
+        {
+          "id": "building-web-servers",
+          "title": "Building Web Servers with Express",
+          "description": "Using a minimal framework to structure a backend: routing, middleware, request parsing, and error handling.",
+          "why": "Express (and frameworks like it) is the standard vocabulary of Node backends — routes, middleware, handlers. Learning it well means every other backend framework, in any language, will feel familiar.",
+          "learn": [
+            "Set up an Express app with routes for GET, POST, PUT, and DELETE",
+            "Parse JSON bodies, route params, and query strings",
+            "Write middleware for logging and centralized error handling",
+            "Validate incoming data and return proper status codes for bad input",
+            "Serve your frontend build and API from the same server"
+          ],
+          "resources": [
+            { "label": "Express — Official docs", "url": "https://expressjs.com" },
+            { "label": "Node.js — Learn", "url": "https://nodejs.org/en/learn" }
+          ],
+          "prerequisites": ["nodejs-fundamentals"],
+          "criteria": [
+            "You built a CRUD API with Express using correct methods and status codes",
+            "You can explain what middleware is and trace a request through your stack",
+            "Your server validates input and never crashes on malformed requests"
+          ]
+        },
+        {
+          "id": "automated-testing",
+          "title": "Automated Testing",
+          "description": "Writing unit and integration tests so code changes can be verified in seconds instead of by manual clicking.",
+          "why": "Tests are what let you refactor and ship without fear, and they are expected in any professional codebase. For a solo developer they are the difference between a project you can grow and one you become afraid to touch.",
+          "learn": [
+            "Write unit tests for pure functions with a test runner (node:test, Jest, or Vitest)",
+            "Write integration tests that hit your API endpoints and assert on responses",
+            "Practice the arrange-act-assert pattern and test edge cases, not just happy paths",
+            "Run the whole suite with a single npm script"
+          ],
+          "resources": [
+            { "label": "Node.js — Built-in test runner", "url": "https://nodejs.org/api/test.html" },
+            { "label": "Jest — Official docs", "url": "https://jestjs.io" },
+            { "label": "Vitest — Official docs", "url": "https://vitest.dev" }
+          ],
+          "prerequisites": ["building-web-servers"],
+          "criteria": [
+            "Your API project has unit and integration tests that run with one command",
+            "You can explain the difference between unit, integration, and end-to-end tests",
+            "A test in your suite catches a bug you intentionally introduce"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Databases",
+      "description": "Store and query data reliably: SQL, PostgreSQL, schema design, ORMs, and caching.",
+      "topics": [
+        {
+          "id": "sql-fundamentals",
+          "title": "SQL Fundamentals",
+          "description": "The universal language for querying relational data: SELECT, filtering, joins, aggregation, and mutations.",
+          "why": "SQL has outlived every framework trend for fifty years and shows up in nearly every backend job. Joins and aggregations let you answer real questions about data instead of dragging everything into application code.",
+          "learn": [
+            "Write SELECT queries with WHERE, ORDER BY, and LIMIT",
+            "Combine tables with INNER and LEFT JOINs until they feel natural",
+            "Aggregate with GROUP BY, COUNT, SUM, AVG, and HAVING",
+            "Modify data with INSERT, UPDATE, and DELETE — carefully"
+          ],
+          "resources": [
+            { "label": "SQLBolt — Interactive SQL lessons", "url": "https://sqlbolt.com" },
+            { "label": "PostgreSQL — Official tutorial", "url": "https://www.postgresql.org/docs/current/tutorial.html" }
+          ],
+          "prerequisites": [],
+          "criteria": [
+            "You completed all SQLBolt lessons",
+            "You can write a three-table join with aggregation without a reference",
+            "You can explain the difference between INNER and LEFT JOIN with an example"
+          ]
+        },
+        {
+          "id": "postgresql-in-practice",
+          "title": "PostgreSQL in Practice",
+          "description": "Running and using the most loved open-source relational database: psql, tables, constraints, indexes, and transactions.",
+          "why": "PostgreSQL is the default database choice for modern web apps and the one roadmap.sh recommends. Constraints and transactions push data integrity into the database, where bugs in your app code cannot corrupt it.",
+          "learn": [
+            "Install PostgreSQL locally (or via Docker) and get comfortable in psql",
+            "Create tables with types, primary keys, foreign keys, NOT NULL, and UNIQUE constraints",
+            "Use transactions (BEGIN/COMMIT/ROLLBACK) and understand why they matter",
+            "Add an index and use EXPLAIN to see it change a query plan"
+          ],
+          "resources": [
+            { "label": "PostgreSQL — Official documentation", "url": "https://www.postgresql.org/docs/" },
+            { "label": "roadmap.sh — PostgreSQL roadmap", "url": "https://roadmap.sh/postgresql-dba" }
+          ],
+          "prerequisites": ["sql-fundamentals"],
+          "criteria": [
+            "You have a local Postgres instance with a schema you designed",
+            "You can explain what a foreign key constraint protects you from",
+            "You used EXPLAIN to show an index speeding up a query"
+          ]
+        },
+        {
+          "id": "data-modeling",
+          "title": "Data Modeling & Schema Design",
+          "description": "Translating application requirements into tables and relationships: normalization, one-to-many, and many-to-many.",
+          "why": "A good schema makes features easy and a bad one makes everything painful — schema mistakes are the most expensive ones to fix later. This is the skill that turns 'I know SQL' into 'I can design a backend'.",
+          "learn": [
+            "Model one-to-many relationships with foreign keys (users and posts)",
+            "Model many-to-many relationships with join tables (posts and tags)",
+            "Apply basic normalization: eliminate duplicated facts, one source of truth per fact",
+            "Design the full schema for a familiar app (e.g. a link aggregator) on paper before writing SQL"
+          ],
+          "resources": [
+            { "label": "PostgreSQL — Data definition docs", "url": "https://www.postgresql.org/docs/current/ddl.html" },
+            { "label": "SQLBolt — Lessons and exercises", "url": "https://sqlbolt.com" }
+          ],
+          "prerequisites": ["postgresql-in-practice"],
+          "criteria": [
+            "You designed and implemented a schema with one-to-many and many-to-many relationships",
+            "You can spot denormalized, duplicated data in a schema and propose a fix",
+            "You can draw your schema's entity-relationship diagram from memory"
+          ]
+        },
+        {
+          "id": "orms-and-migrations",
+          "title": "ORMs & Migrations",
+          "description": "Connecting your app to the database with an ORM or query builder, and evolving the schema safely with migration files.",
+          "why": "Production schemas change constantly, and migrations are how teams change them without losing data or breaking each other's environments. An ORM speeds up the common 90% of queries while you keep raw SQL for the hard 10%.",
+          "learn": [
+            "Connect your Express app to Postgres with an ORM or query builder (e.g. Prisma)",
+            "Define models and generate/run your first migration",
+            "Perform CRUD through the ORM, including relations",
+            "Make a schema change via a new migration rather than editing the database by hand",
+            "Know when to drop to raw SQL and how your tool lets you"
+          ],
+          "resources": [
+            { "label": "Prisma — Official documentation", "url": "https://www.prisma.io/docs" },
+            { "label": "PostgreSQL — Official documentation", "url": "https://www.postgresql.org/docs/" }
+          ],
+          "prerequisites": ["data-modeling", "building-web-servers"],
+          "criteria": [
+            "Your API persists data in Postgres through an ORM",
+            "Your schema history is a sequence of committed migration files",
+            "You can explain what a migration is and why editing production tables by hand is dangerous"
+          ]
+        },
+        {
+          "id": "caching-with-redis",
+          "title": "Caching with Redis",
+          "description": "An in-memory key-value store used for caching hot data, sessions, and rate limiting.",
+          "why": "Caching is the single highest-leverage performance tool in web development, and Redis is its standard implementation. It also introduces the hard, interview-favorite problem of cache invalidation.",
+          "learn": [
+            "Run Redis locally and learn core commands: GET, SET, EXPIRE, DEL, TTL",
+            "Add a cache-aside layer in front of an expensive database query",
+            "Set sensible TTLs and invalidate the cache when underlying data changes",
+            "Understand what belongs in a cache versus the database of record"
+          ],
+          "resources": [
+            { "label": "Redis — Official site and docs", "url": "https://redis.io" },
+            { "label": "Cloudflare Learning — What is caching?", "url": "https://www.cloudflare.com/learning/cdn/what-is-caching/" }
+          ],
+          "prerequisites": ["orms-and-migrations"],
+          "criteria": [
+            "You cached an endpoint's results in Redis and measured the speedup",
+            "You can explain cache-aside, TTLs, and one invalidation strategy",
+            "You can name two things that should never be served from a stale cache"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "APIs & Authentication",
+      "description": "Design clean REST APIs, add real authentication and authorization, and defend against common web attacks.",
+      "topics": [
+        {
+          "id": "rest-api-design",
+          "title": "REST API Design",
+          "description": "Designing HTTP APIs with consistent resources, methods, status codes, versioning, and pagination.",
+          "why": "Your API is the contract between frontend and backend — and often between you and other teams. Consistent, predictable design makes clients simple and spares everyone hours of 'why does this endpoint behave differently' debugging.",
+          "learn": [
+            "Model your endpoints as resources with plural nouns and nested routes where they earn it",
+            "Map CRUD to methods and status codes precisely (200/201/204/400/401/403/404/409/500)",
+            "Design consistent error response bodies and paginate list endpoints",
+            "Handle CORS deliberately for a separate frontend origin",
+            "Write the API spec for your project before implementing it"
+          ],
+          "resources": [
+            { "label": "MDN — HTTP documentation", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" },
+            { "label": "roadmap.sh — API Design roadmap", "url": "https://roadmap.sh/api-design" }
+          ],
+          "prerequisites": ["building-web-servers"],
+          "criteria": [
+            "You designed and built an API where methods, paths, and status codes follow one consistent scheme",
+            "You can explain CORS and fix a CORS error without cargo-culting headers",
+            "Your list endpoints support pagination"
+          ]
+        },
+        {
+          "id": "authentication",
+          "title": "Authentication: Sessions & JWT",
+          "description": "Verifying who a user is: password hashing, session cookies, and token-based auth with JWTs.",
+          "why": "Almost every real application has users, and auth mistakes are catastrophic — leaked passwords, hijacked accounts. Understanding sessions versus tokens lets you pick the right model instead of copying whichever tutorial you found first.",
+          "learn": [
+            "Hash passwords with bcrypt or argon2 — never store or log plaintext",
+            "Implement session-based auth with an HTTP-only, secure cookie",
+            "Implement JWT-based auth: signing, verifying, expiry, and refresh",
+            "Compare the two models and know when each fits",
+            "Protect routes with auth middleware that rejects unauthenticated requests"
+          ],
+          "resources": [
+            { "label": "jwt.io — JWT introduction and debugger", "url": "https://jwt.io" },
+            { "label": "MDN — Using HTTP cookies", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies" },
+            { "label": "OWASP — Cheat Sheet Series", "url": "https://cheatsheetseries.owasp.org" }
+          ],
+          "prerequisites": ["rest-api-design", "postgresql-in-practice"],
+          "criteria": [
+            "You built signup/login/logout with hashed passwords end to end",
+            "You can explain the tradeoffs between session cookies and JWTs",
+            "Your protected endpoints return 401 for missing or invalid credentials"
+          ]
+        },
+        {
+          "id": "authorization-and-security",
+          "title": "Authorization & Web Security",
+          "description": "Controlling what authenticated users may do, and defending against the OWASP Top 10: injection, XSS, CSRF, and friends.",
+          "why": "Authentication says who you are; authorization says what you can touch — confusing them is how users read each other's data. Basic attack literacy is a professional obligation for anyone deploying software to the public internet.",
+          "learn": [
+            "Add ownership and role checks so users can only modify their own resources",
+            "Read the OWASP Top 10 and identify which risks apply to your stack",
+            "Prevent SQL injection with parameterized queries and XSS with output encoding",
+            "Understand CSRF and when cookie-based auth requires protection against it",
+            "Complete a handful of PortSwigger Web Security Academy labs"
+          ],
+          "resources": [
+            { "label": "OWASP — Top 10", "url": "https://owasp.org/www-project-top-ten/" },
+            { "label": "PortSwigger — Web Security Academy", "url": "https://portswigger.net/web-security" }
+          ],
+          "prerequisites": ["authentication"],
+          "criteria": [
+            "Your API enforces per-user ownership: user A cannot read or edit user B's data",
+            "You can explain SQL injection, XSS, and CSRF with a concrete example of each",
+            "You completed at least three Web Security Academy labs"
+          ]
+        },
+        {
+          "id": "api-docs-and-testing",
+          "title": "API Documentation & Testing Tools",
+          "description": "Describing your API with OpenAPI and exercising it with tools like Postman or curl.",
+          "why": "An undocumented API is unusable by anyone but its author — including future you. A spec plus a request collection makes your backend testable, shareable, and dramatically more professional in a portfolio.",
+          "learn": [
+            "Exercise every endpoint with curl or Postman, including failure cases",
+            "Write an OpenAPI description of your API's routes, schemas, and responses",
+            "Keep a shareable request collection alongside the repo",
+            "Document auth flows so a stranger could call your API in five minutes"
+          ],
+          "resources": [
+            { "label": "Swagger — OpenAPI Specification", "url": "https://swagger.io/specification/" },
+            { "label": "Postman — Learning Center", "url": "https://learning.postman.com" }
+          ],
+          "prerequisites": ["rest-api-design"],
+          "criteria": [
+            "Your API has an OpenAPI spec that matches its actual behavior",
+            "A newcomer can authenticate and hit your endpoints using only your docs",
+            "You can debug any endpoint from the command line with curl"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Deployment & Operations",
+      "description": "Ship it: containers, CI/CD pipelines, cloud hosting, and knowing your app is healthy in production.",
+      "topics": [
+        {
+          "id": "docker-fundamentals",
+          "title": "Docker Fundamentals",
+          "description": "Packaging applications and their dependencies into portable containers with images, Dockerfiles, and Compose.",
+          "why": "Containers end 'works on my machine' and are the unit of deployment for most modern infrastructure. Docker Compose also gives you a one-command local stack — app, Postgres, and Redis together.",
+          "learn": [
+            "Understand images vs containers; run and inspect containers from public images",
+            "Write a Dockerfile for your Node app and build a working image",
+            "Run your full stack (app + Postgres + Redis) with Docker Compose",
+            "Use volumes for persistent data and env vars for configuration"
+          ],
+          "resources": [
+            { "label": "Docker — Get started guide", "url": "https://docs.docker.com/get-started/" },
+            { "label": "roadmap.sh — Docker roadmap", "url": "https://roadmap.sh/docker" }
+          ],
+          "prerequisites": ["linux-and-cli"],
+          "criteria": [
+            "Your app runs in a container built from your own Dockerfile",
+            "docker compose up brings up your entire stack from scratch",
+            "You can explain the difference between an image and a container"
+          ]
+        },
+        {
+          "id": "ci-cd-pipelines",
+          "title": "CI/CD Pipelines",
+          "description": "Automating tests and deployments so every push is verified and shipping is a non-event, using GitHub Actions.",
+          "why": "CI catches breakage minutes after it is written instead of days later in production. Automated deploys turn releases from stressful rituals into routine merges — this is how professional teams ship daily.",
+          "learn": [
+            "Create a GitHub Actions workflow that installs dependencies and runs your tests on every push",
+            "Add linting and build steps so broken code cannot merge",
+            "Trigger a deployment automatically when main goes green",
+            "Read a failed pipeline log and fix the failure without guessing"
+          ],
+          "resources": [
+            { "label": "GitHub Docs — GitHub Actions", "url": "https://docs.github.com/en/actions" },
+            { "label": "roadmap.sh — DevOps roadmap", "url": "https://roadmap.sh/devops" }
+          ],
+          "prerequisites": ["git-and-github", "automated-testing"],
+          "criteria": [
+            "Every push to your repo runs tests automatically and reports status",
+            "A failing test blocks the merge and you can trace why from the logs",
+            "Merging to main deploys without manual steps"
+          ]
+        },
+        {
+          "id": "cloud-deployment",
+          "title": "Cloud Deployment",
+          "description": "Getting your app onto the public internet: a host for your server and database, a domain, and HTTPS.",
+          "why": "A project on localhost does not exist as far as the world is concerned. Deploying end to end — DNS, TLS, environment secrets, managed database — is the moment all the previous topics fuse into one working system.",
+          "learn": [
+            "Deploy your containerized app to a cloud host (a VPS or a platform service)",
+            "Provision a managed or self-hosted Postgres and connect it with environment secrets",
+            "Point a domain at your app and serve it over HTTPS",
+            "Separate dev and production configuration cleanly",
+            "Deploy the frontend (static hosting or same origin) and confirm the full flow works live"
+          ],
+          "resources": [
+            { "label": "AWS — Getting started", "url": "https://aws.amazon.com/getting-started/" },
+            { "label": "GitHub Docs — GitHub Pages", "url": "https://docs.github.com/en/pages" },
+            { "label": "Cloudflare Learning Center — Web fundamentals", "url": "https://www.cloudflare.com/learning/" }
+          ],
+          "prerequisites": ["docker-fundamentals", "orms-and-migrations"],
+          "criteria": [
+            "Your app is reachable at a real domain over HTTPS",
+            "Secrets live in environment configuration, not in the repo",
+            "You can redeploy a new version without downtime panic"
+          ]
+        },
+        {
+          "id": "monitoring-and-logging",
+          "title": "Monitoring & Logging",
+          "description": "Knowing what your production app is doing: structured logs, error tracking, health checks, and basic metrics.",
+          "why": "In production, users will not file bug reports — your logs and alerts are how you find out something broke. Even simple observability separates apps that quietly rot from ones their authors actually operate.",
+          "learn": [
+            "Emit structured (JSON) logs with request IDs instead of bare console.log",
+            "Add a health-check endpoint and monitor uptime",
+            "Capture and alert on unhandled errors and 5xx responses",
+            "Track basic metrics — request rate, latency, error rate — and check them after each deploy"
+          ],
+          "resources": [
+            { "label": "OpenTelemetry — Documentation", "url": "https://opentelemetry.io/docs/" },
+            { "label": "Grafana — Documentation", "url": "https://grafana.com/docs/" },
+            { "label": "Google — Site Reliability Engineering books", "url": "https://sre.google/books/" }
+          ],
+          "prerequisites": ["cloud-deployment"],
+          "criteria": [
+            "You can answer 'is my app up and healthy right now?' in under a minute",
+            "A production error reaches you through logs or alerts, not user complaints",
+            "You can explain the three golden signals you watch after a deploy"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Capstone Project",
+      "description": "Prove the whole stack: plan, build, ship, and operate one complete application from scratch.",
+      "topics": [
+        {
+          "id": "capstone-scope-and-plan",
+          "title": "Scope & Plan the Capstone",
+          "description": "Choose a real project with users, data, and auth — then scope it ruthlessly and design it before writing code.",
+          "why": "The gap between tutorial-following and engineering is decision-making: what to build, what to cut, how to structure it. A written plan with a schema and API spec is what keeps a solo project from dying at 60% complete.",
+          "learn": [
+            "Pick a project with real CRUD depth: users, ownership, relations (e.g. a habit tracker, recipe box, or bookmark manager)",
+            "Write a one-page spec: core user stories for v1 and an explicit cut list",
+            "Design the database schema and the REST API contract on paper first",
+            "Break v1 into milestones you can each finish in a few sessions",
+            "Set up the repo: README with the plan, issues for milestones, branch workflow"
+          ],
+          "resources": [
+            { "label": "roadmap.sh — Full Stack roadmap", "url": "https://roadmap.sh/full-stack" },
+            { "label": "CS50 — Web Programming with Python and JavaScript", "url": "https://cs50.harvard.edu/web/" }
+          ],
+          "prerequisites": ["rest-api-design", "react-fundamentals", "orms-and-migrations"],
+          "criteria": [
+            "You have a written spec with user stories, a cut list, a schema diagram, and an API contract",
+            "The work is broken into milestones tracked in your repo",
+            "You can state in one sentence what v1 does and for whom"
+          ]
+        },
+        {
+          "id": "capstone-build",
+          "title": "Build the Capstone",
+          "description": "Implement the full application: React frontend, Express API, Postgres persistence, auth, and tests.",
+          "why": "This is where isolated skills become one system — CORS meets cookies meets migrations meets deployment config, and the integration problems teach you more than any course. A finished full stack app is also the strongest artifact in a junior portfolio.",
+          "learn": [
+            "Build the backend first: migrations, models, authenticated CRUD endpoints, integration tests",
+            "Build the React frontend against your real API: auth flow, forms, lists, error and loading states",
+            "Enforce authorization so users only see and modify their own data",
+            "Keep commits small and merge each milestone through a pull request with green CI",
+            "Dogfood the app yourself for a week and fix what annoys you"
+          ],
+          "resources": [
+            { "label": "react.dev — Learn React", "url": "https://react.dev/learn" },
+            { "label": "Express — Official docs", "url": "https://expressjs.com" },
+            { "label": "PostgreSQL — Official documentation", "url": "https://www.postgresql.org/docs/" }
+          ],
+          "prerequisites": ["capstone-scope-and-plan", "authentication", "automated-testing"],
+          "criteria": [
+            "All v1 user stories work end to end: signup, login, and every core flow",
+            "The test suite covers the critical paths and runs in CI on every push",
+            "You used the app yourself for real and shipped fixes based on it"
+          ]
+        },
+        {
+          "id": "capstone-ship-and-share",
+          "title": "Ship, Operate & Share",
+          "description": "Deploy the capstone to production with CI/CD and monitoring, then package it for your portfolio.",
+          "why": "A deployed, documented, monitored project is proof you can carry software from idea to production — exactly what 'full stack' means. Writing it up cements the lessons and gives interviewers something concrete to dig into.",
+          "learn": [
+            "Containerize the app and deploy it to your cloud host with a domain and HTTPS",
+            "Wire CI/CD so merging to main deploys automatically",
+            "Add logging, error alerts, and a health check; watch them through one real deploy",
+            "Write a README that sells it: what it does, architecture diagram, screenshots, local setup in three commands",
+            "Share it — with friends, a community, or as the centerpiece of your portfolio — and iterate on feedback"
+          ],
+          "resources": [
+            { "label": "Docker — Get started guide", "url": "https://docs.docker.com/get-started/" },
+            { "label": "GitHub Docs — GitHub Actions", "url": "https://docs.github.com/en/actions" },
+            { "label": "roadmap.sh — Full Stack roadmap", "url": "https://roadmap.sh/full-stack" }
+          ],
+          "prerequisites": ["capstone-build", "ci-cd-pipelines", "monitoring-and-logging"],
+          "criteria": [
+            "The capstone is live at a public URL with HTTPS and automatic deploys",
+            "A stranger can understand and run the project from the README alone",
+            "At least one real person besides you has used it, and you shipped a change based on their feedback"
+          ]
+        }
+      ]
+    }
+  ]
+}
