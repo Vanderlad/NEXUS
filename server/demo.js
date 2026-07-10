@@ -36,7 +36,13 @@ export function workspaceCounts() {
 }
 
 export function wipeWorkspace() {
-  db.exec('DELETE FROM edges; DELETE FROM links; DELETE FROM xp_events; DELETE FROM badges; DELETE FROM nodes; DELETE FROM meta;');
+  // Wipe all data but keep personal settings (operator name, theme) — resetting
+  // your map shouldn't log you out of your own preferences.
+  db.exec(`
+    DELETE FROM edges; DELETE FROM links; DELETE FROM xp_events;
+    DELETE FROM badges; DELETE FROM nodes;
+    DELETE FROM meta WHERE key NOT IN ('user_name', 'theme');
+  `);
 }
 
 export function loadDemo() {

@@ -506,6 +506,28 @@ app.get('/api/stats', (req, res) => {
   });
 });
 
+// --- settings (operator name, theme) ---------------------------------------------------
+
+app.get('/api/settings', (req, res) => {
+  const rows = db.prepare(`SELECT key, value FROM meta WHERE key IN ('user_name', 'theme')`).all();
+  const map = Object.fromEntries(rows.map(r => [r.key, r.value]));
+  res.json({
+    // null = never set (first run), '' = asked and skipped
+    name: map.user_name ?? null,
+    theme: map.theme ?? 'nexus'
+  });
+});
+
+app.put('/api/settings', (req, res) => {
+  const b = req.body ?? {};
+  const upsert = db.prepare('INSERT INTO meta (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value');
+  if ('name' in b) upsert.run('user_name', String(b.name ?? '').trim().slice(0, 40));
+  if ('theme' in b && /^[a-z0-9-]{1,32}$/.test(String(b.theme))) upsert.run('theme', String(b.theme));
+  const rows = db.prepare(`SELECT key, value FROM meta WHERE key IN ('user_name', 'theme')`).all();
+  const map = Object.fromEntries(rows.map(r => [r.key, r.value]));
+  res.json({ name: map.user_name ?? null, theme: map.theme ?? 'nexus' });
+});
+
 // --- workspace lifecycle --------------------------------------------------------------
 
 app.get('/api/workspace', (req, res) => {

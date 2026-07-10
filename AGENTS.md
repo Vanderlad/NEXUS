@@ -56,6 +56,7 @@ src/
     Dashboard.jsx          Mission Control: stats, weekly XP strip, deadlines, courses, goals
     StatsView.jsx          Operator Profile: rings, XP charts, records, confidence dist, badges,
                            workspace demo/reset controls
+    SettingsView.jsx       Operator name + theme gallery (previews driven by src/themes.js)
     Tracker.jsx            Coursework table grouped by course, inline status changes
     Roadmaps.jsx           Roadmap cards + custom JSON import
     SearchPalette.jsx      Ctrl/⌘+K search
@@ -159,7 +160,10 @@ GET  /api/roadmaps                 POST /api/roadmaps/:slug/import
 POST /api/roadmaps/import          ← custom roadmap JSON body
 GET  /api/workspace                → { nodes, demo }
 POST /api/workspace/demo           → load demo (409 if not empty)
-POST /api/workspace/reset          → wipe ALL data
+POST /api/workspace/reset          → wipe ALL data (settings below survive)
+GET  /api/settings                 → { name, theme }  (name null = never asked, '' = skipped)
+PUT  /api/settings                 ← { name?, theme? } (meta keys user_name/theme; theme
+                                     slug-validated; both preserved by workspace reset)
 ```
 
 ## Gamification rules
@@ -175,6 +179,12 @@ POST /api/workspace/reset          → wipe ALL data
 - Tokens at the top (`--bg-*, --panel, --accent-a/b/c, --gradient`). Glass = `.glass`,
   HUD frame = `.corners`. Ambient background = `.bg-fx` (grid/aurora/scanline) rendered
   once in App.jsx; respects `prefers-reduced-motion`.
+- **Themes:** accents are RGB triplets (`--aa-rgb` etc.) so glows derive any alpha via
+  `rgb(var(--aa-rgb) / .4)`. A theme = one `[data-theme='x']` block overriding accents +
+  ambient params (nebula colors, grid alpha, scan speed, aurora durations). Registry/UI
+  metadata in `src/themes.js` (`applyTheme` sets `data-theme` on `<html>`); persisted via
+  /api/settings. To add a theme: CSS block + one registry entry. Boot flow in App.jsx:
+  load settings → applyTheme → NamePrompt (first run) or Greeting overlay.
 - Chart colors are contrast-validated against the panel surface: single-series bars use
   `--accent-b` (#818cf8, 6.2:1) / `--accent-a`; the confidence ramp
   `#0e7490 → #06b6d4 → #22d3ee → #67e8f9` is monotonic in lightness, min 3.45:1.

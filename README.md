@@ -13,6 +13,10 @@ Everything runs on your machine. No account, no cloud, one SQLite file.
 
 ## Features
 
+- **Boot greeting** — tell NEXUS your name once and it greets you Jarvis-style on every launch
+- **Configurable themes** — six full-interface themes (Hologrid, Crimson Protocol, Terminal,
+  Sunset Drive, Midas Circuit, Cryostasis), each with its own ambient animations: aurora drift,
+  grid density and scanline speed. Switch live from Settings
 - **Neural Map** — an interactive knowledge graph (pan / zoom / drag / connect / collapse)
   with glowing HUD-style nodes for courses, coursework, projects, skills, goals, notes and roadmaps
 - **Locked / unlocked progression** — roadmap topics with unmet prerequisites render locked,

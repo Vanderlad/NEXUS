@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { api } from './api.js';
+import { applyTheme, DEFAULT_THEME, isTheme } from './themes.js';
 import GraphView from './components/GraphView.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import Tracker from './components/Tracker.jsx';
 import Roadmaps from './components/Roadmaps.jsx';
 import StatsView from './components/StatsView.jsx';
+import SettingsView from './components/SettingsView.jsx';
 import SearchPalette from './components/SearchPalette.jsx';
 import NewNodeModal from './components/NewNodeModal.jsx';
 
@@ -13,8 +15,70 @@ const NAV = [
   { id: 'dashboard', icon: '📡', label: 'Dashboard' },
   { id: 'tracker', icon: '🗓️', label: 'Tracker' },
   { id: 'roadmaps', icon: '🗺️', label: 'Roadmaps' },
-  { id: 'stats', icon: '🏆', label: 'Stats' }
+  { id: 'stats', icon: '🏆', label: 'Stats' },
+  { id: 'settings', icon: '⚙️', label: 'Settings' }
 ];
+
+function timeGreeting() {
+  const h = new Date().getHours();
+  if (h < 5) return 'Burning the midnight oil';
+  if (h < 12) return 'Good morning';
+  if (h < 18) return 'Good afternoon';
+  return 'Good evening';
+}
+
+// Full-screen boot greeting; auto-dismisses, click to skip.
+function Greeting({ name, onDone }) {
+  useEffect(() => {
+    const t = setTimeout(onDone, 2750);
+    return () => clearTimeout(t);
+  }, [onDone]);
+  return (
+    <div className="greet" onClick={onDone}>
+      <div className="greet-inner">
+        <div className="greet-orb" />
+        <div className="greet-line">◈ nexus online</div>
+        <h1>{timeGreeting()}, <span className="greet-name">{name || 'operator'}</span>.</h1>
+        <div className="greet-sub">All systems nominal. Let&apos;s level up.</div>
+        <div className="greet-bar"><div /></div>
+      </div>
+    </div>
+  );
+}
+
+// First-run prompt: asked once; skipping stores '' so we never nag again.
+function NamePrompt({ onSubmit }) {
+  const [value, setValue] = useState('');
+  return (
+    <div className="overlay">
+      <div className="modal glass corners" style={{ width: 420, textAlign: 'center' }}>
+        <div className="onboard-orb" />
+        <div className="onboard-panel-heading">
+          <div className="status-line" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--accent-a)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 10 }}>
+            ◈ identify operator
+          </div>
+          <h2 style={{ margin: '0 0 6px' }}>What should NEXUS call you?</h2>
+          <p style={{ color: 'var(--muted)', fontSize: 13, margin: '0 0 18px' }}>
+            Used for your boot greeting. Stored locally, changeable in Settings.
+          </p>
+        </div>
+        <input
+          autoFocus
+          value={value}
+          maxLength={40}
+          placeholder="Your name"
+          style={{ width: '100%', textAlign: 'center', fontSize: 15 }}
+          onChange={e => setValue(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && onSubmit(value)}
+        />
+        <div className="modal-actions" style={{ justifyContent: 'center' }}>
+          <button className="btn" onClick={() => onSubmit('')}>Skip</button>
+          <button className="btn primary" onClick={() => onSubmit(value)}>Engage</button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   const [view, setView] = useState(() => {
@@ -28,7 +92,48 @@ export default function App() {
   // ?node=<id> deep-links straight to a node on the map
   const [focusNodeId, setFocusNodeId] = useState(() => new URLSearchParams(window.location.search).get('node'));
   const [reloadToken, setReloadToken] = useState(0);
+  const [settings, setSettings] = useState(null);   // { name, theme } | null while loading
+  const [greeting, setGreeting] = useState(null);   // name to greet with | null
+  const [askName, setAskName] = useState(false);
+  const [themeFlash, setThemeFlash] = useState(0);  // >0 renders one flash sweep
   const toastId = useRef(0);
+
+  // Boot: load settings, apply theme, then greet (or ask for a name first).
+  useEffect(() => {
+    api.settings().then(s => {
+      setSettings(s);
+      applyTheme(s.theme);
+      if (s.name === null) setAskName(true);
+      else setGreeting(s.name);
+    }).catch(() => {
+      setSettings({ name: '', theme: DEFAULT_THEME });
+      applyTheme(DEFAULT_THEME);
+    });
+  }, []);
+
+  const submitName = useCallback(async (name) => {
+    setAskName(false);
+    try {
+      const s = await api.saveSettings({ name });
+      setSettings(s);
+      setGreeting(s.name);
+    } catch {
+      setGreeting(name);
+    }
+  }, []);
+
+  const saveName = useCallback(async (name) => {
+    const s = await api.saveSettings({ name });
+    setSettings(s);
+  }, []);
+
+  const setTheme = useCallback(async (theme) => {
+    if (!isTheme(theme)) return;
+    applyTheme(theme);
+    setSettings(s => ({ ...s, theme }));
+    setThemeFlash(f => f + 1);
+    api.saveSettings({ theme }).catch(() => {});
+  }, []);
 
   const refreshGami = useCallback(() => {
     api.gamification().then(setGami).catch(() => {});
@@ -162,6 +267,17 @@ export default function App() {
             onWorkspaceChanged={() => { reload(); refreshGami(); }}
           />
         )}
+        {view === 'settings' && (
+          <SettingsView
+            key={settings?.name ?? ''}
+            settings={settings}
+            onSetTheme={setTheme}
+            onSaveName={async (name) => {
+              await saveName(name);
+              toast('xp', name.trim() ? `Identity updated, ${name.trim()}` : 'Name cleared', 'Greeting updates on next boot.', '◈');
+            }}
+          />
+        )}
         {view === 'tracker' && (
           <Tracker
             onOpenNode={openNode}
@@ -213,6 +329,10 @@ export default function App() {
         ))}
       </div>
       </div>
+
+      {askName && <NamePrompt onSubmit={submitName} />}
+      {greeting !== null && <Greeting name={greeting} onDone={() => setGreeting(null)} />}
+      {themeFlash > 0 && <div className="theme-flash" key={themeFlash} />}
     </>
   );
 }
