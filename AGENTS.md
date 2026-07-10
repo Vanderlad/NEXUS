@@ -45,6 +45,11 @@ server/
   demo.js          OPTIONAL generic demo workspace; loadDemo/wipeWorkspace/workspaceCounts; CLI
   sync.js          GitHub sync + backups: JSON snapshot export/import, GitHub REST client
                    (fetch, no deps), device flow, push/pull with conflict guards
+electron/
+  main.cjs         Desktop shell (CJS): free port, DB → app.getPath('userData'), boots the
+                   SAME server via dynamic import, single-instance lock, native-open IPC
+  preload.cjs      contextBridge → window.nexusDesktop { openPath, showItemInFolder, openExternal }
+build/icon.png     1024² app icon; electron-builder derives per-platform icons from it
 src/
   main.jsx, App.jsx        Shell: bg FX layers, sidebar nav, player card, toasts, palette, modal
   api.js                   fetch wrapper for all endpoints
@@ -190,6 +195,28 @@ POST /api/sync/device/start        POST /api/sync/device/poll       (needs NEXUS
 - Device flow needs a registered OAuth app (enable Device Flow) + `NEXUS_GITHUB_CLIENT_ID`
   env; PAT paste works with zero setup. Tokens live in the local `meta` table only.
 
+## Desktop app (Electron)
+
+- Purely additive — the web/`npm start` path is untouched. `electron/main.cjs` sets
+  `NEXUS_DB_PATH` (→ `app.getPath('userData')/nexus.db`) and `PORT` (a free port), then
+  dynamic-imports `server/index.js` (the identical server) and points a BrowserWindow at
+  `http://127.0.0.1:<port>`. Single-instance lock prevents two processes on one WAL DB.
+- **Native file access** (the browser's blind spot): preload exposes `window.nexusDesktop`;
+  NodePanel uses it to `shell.openPath` / `showItemInFolder` linked files/folders (expanding
+  `~`), and routes external http links through `shell.openExternal`. Web build keeps the
+  copy-path fallback. Detect via `window.nexusDesktop?.isElectron`.
+- **electron-builder** config is the `build` block in package.json. Output → `release/`
+  (NOT `dist/`, which is Vite's). `asarUnpack`s better-sqlite3 (native, must be on disk),
+  `dist/` and `roadmaps/` (robust static serving from `app.asar.unpacked`, transparent to
+  `fs`). `files` whitelists electron/server/dist/roadmaps — `data/`, `src/`, `tests/` excluded.
+- **Native-ABI gotcha:** better-sqlite3 is compiled for Node's ABI by default (needed for
+  tests/`npm start`). `npm run electron`/`dist` rebuild it for Electron's ABI (via
+  @electron/rebuild / electron-builder); `postdist` auto-restores Node ABI. If a native-module
+  error appears running tests after Electron work, run `npm rebuild better-sqlite3`.
+- Verify without a display: `ELECTRON_RUN_AS_NODE` or just replicate `startServer()` on Node
+  (set NEXUS_DB_PATH + PORT, import the server, poll `/api/workspace`). GUI rendering needs a
+  real desktop.
+
 ## Gamification rules
 
 - XP on transition into Completed/Submitted (once — no clawback on revert, by design).
@@ -233,8 +260,10 @@ gamification, search, deep links (`?view=`, `?node=`), Docker, production static
 - Sync is single-file last-write-wins — no merging; simultaneous edits on two machines
   lose one side (with a warning). Edge-only changes don't trip the dirty check.
 - XP is not reverted if you un-complete a node (intentional; revisit).
-- Local file/folder links copy the path to clipboard (browsers can't open `file://`);
-  a Tauri/Electron wrapper would enable "reveal in file manager".
+- Local file/folder links copy the path to clipboard in the WEB build (browsers can't open
+  `file://`); the Electron desktop build opens/reveals them natively.
+- electron-builder emits a cosmetic Linux warning about `desktopName`/WM_CLASS window
+  association — harmless (affects taskbar icon grouping on some DEs), not yet configured.
 - Graph initial camera is a static `defaultViewport` centered on the hub (0,0);
   for an empty workspace the onboarding overlay covers this.
 - Minor a11y lint warnings (labels without htmlFor, clickable divs) — pre-existing pattern.

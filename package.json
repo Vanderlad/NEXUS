@@ -1,8 +1,10 @@
 {
   "name": "nexus",
   "version": "0.1.0",
-  "description": "NEXUS — a local-first, gamified second-brain command center for CS students",
+  "description": "NEXUS — a local-first, gamified developer life OS / second-brain skill tree",
   "type": "module",
+  "author": "Vlad Mihaescu",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "concurrently -n api,ui -c cyan,magenta \"node server/index.js\" \"vite\"",
     "server": "node server/index.js",
@@ -11,7 +13,13 @@
     "demo": "node server/demo.js",
     "demo:reset": "node server/demo.js --reset",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "electron:rebuild": "electron-rebuild -f -w better-sqlite3",
+    "electron": "npm run build && npm run electron:rebuild && electron .",
+    "dist": "npm run build && electron-builder",
+    "dist:linux": "npm run build && electron-builder --linux AppImage",
+    "postdist": "npm rebuild better-sqlite3",
+    "postdist:linux": "npm rebuild better-sqlite3"
   },
   "dependencies": {
     "better-sqlite3": "^11.5.0",
@@ -23,9 +31,53 @@
     "reactflow": "^11.11.4"
   },
   "devDependencies": {
+    "@electron/rebuild": "^4.2.0",
     "@vitejs/plugin-react": "^4.3.1",
     "concurrently": "^8.2.2",
+    "electron": "^33.4.11",
+    "electron-builder": "^26.15.3",
     "vite": "^5.4.8",
     "vitest": "^4.1.10"
+  },
+  "build": {
+    "appId": "dev.nexus.app",
+    "productName": "NEXUS",
+    "copyright": "Copyright © 2026 Vlad Mihaescu",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "electron/**",
+      "server/**",
+      "dist/**",
+      "roadmaps/**",
+      "package.json",
+      "!**/*.map"
+    ],
+    "asarUnpack": [
+      "**/node_modules/better-sqlite3/**",
+      "dist/**",
+      "roadmaps/**"
+    ],
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "linux": {
+      "target": ["AppImage"],
+      "category": "Education",
+      "icon": "build/icon.png"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "category": "public.app-category.productivity",
+      "icon": "build/icon.png"
+    },
+    "win": {
+      "target": ["nsis"],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }

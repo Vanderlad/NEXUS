@@ -160,12 +160,28 @@ export default function NodePanel({ nodeId, onClose, onPatched, onDeleted, onAdd
     }
   };
 
-  const openExternal = (target) =>
-    /^https?:\/\//.test(target) ? (
+  // Desktop (Electron) can truly open files/folders and reveal them in the OS
+  // file manager; the browser build falls back to opening links / copying paths.
+  const desktop = typeof window !== 'undefined' ? window.nexusDesktop : null;
+  const openExternal = (target) => {
+    const isUrl = /^https?:\/\//.test(target);
+    if (desktop?.isElectron) {
+      if (isUrl) {
+        return <button title="Open in browser" onClick={() => desktop.openExternal(target)}>↗</button>;
+      }
+      return (
+        <>
+          <button title="Open file/folder" onClick={() => desktop.openPath(target)}>↗</button>
+          <button title="Reveal in file manager" onClick={() => desktop.showItemInFolder(target)}>⧉</button>
+        </>
+      );
+    }
+    return isUrl ? (
       <a href={target} target="_blank" rel="noreferrer" title="Open">↗</a>
     ) : (
       <button title="Copy path" onClick={() => navigator.clipboard?.writeText(target)}>⧉</button>
     );
+  };
 
   return (
     <div className="node-panel glass">

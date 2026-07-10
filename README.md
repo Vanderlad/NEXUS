@@ -61,6 +61,28 @@ npm start          # builds the UI, serves everything on http://localhost:4000
 The app starts **empty**. From the onboarding screen you can create your first node,
 import a learning roadmap, or load the demo workspace to explore.
 
+### Desktop app (Electron)
+
+Run NEXUS as a native desktop app — its own window, dock/taskbar icon, no browser tab.
+It reuses the same server; the database lives in your OS user-data folder
+(`~/.config/NEXUS`, `~/Library/Application Support/NEXUS`, or `%APPDATA%\NEXUS`).
+
+```bash
+npm run electron      # build UI, rebuild native SQLite for Electron, launch the app
+```
+
+Build distributable installers (output in `release/`):
+
+```bash
+npm run dist:linux    # → NEXUS-<ver>-linux-x86_64.AppImage
+npm run dist          # installer for the OS you run it on (.AppImage / .dmg / .exe)
+```
+
+macOS `.dmg` and Windows `.exe` must be built **on** those platforms (or in CI).
+In the desktop app, files/folders linked to a node **open in your OS file manager**
+(the web build can only copy the path). Packaging rebuilds the native SQLite module for
+Electron; if you then want to run `npm test`/`npm start` again, run `npm rebuild better-sqlite3`.
+
 ### Docker (optional)
 
 ```bash
@@ -75,9 +97,11 @@ docker compose up --build   # http://localhost:4000, data persisted in a named v
 | `npm run build` | Build the UI into `dist/` |
 | `npm start` | Build UI + serve app on :4000 |
 | `npm run server` | API only (serves `dist/` if present) |
+| `npm run electron` | Launch the desktop app (Electron) |
+| `npm run dist` / `dist:linux` | Build desktop installers into `release/` |
 | `npm run demo` | Load the sample workspace (only into an empty DB) |
 | `npm run demo:reset` | **Wipe everything** and load the sample workspace |
-| `npm test` | Run the Vitest suite (confidence scoring + roadmap importer) |
+| `npm test` | Run the Vitest suite (confidence, roadmap importer, sync snapshots) |
 
 ## Keyboard & mouse
 
