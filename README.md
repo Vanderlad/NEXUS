@@ -38,6 +38,9 @@ Everything runs on your machine. No account, no cloud, one SQLite file.
 - **Gamification** — XP per completion, levels, daily streaks, 9 badges, toasts
 - **Search** — `Ctrl/⌘+K` palette across titles, descriptions, notes and linked files
 - **Deep links** — `/?view=stats`, `/?node=<id>` jump straight to a view or node
+- **GitHub sync** — connect your GitHub account and keep your workspace in a **private repo
+  you own**; push from one machine, pull from another. Plus one-click local backup
+  download/restore (JSON)
 - **Local-first** — SQLite database in `data/nexus.db`; copy it to back up, delete it to start over
 
 ## Quick start
@@ -83,6 +86,24 @@ docker compose up --build   # http://localhost:4000, data persisted in a named v
 - Click an edge, press `Delete` — remove a connection
 - `−` button on a node — collapse its subtree
 - Click any node — open the detail panel
+
+## Sync across machines (GitHub)
+
+**Settings → GitHub sync**: paste a GitHub token and NEXUS keeps your whole workspace as
+`nexus-backup.json` in a private repo it creates for you (default `nexus-data`). Push from
+one machine, pull from another — it's your data, in your account, no third-party server.
+
+- **Token:** a [fine-grained PAT](https://github.com/settings/personal-access-tokens/new)
+  with **Contents: read & write** (plus **Administration: write** if NEXUS should create
+  the repo for you), or a classic token with the `repo` scope. It's stored only in your
+  local database and never included in backups.
+- **One-click OAuth (optional):** register a GitHub OAuth app with *Device Flow* enabled
+  and start NEXUS with `NEXUS_GITHUB_CLIENT_ID=<client id>` — Settings then offers
+  "Connect with GitHub" (enter a code, no token pasting).
+- **Conflicts:** sync is last-write-wins. NEXUS warns before overwriting anything —
+  a push warns if the remote changed since you last synced; a pull warns if you have
+  unsynced local changes.
+- A private repo is access-controlled but **not encrypted** — treat it accordingly.
 
 ## Add your own roadmap
 

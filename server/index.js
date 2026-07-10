@@ -9,6 +9,10 @@ import {
 import { listRoadmaps, readRoadmap, importRoadmap } from './roadmaps.js';
 import { loadDemo, wipeWorkspace, workspaceCounts } from './demo.js';
 import { bulkConfidence, scoreConfidence, CONFIDENCE_TYPES } from './confidence.js';
+import {
+  exportSnapshot, importSnapshot, syncStatus, connectWithToken, disconnect,
+  pushSnapshot, pullSnapshot, startDeviceFlow, pollDeviceFlow
+} from './sync.js';
 
 const app = express();
 app.use(express.json({ limit: '2mb' }));
@@ -526,6 +530,97 @@ app.put('/api/settings', (req, res) => {
   const rows = db.prepare(`SELECT key, value FROM meta WHERE key IN ('user_name', 'theme')`).all();
   const map = Object.fromEntries(rows.map(r => [r.key, r.value]));
   res.json({ name: map.user_name ?? null, theme: map.theme ?? 'nexus' });
+});
+
+// --- backup & GitHub sync ---------------------------------------------------------------
+
+// GitHubError carries an http status; 409 bodies may be JSON conflict details.
+function sendSyncError(res, err) {
+  const status = err.status ?? 500;
+  try {
+    res.status(status).json(JSON.parse(err.message));
+  } catch {
+    res.status(status).json({ error: err.message });
+  }
+}
+
+app.get('/api/export', (req, res) => {
+  res.setHeader('Content-Disposition', `attachment; filename="nexus-backup-${todayStr()}.json"`);
+  res.json(exportSnapshot());
+});
+
+app.post('/api/import', (req, res) => {
+  try {
+    const nodes = importSnapshot(req.body);
+    res.json({ ok: true, nodes });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.get('/api/sync/status', async (req, res) => {
+  try {
+    res.json(await syncStatus());
+  } catch (err) {
+    sendSyncError(res, err);
+  }
+});
+
+app.post('/api/sync/connect', async (req, res) => {
+  const pat = String(req.body?.token ?? '').trim();
+  if (!pat) return res.status(400).json({ error: 'token is required' });
+  try {
+    res.json(await connectWithToken(pat));
+  } catch (err) {
+    sendSyncError(res, err);
+  }
+});
+
+app.post('/api/sync/disconnect', (req, res) => {
+  disconnect();
+  res.json({ ok: true });
+});
+
+app.post('/api/sync/repo', (req, res) => {
+  const repo = String(req.body?.repo ?? '').trim();
+  if (!/^[A-Za-z0-9._-]{1,100}$/.test(repo)) {
+    return res.status(400).json({ error: 'invalid repository name' });
+  }
+  db.prepare('INSERT INTO meta (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value')
+    .run('sync_repo', repo);
+  res.json({ ok: true, repo });
+});
+
+app.post('/api/sync/push', async (req, res) => {
+  try {
+    res.json(await pushSnapshot({ force: !!req.body?.force }));
+  } catch (err) {
+    sendSyncError(res, err);
+  }
+});
+
+app.post('/api/sync/pull', async (req, res) => {
+  try {
+    res.json(await pullSnapshot({ force: !!req.body?.force }));
+  } catch (err) {
+    sendSyncError(res, err);
+  }
+});
+
+app.post('/api/sync/device/start', async (req, res) => {
+  try {
+    res.json(await startDeviceFlow());
+  } catch (err) {
+    sendSyncError(res, err);
+  }
+});
+
+app.post('/api/sync/device/poll', async (req, res) => {
+  try {
+    res.json(await pollDeviceFlow());
+  } catch (err) {
+    sendSyncError(res, err);
+  }
 });
 
 // --- workspace lifecycle --------------------------------------------------------------

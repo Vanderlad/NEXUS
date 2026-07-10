@@ -43,6 +43,8 @@ server/
   confidence.js    Evidence-based skill confidence heuristic (scoreConfidence, bulkConfidence)
   roadmaps.js      Roadmap JSON format docs, list/read/import (JSON → nodes+edges+guides)
   demo.js          OPTIONAL generic demo workspace; loadDemo/wipeWorkspace/workspaceCounts; CLI
+  sync.js          GitHub sync + backups: JSON snapshot export/import, GitHub REST client
+                   (fetch, no deps), device flow, push/pull with conflict guards
 src/
   main.jsx, App.jsx        Shell: bg FX layers, sidebar nav, player card, toasts, palette, modal
   api.js                   fetch wrapper for all endpoints
@@ -164,7 +166,29 @@ POST /api/workspace/reset          → wipe ALL data (settings below survive)
 GET  /api/settings                 → { name, theme }  (name null = never asked, '' = skipped)
 PUT  /api/settings                 ← { name?, theme? } (meta keys user_name/theme; theme
                                      slug-validated; both preserved by workspace reset)
+GET  /api/export                   → full workspace snapshot JSON (download)
+POST /api/import                   ← snapshot body; replaces ALL workspace data (validated)
+GET  /api/sync/status              POST /api/sync/connect {token}   POST /api/sync/disconnect
+POST /api/sync/repo {repo}         POST /api/sync/push {force?}     POST /api/sync/pull {force?}
+POST /api/sync/device/start        POST /api/sync/device/poll       (needs NEXUS_GITHUB_CLIENT_ID)
 ```
+
+## GitHub sync (server/sync.js)
+
+- Workspace travels as ONE JSON snapshot (`{app:'nexus', version:1, exported_at, data:{…}}`)
+  pushed to `nexus-backup.json` in a private repo the user owns (meta key `sync_repo`,
+  default `nexus-data`; repo auto-created private on first push).
+- **Secrets never sync:** meta keys matching `github_*`/`sync_*` are excluded from snapshots,
+  preserved across imports AND workspace resets. Everything else (incl. name/theme/streaks)
+  comes from the snapshot — a pull fully moves the workspace.
+- **Conflicts (last-write-wins, guarded):** push 409s if the remote sha ≠ last-synced sha
+  (`sync_remote_sha`); pull 409s if `isDirtySince(sync_last_at)` — both return
+  `{needsForce, reason, remoteExportedAt}`, client confirms then retries with force.
+  Caveats: edges carry no timestamp so edge-only changes don't trip the dirty check;
+  GitHub's contents API caches directory listings, so reads are cache-busted (`?_=Date.now()`)
+  and a stale-sha PUT 409 is treated as the same conflict (force refetches sha and retries).
+- Device flow needs a registered OAuth app (enable Device Flow) + `NEXUS_GITHUB_CLIENT_ID`
+  env; PAT paste works with zero setup. Tokens live in the local `meta` table only.
 
 ## Gamification rules
 
@@ -203,7 +227,10 @@ gamification, search, deep links (`?view=`, `?node=`), Docker, production static
 
 ## Known issues / limitations
 
-- Tests cover `confidence.js` and the roadmap importer only — no API-route or UI tests yet.
+- Tests cover `confidence.js`, the roadmap importer and sync snapshots — no API-route or
+  UI tests yet; GitHub client calls (network) are exercised manually, not in the suite.
+- Sync is single-file last-write-wins — no merging; simultaneous edits on two machines
+  lose one side (with a warning). Edge-only changes don't trip the dirty check.
 - XP is not reverted if you un-complete a node (intentional; revisit).
 - Local file/folder links copy the path to clipboard (browsers can't open `file://`);
   a Tauri/Electron wrapper would enable "reveal in file manager".

@@ -272,6 +272,13 @@ export default function App() {
             key={settings?.name ?? ''}
             settings={settings}
             onSetTheme={setTheme}
+            onToast={toast}
+            onWorkspaceChanged={() => {
+              reload();
+              refreshGami();
+              // a pull may bring a different name/theme from another machine
+              api.settings().then(s => { setSettings(s); applyTheme(s.theme); }).catch(() => {});
+            }}
             onSaveName={async (name) => {
               await saveName(name);
               toast('xp', name.trim() ? `Identity updated, ${name.trim()}` : 'Name cleared', 'Greeting updates on next boot.', '◈');
