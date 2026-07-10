@@ -294,7 +294,7 @@ function GraphInner({ reloadToken, focusNodeId, onFocusHandled, onGami, onAddChi
               <button className="btn" onClick={() => onGoRoadmaps?.()}>🗺 Import a learning roadmap</button>
               <button className="btn" onClick={() => onLoadDemo?.()}>▶ Load demo workspace</button>
             </div>
-            <div className="onboard-foot">Demo data is clearly marked and removable in one click (Stats → Workspace).</div>
+            <div className="onboard-foot">The demo runs as a marked simulation — exit it any time from the banner up top.</div>
           </div>
         </div>
       )}

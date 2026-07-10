@@ -217,7 +217,8 @@ POST /api/sync/device/start        POST /api/sync/device/poll       (needs NEXUS
 
 ## Completed features
 
-Clean-slate onboarding (empty graph → create/import/demo), graph view (custom nodes,
+Clean-slate onboarding (empty graph → create/import/demo), simulated-workspace banner
+(persistent amber pill while demo data is loaded → one-click exit), graph view (custom nodes,
 connect, drag-persist, collapse, legend, minimap, locked states, confidence rings),
 node panel (all fields, guide renderer, confidence breakdown, XP chip, course
 instructor/semester, markdown notes, links, related jumping), dashboard (+weekly XP strip,

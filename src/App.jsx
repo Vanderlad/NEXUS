@@ -96,7 +96,14 @@ export default function App() {
   const [greeting, setGreeting] = useState(null);   // name to greet with | null
   const [askName, setAskName] = useState(false);
   const [themeFlash, setThemeFlash] = useState(0);  // >0 renders one flash sweep
+  const [workspace, setWorkspace] = useState(null); // { nodes, demo }
   const toastId = useRef(0);
+
+  // Demo state drives the "simulated workspace" banner. Any mutation path that
+  // can change it (demo load, reset, pull, import) bumps reloadToken.
+  useEffect(() => {
+    api.workspace().then(setWorkspace).catch(() => {});
+  }, [reloadToken]);
 
   // Boot: load settings, apply theme, then greet (or ask for a name first).
   useEffect(() => {
@@ -169,11 +176,25 @@ export default function App() {
   const loadDemo = useCallback(async () => {
     try {
       await api.loadDemo();
-      toast('xp', 'Demo workspace loaded', 'Explore, then reset any time from Stats → Workspace.', '▶');
+      toast('xp', 'Simulation loaded', 'Explore freely — exit any time from the banner up top.', '▶');
       reload();
       refreshGami();
     } catch (e) {
       toast('error', 'Could not load demo', e.message, '⚠️');
+    }
+  }, [toast, reload, refreshGami]);
+
+  // Exit the simulated (demo) workspace from the banner: wipes demo data,
+  // returns to the clean-slate onboarding. Settings/GitHub connection survive.
+  const exitDemo = useCallback(async () => {
+    if (!confirm('Exit the simulation? Demo data is wiped and you start with a clean workspace.')) return;
+    try {
+      await api.resetWorkspace();
+      toast('levelup', 'Simulation ended', 'Clean slate — build your own map.', '◈');
+      reload();
+      refreshGami();
+    } catch (e) {
+      toast('error', 'Could not exit demo', e.message, '⚠️');
     }
   }, [toast, reload, refreshGami]);
 
@@ -247,6 +268,13 @@ export default function App() {
       </aside>
 
       <main className="main">
+        {workspace?.demo && (
+          <div className="sim-banner glass">
+            <span className="sim-dot" />
+            <span className="sim-label">simulated workspace — demo data</span>
+            <button className="sim-exit" onClick={exitDemo}>✕ Exit simulation</button>
+          </div>
+        )}
         {view === 'graph' && (
           <GraphView
             reloadToken={reloadToken}
