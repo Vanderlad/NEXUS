@@ -217,10 +217,14 @@ POST /api/sync/device/start        POST /api/sync/device/poll       (needs NEXUS
   (NOT `dist/`, which is Vite's). `asarUnpack`s better-sqlite3 (native, must be on disk),
   `dist/` and `roadmaps/` (robust static serving from `app.asar.unpacked`, transparent to
   `fs`). `files` whitelists electron/server/dist/roadmaps — `data/`, `src/`, `tests/` excluded.
-- **Native-ABI gotcha:** better-sqlite3 is compiled for Node's ABI by default (needed for
-  tests/`npm start`). `npm run electron`/`dist` rebuild it for Electron's ABI (via
-  @electron/rebuild / electron-builder); `postdist` auto-restores Node ABI. If a native-module
-  error appears running tests after Electron work, run `npm rebuild better-sqlite3`.
+- **Native-ABI gotcha (auto-healed):** better-sqlite3 is compiled for Node's ABI by default;
+  `npm run electron`/`dist` rebuild it for Electron's ABI. This would break a later `npm start`
+  under plain Node. Guards handle it: `postelectron`/`postdist` restore Node ABI after the
+  desktop commands, and `prestart`/`preserver`/`predev` run `scripts/ensure-sqlite.mjs` which
+  probes the module in a **child process** (a wrong-ABI dlopen segfaults, so it must be
+  isolated) and auto-rebuilds for Node only when needed. Net effect: switching between the
+  desktop app and `npm start` "just works". Only `npm test` isn't guarded — if it hits a
+  native-module error after Electron work, run `npm rebuild better-sqlite3`.
 - Verify without a display: `ELECTRON_RUN_AS_NODE` or just replicate `startServer()` on Node
   (set NEXUS_DB_PATH + PORT, import the server, poll `/api/workspace`). GUI rendering needs a
   real desktop.
