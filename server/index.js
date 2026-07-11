@@ -2,7 +2,7 @@ import express from 'express';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import { db, ROOT_DIR } from './db.js';
+import { db, ROOT_DIR, DB_PATH } from './db.js';
 import {
   DONE_STATUSES, onNodeCompleted, gamificationState, checkBadges, xpForNode
 } from './gamification.js';
@@ -682,4 +682,5 @@ if (fs.existsSync(DIST)) {
 
 app.listen(PORT, () => {
   console.log(`NEXUS api listening on http://localhost:${PORT}${fs.existsSync(DIST) ? ' (serving built UI)' : ''}`);
+  console.log(`Database: ${DB_PATH}`);
 });

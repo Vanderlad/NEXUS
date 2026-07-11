@@ -1,16 +1,47 @@
 import Database from 'better-sqlite3';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const ROOT_DIR = path.join(__dirname, '..');
 
-// NEXUS_DB_PATH overrides the database location (tests use ':memory:').
-const DB_PATH = process.env.NEXUS_DB_PATH || path.join(ROOT_DIR, 'data', 'nexus.db');
-if (DB_PATH !== ':memory:') fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+// Stable per-user data directory, mirroring Electron's app.getPath('userData')
+// convention so every run mode (npm start, dev, Electron) shares one DB per
+// machine and the data survives moving/re-cloning the repo.
+function defaultDataDir() {
+  const home = os.homedir();
+  if (process.platform === 'win32') {
+    return path.join(process.env.APPDATA || path.join(home, 'AppData', 'Roaming'), 'NEXUS');
+  }
+  if (process.platform === 'darwin') {
+    return path.join(home, 'Library', 'Application Support', 'NEXUS');
+  }
+  return path.join(process.env.XDG_CONFIG_HOME || path.join(home, '.config'), 'NEXUS');
+}
+
+// NEXUS_DB_PATH overrides the database location (Docker sets it; tests use ':memory:').
+const usingDefault = !process.env.NEXUS_DB_PATH;
+const DB_PATH = process.env.NEXUS_DB_PATH || path.join(defaultDataDir(), 'nexus.db');
+
+if (DB_PATH !== ':memory:') {
+  fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+  // One-time migration: earlier versions kept the DB repo-local at data/nexus.db.
+  // If we're on the default path and it's empty but a legacy DB exists, move the
+  // data over so nobody "loses" their workspace on upgrade. Runs once (target
+  // already existing means it's skipped, so newer data is never clobbered).
+  const legacy = path.join(ROOT_DIR, 'data', 'nexus.db');
+  if (usingDefault && !fs.existsSync(DB_PATH) && fs.existsSync(legacy)) {
+    for (const suffix of ['', '-wal', '-shm']) {
+      if (fs.existsSync(legacy + suffix)) fs.copyFileSync(legacy + suffix, DB_PATH + suffix);
+    }
+    console.log(`Migrated existing workspace from ${legacy} to ${DB_PATH}`);
+  }
+}
 
 export const db = new Database(DB_PATH);
+export { DB_PATH };
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
 

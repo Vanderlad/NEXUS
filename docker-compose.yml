@@ -3,6 +3,8 @@ services:
     build: .
     ports:
       - "4000:4000"
+    environment:
+      - NEXUS_DB_PATH=/app/data/nexus.db
     volumes:
       - nexus-data:/app/data
     restart: unless-stopped

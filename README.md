@@ -41,7 +41,8 @@ Everything runs on your machine. No account, no cloud, one SQLite file.
 - **GitHub sync** — connect your GitHub account and keep your workspace in a **private repo
   you own**; push from one machine, pull from another. Plus one-click local backup
   download/restore (JSON)
-- **Local-first** — SQLite database in `data/nexus.db`; copy it to back up, delete it to start over
+- **Local-first** — one SQLite database per machine in your OS user-data folder; copy it to
+  back up, or use GitHub sync to move it between machines
 
 ## Quick start
 
@@ -60,6 +61,30 @@ npm start          # builds the UI, serves everything on http://localhost:4000
 
 The app starts **empty**. From the onboarding screen you can create your first node,
 import a learning roadmap, or load the demo workspace to explore.
+
+## How should I run it?
+
+NEXUS is a Node + SQLite app with a web UI, so it runs the same on **Windows, macOS, and
+Linux** — no OS-specific version. Pick whichever fits you:
+
+- **Everyday (recommended):** `npm start`, then open `http://localhost:4000`. Zero packaging,
+  identical on all three OSes.
+- **Native desktop app:** `npm run electron` (own window, dock icon, opens linked files in
+  your file manager). Optional — see [Desktop app](#desktop-app-electron) below.
+- **Container:** `docker compose up --build`.
+
+**Where your data lives:** a stable per-user folder, independent of where you cloned the repo,
+so moving or re-cloning never loses it (and every run mode above shares the same database):
+
+| OS | Database location |
+|---|---|
+| Linux | `~/.config/NEXUS/nexus.db` |
+| macOS | `~/Library/Application Support/NEXUS/nexus.db` |
+| Windows | `%APPDATA%\NEXUS\nexus.db` |
+
+Set `NEXUS_DB_PATH` to override it. Upgrading from an older version auto-migrates an existing
+`data/nexus.db` on first run. **To use NEXUS on several machines, connect GitHub sync** (below)
+— that's how your workspace travels between them.
 
 ### Desktop app (Electron)
 
@@ -139,11 +164,15 @@ Drop a JSON file into `roadmaps/` (format documented in `server/roadmaps.js`) or
 
 ```
 server/     Express API + SQLite (better-sqlite3): schema, gamification, confidence
-            scoring, roadmap importer, optional demo data
+            scoring, roadmap importer, GitHub sync, optional demo data
+electron/   Desktop shell (optional) — boots the same server in a native window
 src/        React UI (Vite + React Flow): map, dashboard, tracker, roadmaps, stats
 roadmaps/   Learning-path JSON files — add your own here
-data/       nexus.db (SQLite) — your entire second brain, git-ignored
 ```
+
+Your database is **not** in the repo — it lives in your OS user-data folder (see
+[How should I run it?](#how-should-i-run-it)). A legacy `data/nexus.db` is auto-migrated on
+first run.
 
 ## Screenshots
 

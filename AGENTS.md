@@ -25,9 +25,15 @@ personal data.
   (CSS variables, glass panels, HUD corner brackets, per-type accent colors). No router —
   views are component state; deep links via `?view=` and `?node=` query params.
 - **Backend:** Express (ESM) + `better-sqlite3`. Single process, serves the built UI in production.
-- **Storage:** SQLite at `data/nexus.db` (WAL mode, FK cascades). Created automatically, empty.
+- **Storage:** one SQLite DB per machine (WAL mode, FK cascades), created automatically empty.
+  Location is resolved in `server/db.js` by `defaultDataDir()` → the OS user-data folder
+  (`~/.config/NEXUS` Linux, `~/Library/Application Support/NEXUS` macOS, `%APPDATA%\NEXUS`
+  Windows), mirroring Electron's `app.getPath('userData')` so **web and Electron share one
+  DB**. `NEXUS_DB_PATH` overrides it (Docker/tests). On first run with the default path, an
+  existing legacy repo-local `data/nexus.db` is auto-migrated (copy, once, never clobbers).
 - **Dev:** `npm run dev` runs API (:4000) and Vite (:5173, proxies `/api`). Prod: `npm start` → :4000.
-- **Docker:** `docker compose up --build`; named volume `nexus-data` for the DB.
+- **Docker:** `docker compose up --build`; sets `NEXUS_DB_PATH=/app/data/nexus.db` on the
+  `nexus-data` volume (needed because the default is now the per-user dir, not the repo).
 - **Tests:** Vitest (`npm test`), server-side only, in `tests/`. `NEXUS_DB_PATH=:memory:`
   (set in vitest.config.js) gives each worker an isolated in-memory SQLite DB — the same
   env var relocates the DB anywhere (e.g. Docker volumes).
@@ -70,9 +76,11 @@ src/
     NewNodeModal.jsx       Create node (+optional parent 'contains' edge)
 roadmaps/*.json    11 curated learning paths (see format below) — all schema-validated,
                    resource links live-checked
-data/nexus.db      SQLite (git-ignored)
 docs/              Screenshots for the README
 ```
+
+The SQLite DB is NOT in the repo — it lives in the OS user-data folder (see Storage above).
+`data/nexus.db` only appears if migrating from an older version (it's git-ignored either way).
 
 ## Database schema (see server/db.js)
 

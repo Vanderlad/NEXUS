@@ -10,6 +10,8 @@ COPY . .
 RUN npm run build
 
 ENV PORT=4000
+# Pin the DB to the mounted volume (the app otherwise defaults to a per-user dir).
+ENV NEXUS_DB_PATH=/app/data/nexus.db
 EXPOSE 4000
 
 # SQLite database lives here — mount a volume to persist it
